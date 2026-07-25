@@ -1,0 +1,27 @@
+{
+  "holdings": [
+    {
+      "id": "9ac496b7-d591-4eee-9b81-bf1908936d51",
+      "ticker": "ANAB",
+      "shares": 0.1,
+      "buyPrice": 52.36,
+      "buyDate": "2026-07-23",
+      "currentPrice": 52.36
+    },
+    {
+      "id": "12015b3b-6451-412f-8209-0660e621c300",
+      "ticker": "ANAB",
+      "shares": 0.1,
+      "buyPrice": 53.5,
+      "buyDate": "2026-07-24",
+      "currentPrice": 53.5
+    }
+  ],
+  "snapshots": [
+    {
+      "date": "2026-07-25",
+      "value": 10.586000000000002,
+      "cost": 10.586000000000002
+    }
+  ]
+}

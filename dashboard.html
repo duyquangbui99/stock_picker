@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Portfolio</title>
+<style>
+:root {
+  color-scheme: light dark;
+  --bg:#fbfaf8; --panel:#fff; --ink:#1a1a1a; --muted:#6b6b6b; --line:#e6e3dd;
+  --gain:#0f9c6c; --loss:#c2321f; --grid:#eceae5; --hover:#f2f0ec; --accent:#0f6b5c;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg:#14161a; --panel:#1b1e23; --ink:#e8e6e3; --muted:#9aa0a6; --line:#2b2f36;
+          --gain:#2f9d78; --loss:#d4645a; --grid:#252a31; --hover:#22262c; --accent:#4ecab0; }
+}
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--ink);
+  font:16px/1.6 ui-sans-serif,-apple-system,"Segoe UI",Roboto,sans-serif; }
+.wrap { max-width:64rem; margin:0 auto; padding:2rem 1.25rem 4rem; }
+h1 { font:600 1.15rem/1.2 ui-sans-serif,sans-serif; margin:0 0 1.5rem; }
+h2 { font-size:.78rem; letter-spacing:.1em; text-transform:uppercase; color:var(--muted);
+  margin:0 0 .75rem; font-weight:600; }
+.card { background:var(--panel); border:1px solid var(--line); border-radius:14px;
+  padding:1.5rem; margin-bottom:1.5rem; }
+
+/* hero */
+.hero { display:flex; flex-wrap:wrap; gap:2.5rem; align-items:flex-end; }
+.hero-v { font:700 2.6rem/1 ui-serif,Georgia,serif; letter-spacing:-.02em; }
+.hero-l { color:var(--muted); font-size:.75rem; letter-spacing:.08em;
+  text-transform:uppercase; margin-bottom:.3rem; }
+.pl { font:700 1.35rem/1 ui-serif,Georgia,serif; }
+.gain { color:var(--gain); } .loss { color:var(--loss); }
+
+/* chart */
+figure { margin:0; }
+svg { display:block; width:100%; height:auto; touch-action:none; }
+.grid-line { stroke:var(--grid); stroke-width:1; }
+.axis-t { fill:var(--muted); font-size:11px; }
+.series { fill:none; stroke-width:2; stroke-linejoin:round; stroke-linecap:round; }
+.cost-line { fill:none; stroke:var(--muted); stroke-width:1.5; stroke-dasharray:4 4; opacity:.8; }
+.crosshair { stroke:var(--muted); stroke-width:1; stroke-dasharray:3 3; }
+.dot { stroke:var(--panel); stroke-width:2; }
+.tip { position:absolute; pointer-events:none; background:var(--panel); color:var(--ink);
+  border:1px solid var(--line); border-radius:8px; padding:.5rem .7rem; font-size:.82rem;
+  box-shadow:0 4px 14px rgb(0 0 0 / .12); opacity:0; transition:opacity .1s; white-space:nowrap; }
+.chart-wrap { position:relative; }
+
+/* table */
+table { width:100%; border-collapse:collapse; font-size:.92rem; }
+th { text-align:left; font-size:.7rem; letter-spacing:.07em; text-transform:uppercase;
+  color:var(--muted); font-weight:600; padding:0 .6rem .5rem; border-bottom:1px solid var(--line); }
+td { padding:.6rem; border-bottom:1px solid var(--line); }
+th.n, td.n { text-align:right; }
+tbody tr:hover { background:var(--hover); }
+.tk { font-weight:700; }
+.sub { color:var(--muted); font-size:.78rem; }
+.chev { border:none; background:none; padding:.1rem 0; color:var(--muted);
+  font-size:.78rem; text-align:left; }
+.chev:hover { color:var(--ink); background:none; }
+tr.lot > td { background:color-mix(in srgb, var(--line) 22%, transparent); padding-top:.35rem;
+  padding-bottom:.35rem; border-bottom:1px solid var(--line); }
+tr.lot:hover > td { background:color-mix(in srgb, var(--line) 34%, transparent); }
+input[type=number], input[type=text], input[type=date] {
+  font:inherit; font-size:.9rem; color:inherit; background:var(--bg);
+  border:1px solid var(--line); border-radius:7px; padding:.35rem .5rem; width:100%; }
+input:focus-visible, button:focus-visible { outline:2px solid var(--accent); outline-offset:1px; }
+.px { max-width:7rem; }
+button { font:inherit; cursor:pointer; border-radius:8px; border:1px solid var(--line);
+  background:var(--panel); color:inherit; padding:.45rem .9rem; }
+button:hover { background:var(--hover); }
+button.primary { background:var(--accent); border-color:var(--accent); color:#fff; font-weight:600; }
+button.link { border:none; background:none; color:var(--muted); padding:.2rem .4rem; }
+button.link:hover { color:var(--loss); background:none; }
+form.add { display:grid; grid-template-columns:6rem 1fr 1fr 1fr auto; gap:.6rem; align-items:end; }
+label { display:block; }
+label > span { display:block; font-size:.7rem; letter-spacing:.07em; text-transform:uppercase;
+  color:var(--muted); margin-bottom:.25rem; }
+.empty { color:var(--muted); text-align:center; padding:2.5rem 1rem; }
+.status { color:var(--muted); font-size:.8rem; min-height:1.2em; }
+@media (max-width:46rem) {
+  form.add { grid-template-columns:1fr 1fr; }
+  .hero { gap:1.5rem; }
+  table { font-size:.85rem; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Portfolio</h1>
+
+  <section class="card">
+    <div class="hero">
+      <div>
+        <div class="hero-l">Market value</div>
+        <div class="hero-v" id="value">$0.00</div>
+      </div>
+      <div>
+        <div class="hero-l">Total profit / loss</div>
+        <div class="pl" id="pl">—</div>
+      </div>
+      <div>
+        <div class="hero-l">Cost basis</div>
+        <div class="pl" id="cost" style="color:var(--muted)">$0.00</div>
+      </div>
+      <div>
+        <div class="hero-l">Positions</div>
+        <div class="pl" id="count" style="color:var(--muted)">0</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Value over time</h2>
+    <figure class="chart-wrap">
+      <div id="chart"></div>
+      <div class="tip" id="tip"></div>
+    </figure>
+  </section>
+
+  <section class="card">
+    <h2>Holdings</h2>
+    <div id="holdings"></div>
+  </section>
+
+  <section class="card">
+    <h2>Add a position</h2>
+    <form class="add" id="add">
+      <label><span>Ticker</span><input name="ticker" type="text" required placeholder="SHBI" autocomplete="off"></label>
+      <label><span>Shares</span><input name="shares" type="number" step="any" min="0" required placeholder="100"></label>
+      <label><span>Buy price</span><input name="buyPrice" type="number" step="any" min="0" required placeholder="19.99"></label>
+      <label><span>Buy date</span><input name="buyDate" type="date" required></label>
+      <button class="primary" type="submit">Add</button>
+    </form>
+    <p class="status" id="status"></p>
+  </section>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const money = (n) => n.toLocaleString(undefined, { style: "currency", currency: "USD" });
+const pct = (n) => `${n >= 0 ? "+" : ""}${n.toFixed(2)}%`;
+// Fractional shares are normal — show up to 6 dp but never trailing zeros.
+const qty = (n) => Number(n.toFixed(6)).toLocaleString(undefined, { maximumFractionDigits: 6 });
+const expanded = new Set(); // tickers whose lots are showing
+const today = () => new Date().toISOString().slice(0, 10);
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+
+let data = { holdings: [], snapshots: [], prices: {} };
+
+/* ---------------------------------------------------------------- data */
+
+/**
+ * Each buy is stored as its own lot, but a ticker is one position: shares add
+ * up and the cost basis is share-weighted, not an average of the prices.
+ */
+function positions() {
+  const byTicker = new Map();
+  for (const lot of data.holdings) {
+    const p = byTicker.get(lot.ticker) ?? { ticker: lot.ticker, shares: 0, cost: 0, lots: [] };
+    p.shares += lot.shares;
+    p.cost += lot.shares * lot.buyPrice;
+    p.lots.push(lot);
+    byTicker.set(lot.ticker, p);
+  }
+  return [...byTicker.values()]
+    .map((p) => {
+      const avgPrice = p.shares > 0 ? p.cost / p.shares : 0;
+      const price = data.prices[p.ticker] ?? avgPrice;
+      p.lots.sort((a, b) => a.buyDate.localeCompare(b.buyDate));
+      return { ...p, avgPrice, price, value: p.shares * price, firstBuy: p.lots[0].buyDate };
+    })
+    .sort((a, b) => b.value - a.value);
+}
+
+function totals() {
+  return positions().reduce(
+    (a, p) => ({ value: a.value + p.value, cost: a.cost + p.cost }),
+    { value: 0, cost: 0 },
+  );
+}
+
+/** One snapshot per day, overwritten as prices change — that's the series. */
+function snapshot() {
+  if (data.holdings.length === 0) return;
+  const { value, cost } = totals();
+  const last = data.snapshots.at(-1);
+  if (last?.date === today()) Object.assign(last, { value, cost });
+  else data.snapshots.push({ date: today(), value, cost });
+}
+
+async function save() {
+  snapshot();
+  const res = await fetch("/api/portfolio", {
+    method: "PUT",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  $("status").textContent = res.ok ? `Saved to portfolio.json · ${new Date().toLocaleTimeString()}` : "Save failed";
+  render();
+}
+
+/* -------------------------------------------------------------- render */
+
+function render() {
+  const { value, cost } = totals();
+  const pl = value - cost;
+  const plPct = cost > 0 ? (pl / cost) * 100 : 0;
+  const cls = pl >= 0 ? "gain" : "loss";
+  const arrow = pl >= 0 ? "▲" : "▼";
+
+  $("value").textContent = money(value);
+  $("cost").textContent = money(cost);
+  $("count").textContent = String(data.holdings.length);
+  // Sign + arrow carry the meaning too — never colour alone.
+  $("pl").className = `pl ${cls}`;
+  $("pl").textContent = data.holdings.length ? `${arrow} ${money(pl)} (${pct(plPct)})` : "—";
+
+  renderHoldings();
+  renderChart();
+}
+
+const daysSince = (date) => Math.max(0, Math.round((Date.now() - new Date(date)) / 86400000));
+
+function renderHoldings() {
+  if (data.holdings.length === 0) {
+    $("holdings").innerHTML = `<p class="empty">No positions yet — add one below.</p>`;
+    return;
+  }
+
+  const rows = positions()
+    .map((p) => {
+      const pl = p.value - p.cost;
+      const plPct = p.cost > 0 ? (pl / p.cost) * 100 : 0;
+      const cls = pl >= 0 ? "gain" : "loss";
+      const open = expanded.has(p.ticker);
+      const lotLabel = p.lots.length === 1 ? "1 buy" : `${p.lots.length} buys`;
+
+      const lotRows = p.lots
+        .map(
+          (lot) => `<tr class="lot">
+            <td colspan="2"><span class="sub">${esc(lot.buyDate)} · ${daysSince(lot.buyDate)}d ago</span></td>
+            <td class="n sub">${qty(lot.shares)} @ ${money(lot.buyPrice)}</td>
+            <td class="n sub" colspan="2">${money(lot.shares * lot.buyPrice)} cost</td>
+            <td class="n sub">${money(lot.shares * p.price - lot.shares * lot.buyPrice)}</td>
+            <td class="n"><button class="link" data-del-lot="${esc(lot.id)}"
+                  aria-label="Remove the ${esc(lot.buyDate)} buy of ${esc(p.ticker)}">✕</button></td>
+          </tr>`,
+        )
+        .join("");
+
+      return `<tr>
+        <td>
+          <div class="tk">${esc(p.ticker)}</div>
+          <button class="chev" data-toggle="${esc(p.ticker)}" aria-expanded="${open}">
+            ${open ? "▾" : "▸"} ${lotLabel} · first ${esc(p.firstBuy)} · ${daysSince(p.firstBuy)}d held
+          </button>
+        </td>
+        <td class="n">${qty(p.shares)}</td>
+        <td class="n">${money(p.avgPrice)}<div class="sub">avg</div></td>
+        <td class="n"><input class="px" type="number" step="any" min="0" data-price="${esc(p.ticker)}"
+             value="${p.price}" aria-label="Current price for ${esc(p.ticker)}"></td>
+        <td class="n">${money(p.value)}</td>
+        <td class="n ${cls}">${pl >= 0 ? "▲" : "▼"} ${money(pl)}<div class="sub ${cls}">${pct(plPct)}</div></td>
+        <td class="n"><button class="link" data-del="${esc(p.ticker)}"
+              aria-label="Remove all ${esc(p.ticker)}">✕</button></td>
+      </tr>${open ? lotRows : ""}`;
+    })
+    .join("");
+
+  $("holdings").innerHTML = `<table>
+    <thead><tr><th>Position</th><th class="n">Shares</th><th class="n">Cost</th>
+      <th class="n">Current</th><th class="n">Value</th><th class="n">P/L</th><th></th></tr></thead>
+    <tbody>${rows}</tbody></table>`;
+}
+
+/* --------------------------------------------------------------- chart */
+
+function renderChart() {
+  const pts = data.snapshots;
+  if (pts.length < 2) {
+    $("chart").innerHTML = `<p class="empty">
+      ${pts.length === 0 ? "No history yet." : "One data point so far."}
+      A point is recorded each day you update prices — the line appears once there are two.</p>`;
+    return;
+  }
+
+  const W = 900, H = 280, pad = { t: 16, r: 56, b: 26, l: 8 };
+  const values = pts.flatMap((p) => [p.value, p.cost]);
+  const lo = Math.min(...values), hi = Math.max(...values);
+  const span = hi - lo || Math.max(hi * 0.02, 1);
+  const min = lo - span * 0.15, max = hi + span * 0.15;
+
+  const x = (i) => pad.l + (i * (W - pad.l - pad.r)) / (pts.length - 1);
+  const y = (v) => pad.t + ((max - v) / (max - min)) * (H - pad.t - pad.b);
+  const path = (key) => pts.map((p, i) => `${i ? "L" : "M"}${x(i).toFixed(1)},${y(p[key]).toFixed(1)}`).join("");
+
+  const up = pts.at(-1).value >= pts.at(-1).cost;
+  const stroke = up ? "var(--gain)" : "var(--loss)";
+  const ticks = [max, (max + min) / 2, min];
+
+  $("chart").innerHTML = `
+  <svg viewBox="0 0 ${W} ${H}" role="img"
+       aria-label="Portfolio market value over ${pts.length} recorded days, from ${money(pts[0].value)} to ${money(pts.at(-1).value)}">
+    ${ticks
+      .map(
+        (t) => `<line class="grid-line" x1="${pad.l}" x2="${W - pad.r}" y1="${y(t).toFixed(1)}" y2="${y(t).toFixed(1)}"/>
+        <text class="axis-t" x="${W - pad.r + 6}" y="${(y(t) + 4).toFixed(1)}">${money(t)}</text>`,
+      )
+      .join("")}
+    <path class="cost-line" d="${path("cost")}"/>
+    <text class="axis-t" x="${(W - pad.r - 2).toFixed(1)}" y="${(y(pts.at(-1).cost) - 6).toFixed(1)}"
+          text-anchor="end">cost basis</text>
+    <path class="series" d="${path("value")}" stroke="${stroke}"/>
+    <text class="axis-t" x="${pad.l}" y="${H - 8}">${pts[0].date}</text>
+    <text class="axis-t" x="${W - pad.r}" y="${H - 8}" text-anchor="end">${pts.at(-1).date}</text>
+    <line class="crosshair" id="cross" y1="${pad.t}" y2="${H - pad.b}" style="display:none"/>
+    <circle class="dot" id="dot" r="5" fill="${stroke}" style="display:none"/>
+    <rect id="hit" x="0" y="0" width="${W}" height="${H}" fill="transparent"/>
+  </svg>`;
+
+  bindHover({ pts, x, y, W, pad });
+}
+
+/** Crosshair + tooltip — an SVG chart should be readable at a point, not just in aggregate. */
+function bindHover({ pts, x, y, W, pad }) {
+  const svg = $("chart").querySelector("svg");
+  const cross = $("chart").querySelector("#cross");
+  const dot = $("chart").querySelector("#dot");
+  const tip = $("tip");
+
+  const move = (event) => {
+    const box = svg.getBoundingClientRect();
+    const px = ((event.clientX - box.left) / box.width) * W;
+    let i = Math.round(((px - pad.l) / (W - pad.l - pad.r)) * (pts.length - 1));
+    i = Math.min(pts.length - 1, Math.max(0, i));
+    const p = pts[i];
+    const pl = p.value - p.cost;
+
+    cross.setAttribute("x1", x(i));
+    cross.setAttribute("x2", x(i));
+    dot.setAttribute("cx", x(i));
+    dot.setAttribute("cy", y(p.value));
+    cross.style.display = dot.style.display = "";
+
+    tip.innerHTML = `<strong>${p.date}</strong><br>${money(p.value)}<br>
+      <span class="${pl >= 0 ? "gain" : "loss"}">${pl >= 0 ? "▲" : "▼"} ${money(pl)}</span>`;
+    tip.style.opacity = "1";
+    const left = (x(i) / W) * box.width;
+    tip.style.left = `${Math.min(box.width - tip.offsetWidth - 4, Math.max(0, left + 12))}px`;
+    tip.style.top = `${(y(p.value) / 280) * box.height - 10}px`;
+  };
+
+  svg.addEventListener("pointermove", move);
+  svg.addEventListener("pointerleave", () => {
+    tip.style.opacity = "0";
+    cross.style.display = dot.style.display = "none";
+  });
+}
+
+/* --------------------------------------------------------------- events */
+
+$("add").addEventListener("submit", (event) => {
+  event.preventDefault();
+  const f = new FormData(event.target);
+  const ticker = String(f.get("ticker")).trim().toUpperCase();
+  data.holdings.push({
+    id: crypto.randomUUID(),
+    ticker,
+    shares: Number(f.get("shares")),
+    buyPrice: Number(f.get("buyPrice")),
+    buyDate: String(f.get("buyDate")),
+  });
+  // Seed the price only for a brand-new ticker; never clobber a live one.
+  data.prices[ticker] ??= Number(f.get("buyPrice"));
+  event.target.reset();
+  $("add").buyDate.value = today();
+  save();
+});
+
+$("holdings").addEventListener("input", (event) => {
+  const ticker = event.target.dataset.price;
+  if (!ticker) return;
+  data.prices[ticker] = Number(event.target.value) || 0;
+  clearTimeout(window.__t);
+  window.__t = setTimeout(save, 500); // debounce while typing
+});
+
+$("holdings").addEventListener("click", (event) => {
+  const button = event.target.closest("button");
+  if (!button) return;
+
+  const toggle = button.dataset.toggle;
+  if (toggle) {
+    expanded.has(toggle) ? expanded.delete(toggle) : expanded.add(toggle);
+    return renderHoldings();
+  }
+
+  const lotId = button.dataset.delLot;
+  if (lotId) {
+    const lot = data.holdings.find((h) => h.id === lotId);
+    if (lot && confirm(`Remove the ${lot.buyDate} buy of ${qty(lot.shares)} ${lot.ticker}?`)) {
+      data.holdings = data.holdings.filter((h) => h.id !== lotId);
+      if (!data.holdings.some((h) => h.ticker === lot.ticker)) delete data.prices[lot.ticker];
+      save();
+    }
+    return;
+  }
+
+  const ticker = button.dataset.del;
+  if (ticker) {
+    const lots = data.holdings.filter((h) => h.ticker === ticker).length;
+    if (confirm(`Remove ${ticker} entirely (${lots} ${lots === 1 ? "buy" : "buys"})? This cannot be undone.`)) {
+      data.holdings = data.holdings.filter((h) => h.ticker !== ticker);
+      delete data.prices[ticker];
+      save();
+    }
+  }
+});
+
+addEventListener("resize", () => renderChart());
+
+/**
+ * Older files stored `currentPrice` on every lot, which let one ticker hold two
+ * different current prices. Fold them into one price per ticker, taking the
+ * most recently bought lot's value, and drop the field.
+ */
+function migrate(d) {
+  const holdings = (d.holdings ?? []).map((h) => ({ ...h }));
+  const prices = { ...(d.prices ?? {}) };
+  const newest = new Map();
+
+  for (const lot of holdings) {
+    if (lot.currentPrice == null) continue;
+    const best = newest.get(lot.ticker);
+    if (!best || lot.buyDate >= best.buyDate) newest.set(lot.ticker, lot);
+  }
+  for (const [ticker, lot] of newest) prices[ticker] ??= lot.currentPrice;
+  for (const lot of holdings) delete lot.currentPrice;
+
+  return { holdings, snapshots: d.snapshots ?? [], prices };
+}
+
+fetch("/api/portfolio")
+  .then((r) => r.json())
+  .then((d) => {
+    data = migrate(d);
+    render();
+  })
+  .catch(() => {
+    $("status").textContent = "Could not reach the server — start it with: npm run portfolio";
+  });
+
+$("add").buyDate.value = today();
+</script>
+</body>
+</html>

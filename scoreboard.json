@@ -1,0 +1,180 @@
+{
+  "entries": [
+    {
+      "report": "2026-07-25",
+      "as_of": "2026-07-25",
+      "universe": "300M-10B",
+      "ticker": "SHBI",
+      "company": "Shore Bancshares, Inc.",
+      "price": 23.72,
+      "market_cap_musd": 770,
+      "eligible": true,
+      "disqualifier": null,
+      "scores": {
+        "survival": 21,
+        "growth_quality": 16,
+        "profitability": 16,
+        "insider_conviction": 8,
+        "valuation_gap": 6
+      },
+      "total": 67,
+      "confidence": "high",
+      "one_line": "Organic three-quarter earnings compounding at 1.24% ROA and 15.66% ROATCE, priced at 1.08x book versus a 1.26x peer average.",
+      "key_risk": "NPAs tripled YoY to 1.09% of assets on three concentrated multifamily/office CRE loans totalling $44.4M."
+    },
+    {
+      "report": "2026-07-25",
+      "as_of": "2026-07-25",
+      "universe": "300M-10B",
+      "ticker": "AVAH",
+      "company": "Aveanna Healthcare Holdings",
+      "price": 9.69,
+      "market_cap_musd": 2110,
+      "eligible": true,
+      "disqualifier": null,
+      "scores": {
+        "survival": 11,
+        "growth_quality": 17,
+        "profitability": 13,
+        "insider_conviction": 2,
+        "valuation_gap": 5
+      },
+      "total": 48,
+      "confidence": "medium",
+      "one_line": "Real 15.9% Q1 revenue growth with guidance raised twice to $2.63-2.65B, but the story is leveraged and partly acquired via Family First.",
+      "key_risk": "$1.483B debt against a $2.11B cap with $963M unhedged floating-rate, plus insiders sold 7.1M shares (~$37.8M) in three months and the stock sits at its ~$10.05 average target."
+    },
+    {
+      "report": "2026-07-25",
+      "as_of": "2026-07-25",
+      "universe": "300M-10B",
+      "ticker": "VIA",
+      "company": "Via Transportation, Inc.",
+      "price": 17,
+      "market_cap_musd": 1420,
+      "eligible": true,
+      "disqualifier": null,
+      "scores": {
+        "survival": 17,
+        "growth_quality": 15,
+        "profitability": 4,
+        "insider_conviction": 1,
+        "valuation_gap": 7
+      },
+      "total": 44,
+      "confidence": "medium",
+      "one_line": "29% revenue growth to $127.4M with $348M net cash, no debt and a 5.1 current ratio — but profitability is adjusted-EBITDA theatre.",
+      "key_risk": "GAAP net loss was $20.1M ($0.25/sh) in Q1 2026 versus an aggregator-reported +$1.7M 'net income'; losses have run $18.8-36.9M for six straight quarters, analysts see no profit for three years, and a securities class action alleges undisclosed growth obstacles behind the ~70% post-IPO decline."
+    },
+    {
+      "report": "2026-07-25",
+      "as_of": "2026-07-25",
+      "universe": "300M-10B",
+      "ticker": "MPB",
+      "company": "Mid Penn Bancorp, Inc.",
+      "price": 34.84,
+      "market_cap_musd": 852,
+      "eligible": false,
+      "disqualifier": "Revenue growth is essentially entirely acquired (William Penn and 1st Colonial) with no organic component disclosed; market cap figure is stale (8 Apr 2026).",
+      "scores": {
+        "survival": 19,
+        "growth_quality": 6,
+        "profitability": 14,
+        "insider_conviction": 3,
+        "valuation_gap": 7
+      },
+      "total": 49,
+      "confidence": "medium",
+      "one_line": "Q2 EPS of $0.86 beat $0.71 and net income rose 355.5% YoY, but the company itself attributes the increase to two acquisitions.",
+      "key_risk": "Integration risk on a double acquisition, and the 'insider buying' is director stock-purchase-plan dribble — 72 shares, 15 shares, $522 — not conviction capital."
+    },
+    {
+      "report": "2026-07-25",
+      "as_of": "2026-07-25",
+      "universe": "300M-10B",
+      "ticker": "GLOO",
+      "company": "Gloo Holdings Inc.",
+      "price": null,
+      "market_cap_musd": null,
+      "eligible": false,
+      "disqualifier": "Stated cash runway under ~2 quarters: $33M cash as of 30 Apr 2026 against $17.1M quarterly operating cash burn plus $5.5M investing outflows.",
+      "scores": {
+        "survival": 4,
+        "growth_quality": 9,
+        "profitability": 3,
+        "insider_conviction": 5,
+        "valuation_gap": 3
+      },
+      "total": 24,
+      "confidence": "medium",
+      "one_line": "238% Q1 revenue growth to $41.5M sounds spectacular but is a roll-up of Westfall, Masterworks, EMD and Midwestern with only ~30% disclosed as organic.",
+      "key_risk": "Roughly two quarters of cash at current burn while management promises adjusted-EBITDA profitability only in Q4 2026 — dilution or a raise looks near-certain before that."
+    },
+    {
+      "report": "2026-07-25",
+      "as_of": "2026-07-25",
+      "universe": "300M-10B",
+      "ticker": "TYGO",
+      "company": "Tigo Energy, Inc.",
+      "price": null,
+      "market_cap_musd": 156,
+      "eligible": false,
+      "disqualifier": "Market cap of $156.38M (10 Jul 2026) is below the $300M universe floor.",
+      "scores": {
+        "survival": 10,
+        "growth_quality": 15,
+        "profitability": 9,
+        "insider_conviction": 2,
+        "valuation_gap": 8
+      },
+      "total": 44,
+      "confidence": "low",
+      "one_line": "Genuinely improving — Q1 revenue +33.7% to $25.2M, gross margin up to 42.8% from 38.1%, loss narrowed to $1.8M from $7.0M, no debt.",
+      "key_risk": "Out of universe on size, and the market cap halved from ~$319.6M (27 May) to $156.4M (10 Jul) while the company was diluting via a $15M registered direct offering — only $11.6M cash left."
+    },
+    {
+      "report": "2026-07-25",
+      "as_of": "2026-07-25",
+      "universe": "300M-10B",
+      "ticker": "MBC",
+      "company": "MasterBrand, Inc.",
+      "price": 8.43,
+      "market_cap_musd": null,
+      "eligible": false,
+      "disqualifier": "Market cap not verified against any source this session — could not reconcile size, so not scored as investable.",
+      "scores": {
+        "survival": 10,
+        "growth_quality": 3,
+        "profitability": 4,
+        "insider_conviction": 12,
+        "valuation_gap": 8
+      },
+      "total": 37,
+      "confidence": "low",
+      "one_line": "The strongest insider signal found this session — CEO bought 60,000 shares for $505,800 — but he is buying into a deteriorating cyclical.",
+      "key_risk": "Q1 sales fell 6.4% to $618M with a $15.4M net loss, gross margin down 530bps, adjusted EBITDA margin of just 4.5%, free cash flow of negative $146.2M, and $946.5M net debt at 3.7x leverage."
+    },
+    {
+      "report": "2026-07-25",
+      "as_of": "2026-07-25",
+      "universe": "300M-10B",
+      "ticker": "ERII",
+      "company": "Energy Recovery, Inc.",
+      "price": null,
+      "market_cap_musd": null,
+      "eligible": false,
+      "disqualifier": "Market cap not verified this session; eliminated on fundamentals before size was confirmed.",
+      "scores": {
+        "survival": 16,
+        "growth_quality": 8,
+        "profitability": 5,
+        "insider_conviction": 4,
+        "valuation_gap": 5
+      },
+      "total": 38,
+      "confidence": "low",
+      "one_line": "Q1 revenue rose 20.4% to $9.7M and beat estimates, with $92.1M cash and investments and $21.0M operating cash flow.",
+      "key_risk": "Gross margin collapsed 2,750bps to 27.8% on the CO2 grocery wind-down, net loss was $12.3M against a $9.7M revenue quarter, and both the CEO and CFO are transitioning at once; the 'insider confidence' cited by screeners is buybacks, not personal purchases."
+    }
+  ]
+}

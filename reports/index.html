@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quality Screen — all reports</title>
+<style>
+:root {
+  color-scheme: light dark;
+  --bg:#fbfaf8; --panel:#fff; --ink:#1a1a1a; --muted:#6b6b6b;
+  --line:#e6e3dd; --accent:#0f6b5c; --risk:#b4530a; --change:#2f5fa8; --hover:#f2f0ec;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg:#14161a; --panel:#1b1e23; --ink:#e8e6e3; --muted:#9aa0a6;
+          --line:#2b2f36; --accent:#4ecab0; --risk:#e0913f; --change:#7aa7e8; --hover:#22262c; }
+}
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--ink);
+  font:16px/1.65 ui-sans-serif,-apple-system,"Segoe UI",Roboto,sans-serif; }
+.wrap { max-width:78rem; margin:0 auto; padding:2rem 1.25rem 4rem; }
+h1 { font:600 1.15rem/1.2 ui-sans-serif,sans-serif; margin:0; }
+.sub { color:var(--muted); font-size:.9rem; margin:.3rem 0 1.5rem; }
+
+.tiles { display:flex; flex-wrap:wrap; gap:.75rem; margin-bottom:2rem; }
+.tile { background:var(--panel); border:1px solid var(--line); border-radius:12px;
+  padding:.9rem 1.25rem; min-width:9rem; }
+.tile-v { font:700 1.7rem/1.1 ui-serif,Georgia,serif; color:var(--accent); }
+.tile-l { color:var(--muted); font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; margin-top:.25rem; }
+
+.cols { display:grid; grid-template-columns:16rem 1fr; gap:1.75rem; align-items:start; }
+.nav { display:flex; flex-direction:column; gap:.4rem; position:sticky; top:1rem; }
+.nav-item { text-align:left; background:var(--panel); border:1px solid var(--line);
+  border-radius:10px; padding:.7rem .85rem; cursor:pointer; color:inherit; font:inherit; display:grid; }
+.nav-item:hover { background:var(--hover); }
+.nav-item[aria-selected="true"] { border-color:var(--accent); box-shadow:inset 3px 0 0 var(--accent); }
+.nav-date { color:var(--muted); font-size:.72rem; letter-spacing:.06em; }
+.nav-ticker { font-weight:700; font-size:1.05rem; }
+.nav-company { color:var(--muted); font-size:.8rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
+.panel { background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:1.75rem; }
+.pick-head { border-bottom:1px solid var(--line); padding-bottom:1rem; margin-bottom:1.25rem; }
+.ticker { font:700 2.5rem/1 ui-serif,Georgia,serif; letter-spacing:-.02em; color:var(--accent); }
+.company { color:var(--muted); margin-top:.3rem; }
+.stamp { color:var(--muted); font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; margin-top:.5rem; }
+.thesis { font-size:1.05rem; }
+h2 { font-size:.78rem; letter-spacing:.1em; text-transform:uppercase; color:var(--muted);
+  margin:1.75rem 0 .75rem; font-weight:600; }
+.numbers { margin:0; display:grid; gap:.6rem; }
+.num { display:grid; grid-template-columns:11rem 1fr; gap:1rem; padding-bottom:.6rem;
+  border-bottom:1px dashed var(--line); }
+.num dt { font-weight:600; } .num dd { margin:0; }
+.callout { border-left:3px solid var(--line); padding:.1rem 0 .1rem 1rem; margin:1.5rem 0; }
+.callout h3 { font-size:.78rem; letter-spacing:.1em; text-transform:uppercase; margin:0 0 .4rem; font-weight:600; }
+.callout.risk { border-color:var(--risk); } .callout.risk h3 { color:var(--risk); }
+.callout.change { border-color:var(--change); } .callout.change h3 { color:var(--change); }
+.disclaimer { color:var(--muted); font-size:.84rem; border-top:1px solid var(--line);
+  padding-top:1rem; margin-top:1.75rem; }
+.fold { border-top:1px solid var(--line); padding-top:1rem; margin-top:1.5rem; }
+.fold > summary { cursor:pointer; font-size:.78rem; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--muted); font-weight:600; }
+.fold[open] > summary { margin-bottom:.75rem; }
+.fold li { margin-bottom:.45rem; font-size:.95rem; }
+.empty { color:var(--muted); }
+.card { background:var(--panel); border:1px solid var(--line); border-radius:14px;
+  padding:1.5rem; margin-bottom:1.75rem; }
+table.rank { width:100%; border-collapse:collapse; font-size:.9rem; }
+table.rank th { text-align:left; font-size:.68rem; letter-spacing:.07em; text-transform:uppercase;
+  color:var(--muted); font-weight:600; padding:0 .6rem .5rem; border-bottom:1px solid var(--line); }
+table.rank td { padding:.55rem .6rem; border-bottom:1px solid var(--line); vertical-align:top; }
+table.rank tr.out { opacity:.55; }
+.rk { color:var(--muted); font-size:.8rem; }
+.tkr { font-weight:700; }
+.tot { font:700 1.05rem/1 ui-serif,Georgia,serif; color:var(--accent); }
+.bars { white-space:nowrap; min-width:9rem; }
+.bar { display:inline-block; width:1.5rem; height:.4rem; margin-right:2px; border-radius:2px;
+  background:color-mix(in srgb,var(--line) 70%,transparent); overflow:hidden; vertical-align:middle; }
+.bar > span { display:block; height:100%; background:var(--accent); border-radius:2px; }
+.tag { font-size:.66rem; letter-spacing:.05em; text-transform:uppercase; padding:.1rem .4rem;
+  border-radius:4px; white-space:nowrap; }
+.tag.bad { background:color-mix(in srgb,var(--risk) 18%,transparent); color:var(--risk); }
+.tag.warn { background:color-mix(in srgb,var(--change) 16%,transparent); color:var(--change); }
+.nowrap { white-space:nowrap; }
+.note { margin-top:1rem; }
+a { color:var(--change); }
+code { background:color-mix(in srgb,var(--line) 55%,transparent); padding:.1em .35em; border-radius:4px; font-size:.9em; }
+.raw { white-space:pre-wrap; overflow-x:auto; }
+@media (max-width:60rem) { .cols { grid-template-columns:1fr; } .nav { position:static; } }
+@media (max-width:34rem) { .num { grid-template-columns:1fr; gap:.15rem; } }
+@media print { .nav,.tiles{display:none} .panel{border:none;padding:0} [hidden]{display:block!important} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Quality Screen</h1>
+  <p class="sub">Every saved report, newest first. Not financial advice.</p>
+  <div class="tiles"><div class="tile"><div class="tile-v">2</div><div class="tile-l">screens run</div></div><div class="tile"><div class="tile-v">SHBI</div><div class="tile-l">latest pick</div></div><div class="tile"><div class="tile-v">3/20</div><div class="tile-l">eligible &amp; fresh</div></div><div class="tile"><div class="tile-v">8</div><div class="tile-l">scored tickers</div></div></div>
+  <section class="card"><h2>Ranking — all scored candidates</h2>
+    <table class="rank"><thead><tr>
+      <th></th><th>Ticker</th><th>Total</th>
+      <th>Survival · Growth · Profit · Insider · Value</th><th>Read</th><th>Scored</th>
+    </tr></thead><tbody><tr class="">
+        <td class="rk">1</td>
+        <td><span class="tkr">SHBI</span> 
+            <div class="sub">Shore Bancshares, Inc.</div></td>
+        <td class="tot">67</td>
+        <td class="bars"><span class="bar" title="survival: 21/25">
+          <span style="width:84%"></span></span><span class="bar" title="growth quality: 16/25">
+          <span style="width:64%"></span></span><span class="bar" title="profitability: 16/20">
+          <span style="width:80%"></span></span><span class="bar" title="insider conviction: 8/15">
+          <span style="width:53%"></span></span><span class="bar" title="valuation gap: 6/15">
+          <span style="width:40%"></span></span></td>
+        <td class="sub">Organic three-quarter earnings compounding at 1.24% ROA and 15.66% ROATCE, priced at 1.08x book versus a 1.26x peer average.</td>
+        <td class="sub nowrap">2026-07-25 · high</td>
+      </tr><tr class="">
+        <td class="rk">2</td>
+        <td><span class="tkr">AVAH</span> 
+            <div class="sub">Aveanna Healthcare Holdings</div></td>
+        <td class="tot">48</td>
+        <td class="bars"><span class="bar" title="survival: 11/25">
+          <span style="width:44%"></span></span><span class="bar" title="growth quality: 17/25">
+          <span style="width:68%"></span></span><span class="bar" title="profitability: 13/20">
+          <span style="width:65%"></span></span><span class="bar" title="insider conviction: 2/15">
+          <span style="width:13%"></span></span><span class="bar" title="valuation gap: 5/15">
+          <span style="width:33%"></span></span></td>
+        <td class="sub">Real 15.9% Q1 revenue growth with guidance raised twice to $2.63-2.65B, but the story is leveraged and partly acquired via Family First.</td>
+        <td class="sub nowrap">2026-07-25 · medium</td>
+      </tr><tr class="">
+        <td class="rk">3</td>
+        <td><span class="tkr">VIA</span> 
+            <div class="sub">Via Transportation, Inc.</div></td>
+        <td class="tot">44</td>
+        <td class="bars"><span class="bar" title="survival: 17/25">
+          <span style="width:68%"></span></span><span class="bar" title="growth quality: 15/25">
+          <span style="width:60%"></span></span><span class="bar" title="profitability: 4/20">
+          <span style="width:20%"></span></span><span class="bar" title="insider conviction: 1/15">
+          <span style="width:7%"></span></span><span class="bar" title="valuation gap: 7/15">
+          <span style="width:47%"></span></span></td>
+        <td class="sub">29% revenue growth to $127.4M with $348M net cash, no debt and a 5.1 current ratio — but profitability is adjusted-EBITDA theatre.</td>
+        <td class="sub nowrap">2026-07-25 · medium</td>
+      </tr><tr class="out">
+        <td class="rk">4</td>
+        <td><span class="tkr">MPB</span> <span class="tag bad">✗ Revenue growth is essentially entirely acquired (William Penn and 1st Colonial) with no organic component disclosed; market cap figure is stale (8 Apr 2026).</span>
+            <div class="sub">Mid Penn Bancorp, Inc.</div></td>
+        <td class="tot">49</td>
+        <td class="bars"><span class="bar" title="survival: 19/25">
+          <span style="width:76%"></span></span><span class="bar" title="growth quality: 6/25">
+          <span style="width:24%"></span></span><span class="bar" title="profitability: 14/20">
+          <span style="width:70%"></span></span><span class="bar" title="insider conviction: 3/15">
+          <span style="width:20%"></span></span><span class="bar" title="valuation gap: 7/15">
+          <span style="width:47%"></span></span></td>
+        <td class="sub">Q2 EPS of $0.86 beat $0.71 and net income rose 355.5% YoY, but the company itself attributes the increase to two acquisitions.</td>
+        <td class="sub nowrap">2026-07-25 · medium</td>
+      </tr><tr class="out">
+        <td class="rk">5</td>
+        <td><span class="tkr">TYGO</span> <span class="tag bad">✗ Market cap of $156.38M (10 Jul 2026) is below the $300M universe floor.</span>
+            <div class="sub">Tigo Energy, Inc.</div></td>
+        <td class="tot">44</td>
+        <td class="bars"><span class="bar" title="survival: 10/25">
+          <span style="width:40%"></span></span><span class="bar" title="growth quality: 15/25">
+          <span style="width:60%"></span></span><span class="bar" title="profitability: 9/20">
+          <span style="width:45%"></span></span><span class="bar" title="insider conviction: 2/15">
+          <span style="width:13%"></span></span><span class="bar" title="valuation gap: 8/15">
+          <span style="width:53%"></span></span></td>
+        <td class="sub">Genuinely improving — Q1 revenue +33.7% to $25.2M, gross margin up to 42.8% from 38.1%, loss narrowed to $1.8M from $7.0M, no debt.</td>
+        <td class="sub nowrap">2026-07-25 · low</td>
+      </tr><tr class="out">
+        <td class="rk">6</td>
+        <td><span class="tkr">ERII</span> <span class="tag bad">✗ Market cap not verified this session; eliminated on fundamentals before size was confirmed.</span>
+            <div class="sub">Energy Recovery, Inc.</div></td>
+        <td class="tot">38</td>
+        <td class="bars"><span class="bar" title="survival: 16/25">
+          <span style="width:64%"></span></span><span class="bar" title="growth quality: 8/25">
+          <span style="width:32%"></span></span><span class="bar" title="profitability: 5/20">
+          <span style="width:25%"></span></span><span class="bar" title="insider conviction: 4/15">
+          <span style="width:27%"></span></span><span class="bar" title="valuation gap: 5/15">
+          <span style="width:33%"></span></span></td>
+        <td class="sub">Q1 revenue rose 20.4% to $9.7M and beat estimates, with $92.1M cash and investments and $21.0M operating cash flow.</td>
+        <td class="sub nowrap">2026-07-25 · low</td>
+      </tr><tr class="out">
+        <td class="rk">7</td>
+        <td><span class="tkr">MBC</span> <span class="tag bad">✗ Market cap not verified against any source this session — could not reconcile size, so not scored as investable.</span>
+            <div class="sub">MasterBrand, Inc.</div></td>
+        <td class="tot">37</td>
+        <td class="bars"><span class="bar" title="survival: 10/25">
+          <span style="width:40%"></span></span><span class="bar" title="growth quality: 3/25">
+          <span style="width:12%"></span></span><span class="bar" title="profitability: 4/20">
+          <span style="width:20%"></span></span><span class="bar" title="insider conviction: 12/15">
+          <span style="width:80%"></span></span><span class="bar" title="valuation gap: 8/15">
+          <span style="width:53%"></span></span></td>
+        <td class="sub">The strongest insider signal found this session — CEO bought 60,000 shares for $505,800 — but he is buying into a deteriorating cyclical.</td>
+        <td class="sub nowrap">2026-07-25 · low</td>
+      </tr><tr class="out">
+        <td class="rk">8</td>
+        <td><span class="tkr">GLOO</span> <span class="tag bad">✗ Stated cash runway under ~2 quarters: $33M cash as of 30 Apr 2026 against $17.1M quarterly operating cash burn plus $5.5M investing outflows.</span>
+            <div class="sub">Gloo Holdings Inc.</div></td>
+        <td class="tot">24</td>
+        <td class="bars"><span class="bar" title="survival: 4/25">
+          <span style="width:16%"></span></span><span class="bar" title="growth quality: 9/25">
+          <span style="width:36%"></span></span><span class="bar" title="profitability: 3/20">
+          <span style="width:15%"></span></span><span class="bar" title="insider conviction: 5/15">
+          <span style="width:33%"></span></span><span class="bar" title="valuation gap: 3/15">
+          <span style="width:20%"></span></span></td>
+        <td class="sub">238% Q1 revenue growth to $41.5M sounds spectacular but is a roll-up of Westfall, Masterworks, EMD and Midwestern with only ~30% disclosed as organic.</td>
+        <td class="sub nowrap">2026-07-25 · medium</td>
+      </tr></tbody></table>
+    <p class="sub note">Ineligible names sort last whatever they scored; scores older than
+    30 days rank below fresh ones. Scores are model judgements, not audited data.</p>
+  </section>
+  <div class="cols">
+    <nav class="nav" role="tablist" aria-label="Reports"><button class="nav-item" role="tab" data-target="2026-07-25"
+    aria-selected="true" tabindex="0">
+    <span class="nav-date">2026-07-25</span>
+    <span class="nav-ticker">SHBI</span>
+    <span class="nav-company">Shore Bancshares, Inc.</span>
+  </button><button class="nav-item" role="tab" data-target="2026-07-24"
+    aria-selected="false" tabindex="-1">
+    <span class="nav-date">2026-07-24</span>
+    <span class="nav-ticker">ISTR</span>
+    <span class="nav-company">Investar Holding Corporation</span>
+  </button></nav>
+    <div class="detail"><section class="panel" id="r-2026-07-25" role="tabpanel" >
+  <header class="pick-head">
+           <div class="ticker">SHBI</div>
+           <div class="company">Shore Bancshares, Inc.</div>
+           <div class="stamp">2026-07-25</div>
+         </header>
+         <p class="thesis">Shore Bancshares is a boringly profitable Mid-Atlantic community bank that has
+quietly compounded earnings through three consecutive quarters — $0.46 diluted
+EPS in Q2 2025, $0.51 in Q1 2026, $0.56 in Q2 2026 — while generating a 1.24%
+return on average assets and 15.66% return on average tangible common equity in
+Q2 2026 (company release, 23 Jul 2026). Those are genuinely good bank returns,
+not screen artifacts, and they are being produced organically through net interest
+margin expansion (3.64% in Q1 2026, guided to 3.55–3.65% for the year) rather
+than through acquisition accounting — which is precisely what disqualified Mid
+Penn Bancorp, whose 39.6% &quot;revenue growth&quot; is almost entirely the William Penn
+and 1st Colonial deals. Management is signalling confidence with capital: the
+quarterly dividend was raised 16.7% to $0.14, and insiders have been net buyers
+of roughly $491k of stock over the last twelve months. At a market cap of $770M
+(21 Jul 2026) and 1.08x book versus a 1.26x regional-bank peer average, you are
+paying a below-peer multiple for above-peer returns on equity. I want to be
+honest about the limit of this thesis: at $23.72 the stock just set a 52-week
+high and Piper Sandler's raised target is $24.00, so this is not a mispricing
+trade — it is a durable, fairly-priced compounder for a portfolio where survival
+matters more than upside, which is exactly the mandate.</p>
+         <h2>Key numbers</h2><dl class="numbers"><div class="num"><dt>Revenue trend</dt><dd>Q1 2026 revenue $59.8M vs $55.65M est.; Q2 2026 net income $18.9M ($0.56/diluted sh) vs $17.1M in Q1 2026 and $15.5M in Q2 2025 — organic, three quarters of sequential growth. NIM 3.64% (Q1 2026).</dd></div><div class="num"><dt>Cash / debt</dt><dd>Bank balance sheet, so runway is not the frame — ROA 1.24%, ROATCE 15.66% (Q2 2026), price/book 1.08x vs 1.26x peer average.</dd></div><div class="num"><dt>Insider activity</dt><dd>Net insider buying of ~US$491k over trailing 12 months. Director William E. Esham III bought 5,000 shares at $19.99 (~$99,950) on 5 Feb 2026. Pattern is real but modest in absolute size.</dd></div><div class="num"><dt>Analyst targets</dt><dd>Piper Sandler raised target to $24.00 from $22.00, Buy. Stock at $23.72 (52-week high, 25 Jul 2026) — essentially at target.</dd></div></dl>
+         <aside class="callout risk"><h3>Main risk</h3><p>Commercial real estate credit. Nonperforming assets jumped to 1.09% of total</p>
+<p>assets at 30 Jun 2026 from 0.33% a year earlier — driven by three large loans</p>
+<p>totalling $44.4M in multifamily and office CRE collateralised in North Carolina</p>
+<p>and Virginia. That is a concentrated, chunky exposure against a $770M market</p>
+<p>cap; if those three credits move from nonperforming to charged-off, a meaningful</p>
+<p>slice of a year's earnings goes with them, and it would call into question</p>
+<p>whether underwriting elsewhere in the book is as clean as the returns suggest.</p></aside>
+         <aside class="callout change"><h3>What would change my mind</h3><p>If Q3 2026 nonperforming assets exceed ~1.5% of total assets, or if the bank</p>
+<p>takes a specific reserve build or charge-off against the $44.4M CRE trio, the</p>
+<p>thesis is broken and I would exit rather than average down. Conversely, if NPAs</p>
+<p>resolve back toward 0.5% while ROATCE holds above 14%, the position deserves to</p>
+<p>be built out. I would also reconsider on valuation alone if the stock runs</p>
+<p>materially above ~1.3x book without a corresponding improvement in credit.</p></aside>
+         <p class="disclaimer">This is not financial advice. This is an automated research summary based on
+publicly available information as of 2026-07-25. Verify all figures independently
+before making any investment decision.</p>
+  <details class="fold"><summary>The screen — shortlist &amp; eliminations</summary><p>Research complete — 16 searches. The decisive finding: VIA's &quot;profitability&quot; was adjusted-only spin. GAAP net loss was <strong>$20.1M</strong> in Q1 2026, not the +$1.7M one aggregator reported, and there's an active securities class action over ~70% post-IPO decline. That disqualifies it as a pick.</p></details>
+  <details class="fold"><summary>Sources (26)</summary><p>A note on one unresolved discrepancy: the company release states Q2 2026 diluted EPS of <strong>$0.56</strong>, while MarketBeat reported a <strong>$0.60</strong> EPS beat versus a $0.50 consensus. The likely cause is a core/operating EPS figure excluding merger or securities items versus the GAAP diluted number. I used the GAAP figure throughout.</p>
+<p>Sources: <a href="https://simplywall.st/stocks/us/capital-goods/nasdaq-erii/energy-recovery/news/top-undervalued-small-caps-with-insider-buying-in-july-2026" rel="noopener" target="_blank">Simply Wall St — undervalued small caps with insider buying, July 2026</a> · <a href="https://www.prnewswire.com/news-releases/shore-bancshares-inc-reports-2026-second-quarter-results-302833642.html" rel="noopener" target="_blank">Shore Bancshares Q2 2026 results</a> · <a href="https://www.defenseworld.net/2026/07/25/shore-bancshares-nasdaqshbi-hits-new-1-year-high-after-better-than-expected-earnings.html" rel="noopener" target="_blank">SHBI 52-week high</a> · <a href="https://www.wallstreetzen.com/stocks/us/nasdaq/shbi" rel="noopener" target="_blank">SHBI valuation</a> · <a href="https://ir.aveanna.com/news-releases/news-release-details/aveanna-healthcare-holdings-announces-first-quarter-financial-0" rel="noopener" target="_blank">Aveanna Q1 2026 + guidance</a> · <a href="https://www.etoro.com/markets/avah" rel="noopener" target="_blank">AVAH targets/insider activity</a> · <a href="https://www.stocktitan.net/sec-filings/VIA/8-k-via-transportation-inc-reports-material-event-5f23b1c9cb56.html" rel="noopener" target="_blank">Via Q1 2026 8-K</a> · <a href="https://www.prnewswire.com/news-releases/via-transportation-inc-securities-class-action-result-of-undisclosed-growth-obstacles-and-approximately-70-stock-decline---investors-may-contact-lewis-kahn-esq-at-kahn-swick--foti-llc-302828868.html" rel="noopener" target="_blank">Via securities class action</a> · <a href="https://www.stocktitan.net/news/MPB/mid-penn-bancorp-inc-reports-second-quarter-earnings-and-declares-g4kz10vv2mov.html" rel="noopener" target="_blank">Mid Penn Q2 2026</a> · <a href="https://www.stocktitan.net/sec-filings/GLOO/10-q-gloo-holdings-inc-quarterly-earnings-report-1a61f627679e.html" rel="noopener" target="_blank">Gloo 10-Q</a> · <a href="https://stockanalysis.com/stocks/tygo/market-cap/" rel="noopener" target="_blank">Tigo market cap</a> · <a href="https://www.stocktitan.net/news/MBC/master-brand-reports-first-quarter-2026-financial-0wtn3dbtdedm.html" rel="noopener" target="_blank">MasterBrand Q1 2026</a> · <a href="https://ir.energyrecovery.com/news-events/press-releases/detail/377/energy-recovery-reports-its-first-quarter-2026-financial" rel="noopener" target="_blank">Energy Recovery Q1 2026</a></p>
+<p>SOURCES</p>
+<ol>
+<li><a href="https://simplywall.st/stocks/us/capital-goods/nasdaq-erii/energy-recovery/news/top-undervalued-small-caps-with-insider-buying-in-july-2026" rel="noopener" target="_blank">Top Undervalued Small Caps With Insider Buying In July 2026 - Simply Wall St News</a></li>
+<li><a href="https://ir.energyrecovery.com/news-events/press-releases/detail/377/energy-recovery-reports-its-first-quarter-2026-financial" rel="noopener" target="_blank">Energy Recovery Reports its First Quarter 2026 Financial Results and Organizational Updates :: Energy Recovery (ERII)</a></li>
+<li><a href="https://www.stocktitan.net/sec-filings/GLOO/10-q-gloo-holdings-inc-quarterly-earnings-report-1a61f627679e.html" rel="noopener" target="_blank">Gloo revenue surges but losses, cash burn persist | GLOO Quarterly Report (10-Q)</a></li>
+<li><a href="https://ir.aveanna.com/news-releases/news-release-details/aveanna-healthcare-holdings-announces-first-quarter-financial-0" rel="noopener" target="_blank">Aveanna Healthcare Holdings Announces First Quarter Financial Results and Revised 2026 Guidance | Aveanna Healthcare Holdings, Inc</a></li>
+<li><a href="https://www.etoro.com/markets/avah" rel="noopener" target="_blank">AVAH Stock Price | Analyst Target 10.50 &amp; Moderate Buy Consensus</a></li>
+<li><a href="https://stockanalysis.com/stocks/tygo/market-cap/" rel="noopener" target="_blank">Tigo Energy (TYGO) Market Cap &amp; Net Worth</a></li>
+<li><a href="https://www.stocktitan.net/news/MPB/mid-penn-bancorp-inc-reports-second-quarter-earnings-and-declares-g4kz10vv2mov.html" rel="noopener" target="_blank">Mid Penn Bancorp Q2 Earnings: $0.85 EPS, $0.23 Dividend | MPB Stock News</a></li>
+<li><a href="https://www.stocktitan.net/news/MBC/master-brand-reports-first-quarter-2026-financial-0wtn3dbtdedm.html" rel="noopener" target="_blank">MasterBrand Q1 sales fall 6.4%, posts net loss | MBC Stock News</a></li>
+<li><a href="https://www.prnewswire.com/news-releases/shore-bancshares-inc-reports-2026-second-quarter-results-302833642.html" rel="noopener" target="_blank">Shore Bancshares, Inc. Reports 2026 Second Quarter Results</a></li>
+<li><a href="https://www.defenseworld.net/2026/07/25/shore-bancshares-nasdaqshbi-hits-new-1-year-high-after-better-than-expected-earnings.html" rel="noopener" target="_blank">Shore Bancshares (NASDAQ:SHBI) Hits New 1-Year High After Better-Than-Expected Earnings - Defense World</a></li>
+<li><a href="https://www.wallstreetzen.com/stocks/us/nasdaq/shbi" rel="noopener" target="_blank">Shore Bancshares Stock Price Today (NASDAQ: SHBI) Quote, Market Cap, Chart | WallStreetZen</a></li>
+<li><a href="https://www.stocktitan.net/sec-filings/VIA/8-k-via-transportation-inc-reports-material-event-5f23b1c9cb56.html" rel="noopener" target="_blank">Via posts Q1 2026 revenue of $127M | VIA 8-K Filing</a></li>
+<li><a href="https://www.prnewswire.com/news-releases/via-transportation-inc-securities-class-action-result-of-undisclosed-growth-obstacles-and-approximately-70-stock-decline---investors-may-contact-lewis-kahn-esq-at-kahn-swick--foti-llc-302828868.html" rel="noopener" target="_blank">Via Transportation, Inc. Securities Class Action Result of Undisclosed Growth Obstacles and approximately 70% Stock Decline - Investors may Contact Lewis Kahn, Esq, at Kahn Swick &amp; Foti, LLC</a></li>
+</ol></details>
+</section><section class="panel" id="r-2026-07-24" role="tabpanel" hidden>
+  <header class="pick-head">
+           <div class="ticker">ISTR</div>
+           <div class="company">Investar Holding Corporation</div>
+           <div class="stamp">2026-07-24</div>
+         </header>
+         <p class="thesis">The only candidate on my list where verified fundamentals are improving, the
+balance sheet isn't a question mark, and the price hasn't already absorbed the
+news. Investar is a Louisiana-based community bank compounding tangible book
+value while its margin widens: Q2 2026 net income to common of $8.9 million
+($0.61 diluted, $0.75 core) versus $4.5 million ($0.46) a year earlier — close
+to a doubling — on a net interest margin that expanded 8bps to 3.67%. Revenue
+net of interest expense of $36.5 million beat Street forecasts. Crucially,
+credit is not deteriorating underneath the earnings: the allowance stands at
+1.18% of total loans and coverage of nonperforming loans improved to 187.3%
+from 176.8% in Q1. It trades around 1.2x tangible book and under 10x
+annualized core earnings, below the $31.00 median analyst target — an
+unglamorous bank being valued like a static one while margin, book value, and
+reserve coverage all move the right way. This is a modest-upside quality pick,
+not a multi-bagger, and I'd rather state that plainly than manufacture
+conviction in a broken solar name.</p>
+         <h2>Key numbers</h2><dl class="numbers"><div class="num"><dt>Revenue trend</dt><dd>Q2 2026 revenue $56.3M, $36.5M net of interest expense (beat Street). Net income to common $8.9M / $0.61 diluted, vs. $4.5M / $0.46 in Q2 2025. Sequentially DOWN from Q1's $11.5M / $0.77 — decelerating quarter-over-quarter, which I am not glossing over. NIM 3.67%, +8bps QoQ.</dd></div><div class="num"><dt>Cash / debt</dt><dd>Bank balance sheet, so runway framing doesn't apply. Book value $28.29/share; tangible book $23.09/share, +1.6% in the quarter (6.4% annualized). Allowance for credit losses $36.3M = 1.18% of total loans, 187.3% of nonperforming loans (up from 176.8% in Q1).</dd></div><div class="num"><dt>Insider activity</dt><dd>WEAK — this is the soft spot in the thesis. The only open-market purchase I could verify is Director Scott G. Ginn, 8,475 shares at $23.68 (~$200,688), dated November 2024 — stale, and one source contradicted itself on the window. Do not treat this as a live insider signal; it isn't one.</dd></div><div class="num"><dt>Analyst targets</dt><dd>Median PT $31.00 across 5 analysts (range $29.00–$31.50), ~12.4% implied upside; consensus rose 5.5% to $32.17 after earnings. But Piper Sandler DOWNGRADED to Neutral on 4/23/2026 at a $31.50 target. Price $28.74 (July 10 open); 52-week range $20.99–$31.77.</dd></div></dl>
+         <aside class="callout risk"><h3>Main risk</h3><p>Credit quality in a concentrated regional loan book. Reserve coverage looks</p>
+<p>fine today, but the Q2 sequential earnings drop (-21% QoQ) is unexplained in</p>
+<p>what I could verify, and a single large commercial or CRE relationship going</p>
+<p>bad would take out several quarters of earnings at this size. Compounding it:</p>
+<p>at ~1.2x tangible book near the upper half of its 52-week range, with analyst</p>
+<p>targets only ~8-12% above spot and one recent downgrade, the margin of safety</p>
+<p>is thin — this is a fair-price-for-good-business call, not a deep discount.</p></aside>
+         <aside class="callout change"><h3>What would change my mind</h3><p>Two checkable items. (1) If Q3 2026 shows nonperforming loans rising with</p>
+<p>allowance coverage falling back below ~175% of NPLs, the credit thesis is</p>
+<p>broken and I'm out regardless of EPS. (2) If net interest margin fails to hold</p>
+<p>above ~3.60% in Q3, the core earnings-power story — margin expansion driving</p>
+<p>the YoY doubling — is over, and the stock deserves its ~10x multiple rather</p>
+<p>than a re-rating toward the $31-32 consensus.</p></aside>
+         <p class="disclaimer">This is not financial advice. This is an automated research summary based on
+publicly available information as of 2026-07-24. Verify all figures
+independently before making any investment decision.</p>
+  <details class="fold"><summary>The screen — shortlist &amp; eliminations</summary><p><strong>19 searches used.</strong> Shortlist built from insider-activity and growth screens: ADV, ERII, TYGO, GLOO, SERV, LINC, ISTR, Shore Bancshares, CSR.</p>
+<h3>Disqualified, with reasons</h3>
+<p>| Candidate | Why it failed |</p>
+<p>|---|---|</p>
+<p>| <strong>SERV</strong> (Serve Robotics) | Q1 2026: $2.98M revenue, <strong>$49M net loss</strong>; TTM net income −$101.4M, operating cash flow −$80.2M. ~$612M cap on $26M FY guide ≈ 23x sales. The +578% growth is off a near-zero base. Not fundamentals. |</p>
+<p>| <strong>ADV</strong> (Advantage Solutions) | $1.59B long-term debt, 4.2x net leverage, $34.8M quarterly interest expense, core Branded Services still contracting. CEO's &quot;insider buy&quot; was <strong>1,600 shares (~$55K)</strong> — a token purchase, and other directors have sold. |</p>
+<p>| <strong>ERII</strong> (Energy Recovery) | Revenue +20% to $9.7M but <strong>net loss $12.3M</strong>, gross margin −10.6pp, and management <strong>withdrew 2026 guidance</strong> amid CEO retirement + CFO transition. Debt-free with $92M cash, but no visibility to underwrite. |</p>
+<p>| <strong>GLOO</strong> (Gloo Holdings) | The +238% revenue growth is largely <strong>acquisition roll-up</strong> (Westfall, Masterworks, EMD, Midwestern), not organic. Still losing $17.1M/quarter, adj. EBITDA −$11.5M, recent IPO. Exactly the data artifact I'm told to disqualify. |</p>
+<p>| <strong>LINC</strong> (Lincoln Educational) | The best <em>quality</em> name — Q1 revenue +22.5% to $144M, net income doubled, guidance raised to $590–600M / EPS $0.74–0.83. But ~$1.6B cap = <strong>~63x guided EPS</strong>, analyst PTs $54–56 vs. price near $50 (~10% upside), and <strong>10 insider sales / $4.8M in 12 months with zero buying</strong>. The good news is priced. |</p>
+<p>| <strong>TYGO</strong> (Tigo Energy) | See below — this one required real work. |</p>
+<h3>The TYGO trap (why the cheap one isn't the pick)</h3>
+<p>TYGO looked like the winner on fundamentals: Q1 revenue $25.2M (+34%), gross margin 42.8% (up from 38.1%), GAAP loss narrowed to $1.8M from $7.0M, non-GAAP loss $0.1M, no debt, FY26 guide $130–135M.</p>
+<p><strong>Data conflict I had to resolve:</strong> sources reported market caps of $319.6M (May 27) and &quot;$271.56M today.&quot; Neither is current. Direct check: <strong>$1.69/share at the July 24 close, $128.29M cap on 75.91M shares</strong>, 52-week range $1.19–$5.33. The $271M/$319M figures are stale — the stock has fallen ~60% since May.</p>
+<p>At ~0.95x guided sales that looks like a gift. It isn't. The <strong>25D residential solar credit went to 0% on Jan 1, 2026</strong> with no phase-down (OBBBA); BloombergNEF projects a sector &quot;collapse&quot; in 2026, and the Invesco Solar ETF fell 27% in ~45 days through July 13. Tigo's MLPE hardware is levered directly to that demand, and Q1 likely captured pull-forward. Confirming signals: <strong>CEO Zvi Alon sold $309K at $3.52 (June 3)</strong>, Director Manor sold at $2.85 (June 15), 463K shares / $1.63M of insider selling in three months with <strong>no buying</strong>, and short interest +269.7% in the second half of June. Analyst PTs ($6.85 avg) were last set May 7 — pre-collapse and stale. With only $11.6M cash, a guide-down on <strong>Aug 4</strong> makes this a value trap, not a discount. Disqualified: I cannot verify the fundamentals behind the move.</p>
+<p>That leaves one survivor.</p></details>
+  <details class="fold"><summary>Sources (49)</summary><h3>Data-quality notes I owe you</h3>
+<ul>
+<li><strong>ISTR price is as of the July 10 open ($28.74)</strong> — I did not obtain a verified July 24 close, so treat spot as approximate. I also could <strong>not</strong> source a market cap directly; ~$420M is my own arithmetic from implied diluted share count, not a verified figure.</li>
+<li><strong>ISTR valuation views conflict:</strong> analyst targets imply ~12.4% upside, while GuruFocus flags it &quot;41.4% overvalued&quot; (GF Score 63/100). Likely a DCF/fair-value model versus peer-multiple framing — I lean on the tangible-book and core-earnings multiples because they're directly observable.</li>
+<li><strong>LINC market cap</strong> was reported as both $1.59B and $1.68B — different measurement dates, not a share-count change.</li>
+</ul>
+<p>Sources: <a href="https://simplywall.st/stocks/us/media/nasdaq-adv/advantage-solutions/news/undervalued-small-caps-with-insider-activity-to-explore-in-j-1/amp" rel="noopener" target="_blank">Simply Wall St — insider screens</a> · <a href="https://www.sahmcapital.com/news/content/july-2026s-undervalued-small-caps-with-insider-action-across-regions-2026-07-15" rel="noopener" target="_blank">Sahm Capital</a> · <a href="https://altindex.com/best-stocks/small-cap-stocks" rel="noopener" target="_blank">AltIndex</a> · <a href="https://ir.energyrecovery.com/news-events/press-releases/detail/377/energy-recovery-reports-its-first-quarter-2026-financial" rel="noopener" target="_blank">ERII Q1 2026 results</a> · <a href="https://www.stocktitan.net/sec-filings/ERII/10-q-energy-recovery-inc-quarterly-earnings-report-99aa1c1f2340.html" rel="noopener" target="_blank">ERII 10-Q</a> · <a href="https://www.businesswire.com/news/home/20260505768793/en/Tigo-Energy-Reports-First-Quarter-2026-Financial-Results" rel="noopener" target="_blank">Tigo Q1 2026 results</a> · <a href="https://stockanalysis.com/stocks/tygo/" rel="noopener" target="_blank">TYGO stock data</a> · <a href="https://www.themarketsdaily.com/2026/07/14/tigo-energy-inc-nasdaqtygo-sees-significant-growth-in-short-interest.html" rel="noopener" target="_blank">TYGO short interest</a> · <a href="https://stockanalysis.com/stocks/tygo/forecast/" rel="noopener" target="_blank">TYGO forecast</a> · <a href="https://www.stocktitan.net/news/TYGO/tigo-energy-inc-to-report-second-quarter-2026-financial-results-on-h41m6fo4rqgx.html" rel="noopener" target="_blank">Tigo Q2 date</a> · <a href="https://simplywall.st/stocks/us/consumer-services/nasdaq-serv/serve-robotics/news/assessing-serve-robotics-serv-valuation-after-q1-2026-revenu" rel="noopener" target="_blank">SERV valuation</a> · <a href="https://www.fool.com/earnings/call-transcripts/2026/05/06/advantage-solutions-adv-q1-2026-earnings-transcript/" rel="noopener" target="_blank">ADV Q1 transcript</a> · <a href="https://www.stocktitan.net/sec-filings/ADV/10-q-advantage-solutions-inc-quarterly-earnings-report-e7221d7b43f9.html" rel="noopener" target="_blank">ADV 10-Q</a> · <a href="https://www.businesswire.com/news/home/20260608302096/en/Gloo-Holdings-Inc.-Reports-First-Quarter-2026-Financial-Results" rel="noopener" target="_blank">GLOO Q1 2026</a> · <a href="https://www.stocktitan.net/sec-filings/GLOO/8-k-gloo-holdings-inc-reports-material-event-fdcb42a9edf4.html" rel="noopener" target="_blank">GLOO 8-K</a> · <a href="https://www.stocktitan.net/sec-filings/LINC/8-k-lincoln-educational-services-corp-reports-material-event-ac02474e47c4.html" rel="noopener" target="_blank">LINC guidance</a> · <a href="https://public.com/stocks/linc/forecast-price-target" rel="noopener" target="_blank">LINC forecast</a> · <a href="https://www.eenews.net/articles/5-questions-answered-as-solar-tax-credits-phase-out/" rel="noopener" target="_blank">E&amp;E News — solar credit phase-out</a> · <a href="https://markets.financialcontent.com/stocks/article/stockstory-2026-7-20-why-enphase-enph-shares-are-falling-today" rel="noopener" target="_blank">Enphase/25D impact</a> · <a href="https://www.prnewswire.com/news-releases/investar-holding-corporation-announces-2026-second-quarter-results-302829060.html" rel="noopener" target="_blank">ISTR Q2 2026 results</a> · <a href="https://simplywall.st/stocks/us/banks/nasdaq-istr/investar-holding/news/investar-holding-istr-rising-net-interest-margin-reinforces" rel="noopener" target="_blank">ISTR NIM analysis</a> · <a href="https://www.wallstreetzen.com/stocks/us/nasdaq/istr/stock-forecast" rel="noopener" target="_blank">ISTR forecast</a> · <a href="https://www.nasdaq.com/market-activity/stocks/istr/insider-activity" rel="noopener" target="_blank">ISTR insider activity</a></p>
+<p>SOURCES</p>
+<ol>
+<li><a href="https://simplywall.st/stocks/us/media/nasdaq-adv/advantage-solutions/news/undervalued-small-caps-with-insider-activity-to-explore-in-j-1/amp" rel="noopener" target="_blank">Undervalued Small Caps With Insider Activity To Explore In July 2026 - Simply Wall St News</a></li>
+<li><a href="https://www.sahmcapital.com/news/content/july-2026s-undervalued-small-caps-with-insider-action-across-regions-2026-07-15" rel="noopener" target="_blank">July 2026's Undervalued Small Caps With Insider Action Across Regions</a></li>
+<li><a href="https://altindex.com/best-stocks/small-cap-stocks" rel="noopener" target="_blank">Best Small Cap Stocks to Buy Now — July 2026 | AltIndex</a></li>
+<li><a href="https://simplywall.st/stocks/us/consumer-services/nasdaq-serv/serve-robotics/news/assessing-serve-robotics-serv-valuation-after-q1-2026-revenu" rel="noopener" target="_blank">Assessing Serve Robotics (SERV) Valuation After Q1 2026 Revenue Growth And Wider Net Loss - Simply Wall St News</a></li>
+<li><a href="https://ir.energyrecovery.com/news-events/press-releases/detail/377/energy-recovery-reports-its-first-quarter-2026-financial" rel="noopener" target="_blank">Energy Recovery Reports its First Quarter 2026 Financial Results and Organizational Updates :: Energy Recovery (ERII)</a></li>
+<li><a href="https://www.stocktitan.net/sec-filings/ERII/10-q-energy-recovery-inc-quarterly-earnings-report-99aa1c1f2340.html" rel="noopener" target="_blank">Energy Recovery Q1 2026 revenue rises but loss widens | ERII Quarterly Report (10-Q)</a></li>
+<li><a href="https://www.stocktitan.net/news/TYGO/" rel="noopener" target="_blank">Tigo Energy (TYGO) Stock News &amp; Updates | StockTitan</a></li>
+<li><a href="https://stockanalysis.com/stocks/tygo/" rel="noopener" target="_blank">Tigo Energy (TYGO) Stock Price &amp; Overview</a></li>
+<li><a href="https://www.businesswire.com/news/home/20260505768793/en/Tigo-Energy-Reports-First-Quarter-2026-Financial-Results" rel="noopener" target="_blank">Tigo Energy Reports First Quarter 2026 Financial Results</a></li>
+<li><a href="https://www.fool.com/earnings/call-transcripts/2026/05/06/advantage-solutions-adv-q1-2026-earnings-transcript/" rel="noopener" target="_blank">Advantage Solutions (ADV) Q1 2026 Earnings Transcript | The Motley Fool</a></li>
+<li><a href="https://simplywall.st/stocks/us/media/nasdaq-adv/advantage-solutions" rel="noopener" target="_blank">Advantage Solutions (Nasdaq:ADV) - Stock Analysis - Simply Wall St</a></li>
+<li><a href="https://www.stocktitan.net/sec-filings/ADV/10-q-advantage-solutions-inc-quarterly-earnings-report-e7221d7b43f9.html" rel="noopener" target="_blank">Advantage Solutions (NASDAQ: ADV) refinances debt as Q1 revenue grows</a></li>
+<li><a href="https://stockanalysis.com/stocks/tygo/forecast/" rel="noopener" target="_blank">Tigo Energy (TYGO) Stock Forecast &amp; Analyst Price Targets</a></li>
+<li><a href="https://www.themarketsdaily.com/2026/07/14/tigo-energy-inc-nasdaqtygo-sees-significant-growth-in-short-interest.html" rel="noopener" target="_blank">Tigo Energy, Inc. (NASDAQ:TYGO) Sees Significant Growth in Short Interest - Markets Daily</a></li>
+<li><a href="https://www.stocktitan.net/news/TYGO/tigo-energy-inc-to-report-second-quarter-2026-financial-results-on-h41m6fo4rqgx.html" rel="noopener" target="_blank">Tigo Energy Will Release Q2 Results Before Its Aug. 4 Call</a></li>
+<li><a href="https://www.stocktitan.net/sec-filings/LINC/8-k-lincoln-educational-services-corp-reports-material-event-ac02474e47c4.html" rel="noopener" target="_blank">Lincoln Educational Services (NASDAQ: LINC) boosts 2026 guidance on strong Q1 growth</a></li>
+<li><a href="https://www.businesswire.com/news/home/20260608302096/en/Gloo-Holdings-Inc.-Reports-First-Quarter-2026-Financial-Results" rel="noopener" target="_blank">Gloo Holdings, Inc. Reports First Quarter 2026 Financial Results</a></li>
+<li><a href="https://www.stocktitan.net/sec-filings/GLOO/8-k-gloo-holdings-inc-reports-material-event-fdcb42a9edf4.html" rel="noopener" target="_blank">Gloo posts 238% Q1 revenue growth, lifts outlook | GLOO 8-K Filing</a></li>
+<li><a href="https://public.com/stocks/linc/forecast-price-target" rel="noopener" target="_blank">LINC Stock Forecast: Analyst Ratings, Predictions &amp; Price Target 2026</a></li>
+<li><a href="https://www.eenews.net/articles/5-questions-answered-as-solar-tax-credits-phase-out/" rel="noopener" target="_blank">5 questions answered as solar tax credits phase out - E&amp;E News by POLITICO</a></li>
+<li><a href="https://markets.financialcontent.com/stocks/article/stockstory-2026-7-20-why-enphase-enph-shares-are-falling-today" rel="noopener" target="_blank">FinancialContent - Why Enphase (ENPH) Shares Are Falling Today</a></li>
+<li><a href="https://simplywall.st/stocks/us/banks/nasdaq-istr/investar-holding" rel="noopener" target="_blank">Investar Holding (Nasdaq:ISTR) - Stock Analysis - Simply Wall St</a></li>
+<li><a href="https://www.prnewswire.com/news-releases/investar-holding-corporation-announces-2026-second-quarter-results-302829060.html" rel="noopener" target="_blank">Investar Holding Corporation Announces 2026 Second Quarter Results</a></li>
+<li><a href="https://www.nasdaq.com/market-activity/stocks/istr/insider-activity" rel="noopener" target="_blank">Investar Holding Corporation Common Stock (ISTR) Insider Activity &amp; Insider Shares Traded | Nasdaq</a></li>
+<li><a href="https://simplywall.st/stocks/us/banks/nasdaq-istr/investar-holding/news/investar-holding-istr-rising-net-interest-margin-reinforces" rel="noopener" target="_blank">Investar Holding (ISTR) Rising Net Interest Margin Reinforces Bullish Profitability Narratives - Simply Wall St News</a></li>
+<li><a href="https://www.wallstreetzen.com/stocks/us/nasdaq/istr/stock-forecast" rel="noopener" target="_blank">Investar Holding Stock Forecast &amp; Predictions: 1Y Price Target $31.50 | Buy or Sell NASDAQ: ISTR 2026 | WallStreetZen</a></li>
+</ol></details>
+</section></div>
+  </div>
+</div>
+<script>
+(() => {
+  const tabs = [...document.querySelectorAll('.nav-item')];
+  const show = (date) => {
+    const target = document.getElementById('r-' + date);
+    if (!target) return;
+    document.querySelectorAll('.panel').forEach((p) => (p.hidden = p !== target));
+    tabs.forEach((t) => {
+      const on = t.dataset.target === date;
+      t.setAttribute('aria-selected', on);
+      t.tabIndex = on ? 0 : -1;
+    });
+    history.replaceState(null, '', '#' + date);
+  };
+  tabs.forEach((t) => t.addEventListener('click', () => show(t.dataset.target)));
+  document.querySelector('.nav')?.addEventListener('keydown', (e) => {
+    const i = tabs.findIndex((t) => t.getAttribute('aria-selected') === 'true');
+    const next = e.key === 'ArrowDown' ? i + 1 : e.key === 'ArrowUp' ? i - 1 : -1;
+    if (next < 0 || next >= tabs.length) return;
+    e.preventDefault();
+    tabs[next].focus();
+    show(tabs[next].dataset.target);
+  });
+  if (location.hash) show(location.hash.slice(1));
+})();
+</script>
+</body>
+</html>

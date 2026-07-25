@@ -1,0 +1,22 @@
+{
+  "name": "quality-stock-picker",
+  "version": "1.0.0",
+  "description": "Fundamentals-driven small-to-mid-cap equity research CLI backed by Claude + live web search.",
+  "type": "module",
+  "bin": {
+    "pick": "bin/pick.js"
+  },
+  "scripts": {
+    "pick": "node --env-file-if-exists=.env bin/pick.js",
+    "dashboard": "node bin/dashboard.js",
+    "portfolio": "node bin/portfolio.js",
+    "scoreboard": "node bin/scoreboard.js"
+  },
+  "license": "ISC",
+  "engines": {
+    "node": ">=20.12"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.115.0"
+  }
+}

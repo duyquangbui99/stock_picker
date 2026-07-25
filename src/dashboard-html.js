@@ -49,31 +49,37 @@ function ranking(ranked) {
           <span style="width:${Math.round((got / max) * 100)}%"></span></span>`;
       }).join("");
 
+      // The badge stays short and fixed-width; the full reason wraps below it.
+      // Putting a 170-character disqualifier inside a nowrap badge was setting
+      // the width of the whole table.
       const flag = !r.eligible
-        ? `<span class="tag bad">✗ ${esc(r.disqualifier ?? "ineligible")}</span>`
+        ? `<span class="tag bad">✗ ineligible</span>`
         : r.stale
           ? `<span class="tag warn">stale ${r.ageDays}d</span>`
           : "";
+      const why =
+        !r.eligible && r.disqualifier ? `<div class="why">${esc(r.disqualifier)}</div>` : "";
 
       return `<tr class="${r.eligible ? "" : "out"}">
         <td class="rk">${i + 1}</td>
-        <td><span class="tkr">${esc(r.ticker)}</span> ${flag}
-            <div class="sub">${esc(r.company)}</div></td>
+        <td class="tkcell"><span class="tkr">${esc(r.ticker)}</span> ${flag}
+            <div class="sub">${esc(r.company)}</div>${why}</td>
         <td class="tot">${r.total}</td>
         <td class="bars">${bars}</td>
-        <td class="sub">${esc(r.one_line)}</td>
-        <td class="sub nowrap">${esc(r.as_of)} · ${esc(r.confidence)}</td>
+        <td class="sub read">${esc(r.one_line)}</td>
+        <td class="sub scored">${esc(r.as_of)}<div>${esc(r.confidence)}</div></td>
       </tr>`;
     })
     .join("");
 
   return `<section class="card"><h2>Ranking — all scored candidates</h2>
-    <table class="rank"><thead><tr>
-      <th></th><th>Ticker</th><th>Total</th>
-      <th>Survival · Growth · Profit · Insider · Value</th><th>Read</th><th>Scored</th>
-    </tr></thead><tbody>${rows}</tbody></table>
-    <p class="sub note">Ineligible names sort last whatever they scored; scores older than
-    ${STALE_AFTER_DAYS} days rank below fresh ones. Scores are model judgements, not audited data.</p>
+    <div class="rank-wrap"><table class="rank"><thead><tr>
+      <th></th><th>Ticker</th><th>Total</th><th>Scores</th><th>Read</th><th>Scored</th>
+    </tr></thead><tbody>${rows}</tbody></table></div>
+    <p class="sub note"><strong>Scores</strong> bars read left to right:
+    survival · growth · profitability · insider conviction · valuation gap (hover for values).
+    Ineligible names sort last whatever they scored; scores older than ${STALE_AFTER_DAYS} days
+    rank below fresh ones. Scores are model judgements, not audited data.</p>
   </section>`;
 }
 
@@ -200,7 +206,15 @@ table.rank tr.out { opacity:.55; }
 .rk { color:var(--muted); font-size:.8rem; }
 .tkr { font-weight:700; }
 .tot { font:700 1.05rem/1 ui-serif,Georgia,serif; color:var(--accent); }
-.bars { white-space:nowrap; min-width:9rem; }
+/* Wide content scrolls inside its own box — the page must never scroll sideways. */
+.rank-wrap { overflow-x:auto; }
+table.rank { min-width:44rem; }
+.bars { white-space:nowrap; width:9rem; }
+/* Free text: give it the slack, but cap it so it can't force the table wider. */
+.read { max-width:22rem; min-width:11rem; }
+.tkcell { max-width:15rem; min-width:9rem; }
+.why { color:var(--muted); font-size:.72rem; line-height:1.45; margin-top:.3rem; }
+.scored { white-space:nowrap; width:6rem; }
 .bar { display:inline-block; width:1.5rem; height:.4rem; margin-right:2px; border-radius:2px;
   background:color-mix(in srgb,var(--line) 70%,transparent); overflow:hidden; vertical-align:middle; }
 .bar > span { display:block; height:100%; background:var(--accent); border-radius:2px; }

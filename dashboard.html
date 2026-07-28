@@ -19,6 +19,11 @@ body { margin:0; background:var(--bg); color:var(--ink);
   font:16px/1.6 ui-sans-serif,-apple-system,"Segoe UI",Roboto,sans-serif; }
 .wrap { max-width:64rem; margin:0 auto; padding:2rem 1.25rem 4rem; }
 h1 { font:600 1.15rem/1.2 ui-sans-serif,sans-serif; margin:0 0 1.5rem; }
+.tabs { display:flex; gap:.35rem; margin-bottom:1.5rem; border-bottom:1px solid var(--line); }
+.tab { display:block; padding:.5rem .9rem; color:var(--muted); text-decoration:none;
+  font-size:.9rem; border-bottom:2px solid transparent; margin-bottom:-1px; }
+.tab:hover { color:var(--ink); }
+.tab.active { color:var(--ink); font-weight:600; border-bottom-color:var(--accent); }
 h2 { font-size:.78rem; letter-spacing:.1em; text-transform:uppercase; color:var(--muted);
   margin:0 0 .75rem; font-weight:600; }
 .card { background:var(--panel); border:1px solid var(--line); border-radius:14px;
@@ -87,6 +92,10 @@ label > span { display:block; font-size:.7rem; letter-spacing:.07em; text-transf
 </head>
 <body>
 <div class="wrap">
+  <nav class="tabs">
+    <a class="tab active" href="/">Portfolio</a>
+    <a class="tab" href="/reports">Reports &amp; ranking</a>
+  </nav>
   <h1>Portfolio</h1>
 
   <section class="card">

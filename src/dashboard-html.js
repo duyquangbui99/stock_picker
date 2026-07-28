@@ -25,7 +25,7 @@ export function dashboard(reports, ranked = []) {
       tile(String(sorted.length), sorted.length === 1 ? "screen run" : "screens run"),
       tile(picks[0]?.pick.ticker ?? "—", "latest pick"),
       tile(`${investable.length}/${MAX_POSITIONS}`, "eligible & fresh"),
-      tile(String(ranked.length), "scored tickers"),
+      tile(String(new Set(investable.map((r) => r.sector).filter(Boolean)).size || "—"), "sectors covered"),
     ].join(""),
     ranking: ranking(ranked),
     nav: sorted.map(navItem).join("") || `<p class="empty">No reports yet.</p>`,
@@ -52,18 +52,24 @@ function ranking(ranked) {
       // The badge stays short and fixed-width; the full reason wraps below it.
       // Putting a 170-character disqualifier inside a nowrap badge was setting
       // the width of the whole table.
+      // A data gap is "needs another look", not a rejection — it must not wear
+      // the same red badge as a going-concern finding.
+      const gap = r.data_completeness && r.data_completeness !== "verified";
       const flag = !r.eligible
         ? `<span class="tag bad">✗ ineligible</span>`
         : r.stale
           ? `<span class="tag warn">stale ${r.ageDays}d</span>`
-          : "";
+          : gap
+            ? `<span class="tag info">${esc(r.data_completeness)}</span>`
+            : "";
       const why =
         !r.eligible && r.disqualifier ? `<div class="why">${esc(r.disqualifier)}</div>` : "";
+      const sector = r.sector ? `<div class="why">${esc(r.sector)}</div>` : "";
 
       return `<tr class="${r.eligible ? "" : "out"}">
         <td class="rk">${i + 1}</td>
         <td class="tkcell"><span class="tkr">${esc(r.ticker)}</span> ${flag}
-            <div class="sub">${esc(r.company)}</div>${why}</td>
+            <div class="sub">${esc(r.company)}</div>${sector}${why}</td>
         <td class="tot">${r.total}</td>
         <td class="bars">${bars}</td>
         <td class="sub read">${esc(r.one_line)}</td>
@@ -155,6 +161,13 @@ body { margin:0; background:var(--bg); color:var(--ink);
 .wrap { max-width:78rem; margin:0 auto; padding:2rem 1.25rem 4rem; }
 h1 { font:600 1.15rem/1.2 ui-sans-serif,sans-serif; margin:0; }
 .sub { color:var(--muted); font-size:.9rem; margin:.3rem 0 1.5rem; }
+/* Links are absolute, so they resolve when served by bin/portfolio.js. Opened
+   straight off disk the pages still read fine, but the tabs won't navigate. */
+.tabs { display:flex; gap:.35rem; margin-bottom:1.5rem; border-bottom:1px solid var(--line); }
+.tab { display:block; padding:.5rem .9rem; color:var(--muted); text-decoration:none;
+  font-size:.9rem; border-bottom:2px solid transparent; margin-bottom:-1px; }
+.tab:hover { color:var(--ink); }
+.tab.active { color:var(--ink); font-weight:600; border-bottom-color:var(--accent); }
 
 .tiles { display:flex; flex-wrap:wrap; gap:.75rem; margin-bottom:2rem; }
 .tile { background:var(--panel); border:1px solid var(--line); border-radius:12px;
@@ -222,6 +235,7 @@ table.rank { min-width:44rem; }
   border-radius:4px; white-space:nowrap; }
 .tag.bad { background:color-mix(in srgb,var(--risk) 18%,transparent); color:var(--risk); }
 .tag.warn { background:color-mix(in srgb,var(--change) 16%,transparent); color:var(--change); }
+.tag.info { background:color-mix(in srgb,var(--muted) 18%,transparent); color:var(--muted); }
 .nowrap { white-space:nowrap; }
 .note { margin-top:1rem; }
 a { color:var(--change); }
@@ -234,6 +248,10 @@ code { background:color-mix(in srgb,var(--line) 55%,transparent); padding:.1em .
 </head>
 <body>
 <div class="wrap">
+  <nav class="tabs">
+    <a class="tab" href="/">Portfolio</a>
+    <a class="tab active" href="/reports">Reports &amp; ranking</a>
+  </nav>
   <h1>Quality Screen</h1>
   <p class="sub">Every saved report, newest first. Not financial advice.</p>
   <div class="tiles">${stats}</div>

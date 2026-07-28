@@ -5,16 +5,35 @@
       "ticker": "ANAB",
       "shares": 0.1,
       "buyPrice": 52.36,
-      "buyDate": "2026-07-23",
-      "currentPrice": 52.36
+      "buyDate": "2026-07-23"
     },
     {
       "id": "12015b3b-6451-412f-8209-0660e621c300",
       "ticker": "ANAB",
       "shares": 0.1,
       "buyPrice": 53.5,
-      "buyDate": "2026-07-24",
-      "currentPrice": 53.5
+      "buyDate": "2026-07-24"
+    },
+    {
+      "id": "f9f83218-c6d4-4018-806e-70dea0c48692",
+      "ticker": "ISTR",
+      "shares": 0.2,
+      "buyPrice": 30.25,
+      "buyDate": "2026-07-24"
+    },
+    {
+      "id": "1f0b4bb8-7b78-4431-8abd-0e42f4f8fd27",
+      "ticker": "CGNT",
+      "shares": 0.5,
+      "buyPrice": 8.5,
+      "buyDate": "2026-07-26"
+    },
+    {
+      "id": "4fa9b784-32ed-4c66-beb9-118f6904a401",
+      "ticker": "CGNT",
+      "shares": 0.5,
+      "buyPrice": 8.51,
+      "buyDate": "2026-07-27"
     }
   ],
   "snapshots": [
@@ -22,6 +41,16 @@
       "date": "2026-07-25",
       "value": 10.586000000000002,
       "cost": 10.586000000000002
+    },
+    {
+      "date": "2026-07-28",
+      "value": 25.250000000000004,
+      "cost": 25.141000000000002
     }
-  ]
+  ],
+  "prices": {
+    "ANAB": 53.5,
+    "ISTR": 30.25,
+    "CGNT": 8.5
+  }
 }

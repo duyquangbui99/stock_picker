@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, stat, writeFile } from "node:fs/promises";
 import { parseArgs } from "node:util";
 
 import { research as viaApi } from "../src/backends/api.js";
@@ -13,6 +13,7 @@ import {
 } from "../src/config.js";
 import { bold, createReporter, dim, renderFooter, renderSources } from "../src/render.js";
 import { buildTask, loadSystemPrompt } from "../src/prompt.js";
+import { buildCoverage } from "../src/coverage.js";
 
 const BACKEND_IMPLS = { "claude-cli": viaClaudeCli, api: viaApi };
 
@@ -68,11 +69,18 @@ process.stderr.write(
   ),
 );
 
+// What earlier runs settled — stops this one re-deriving it. Empty on a fresh
+// clone, which is fine: the task reads normally without it.
+const coverage = await buildCoverage();
+if (coverage) {
+  process.stderr.write(dim(`  carrying forward ${coverage.split("\n### ").length - 1} sections of prior work\n\n`));
+}
+
 let result;
 try {
   result = await research({
     system: await loadSystemPrompt(),
-    task: buildTask({ date, focus: flags.focus }),
+    task: buildTask({ date, focus: flags.focus, coverage }),
     effort: flags.effort,
     onEvent: createReporter({ verbose: flags.verbose }),
   });
@@ -111,10 +119,28 @@ process.stderr.write(
 );
 
 if (flags.save) {
-  const path = new URL(`../reports/${date}.md`, import.meta.url);
-  await mkdir(new URL("../reports/", import.meta.url), { recursive: true });
-  await writeFile(path, `${report}${sourceList}`, "utf8");
-  process.stderr.write(dim(`  saved reports/${date}.md\n`));
+  const dir = new URL("../reports/", import.meta.url);
+  await mkdir(dir, { recursive: true });
+  const name = await freeReportName(dir, date);
+  await writeFile(new URL(name, dir), `${report}${sourceList}`, "utf8");
+  process.stderr.write(dim(`  saved reports/${name}\n`));
+}
+
+/**
+ * Never overwrite an existing report. A second run on the same day is a second
+ * run — its scores are already kept separately, and silently replacing the first
+ * run's prose destroys the only record of why those scores were given.
+ */
+async function freeReportName(dir, date) {
+  for (let n = 1; n < 100; n++) {
+    const name = n === 1 ? `${date}.md` : `${date}-${n}.md`;
+    try {
+      await stat(new URL(name, dir));
+    } catch {
+      return name; // doesn't exist — take it
+    }
+  }
+  return `${date}-${Date.now()}.md`; // absurd fallback, still never overwrites
 }
 
 function isAuthProblem(error) {

@@ -10,7 +10,8 @@
     "pick": "node --env-file-if-exists=.env bin/pick.js",
     "dashboard": "node bin/dashboard.js",
     "portfolio": "node bin/portfolio.js",
-    "scoreboard": "node bin/scoreboard.js"
+    "scoreboard": "node bin/scoreboard.js",
+    "start": "node --env-file-if-exists=.env bin/daily.js"
   },
   "license": "ISC",
   "engines": {

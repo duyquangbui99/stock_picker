@@ -24,10 +24,11 @@ Three things bridge that gap:
    and rejects most of them. Those rejects are scored too, which is what makes a
    pick from March comparable to one from July.
 2. **Hard eligibility gates.** Going-concern language, cash runway under ~2
-   quarters, a market cap outside the range, or figures that cannot be reconciled
-   make a name ineligible **whatever it scored**. A 90 with a going-concern note
-   ranks below an eligible 60. In small-caps, avoiding disasters matters more
-   than catching winners.
+   quarters, or a *verified* market cap outside the range make a name ineligible
+   **whatever it scored** — a 90 with a going-concern note ranks below an
+   eligible 60. A figure you simply could not verify is different: that is
+   tracked as `data_completeness`, ranked below verified names but above
+   rejected ones. A research gap is not a finding.
 3. **Accumulate, then deploy.** Save ~$5/day and deploy ~$35 weekly into the
    top-ranked eligible name. 52 decisions a year instead of 365, larger
    increments, and the screen only needs to run 2–3×/week.
@@ -53,20 +54,27 @@ Requires Node 20.12+ and the `claude` CLI on your PATH.
 
 ## The workflow
 
-**2–3× a week — run a screen and rebuild the ranking:**
+**One command does everything:**
 
 ```sh
-npm run pick -- --save     # research a new candidate set (~2-5 min)
-npm run scoreboard         # ingest the scores, print the ranking
-npm run dashboard          # rebuild reports/index.html
+npm start
 ```
 
-**Weekly — deploy:** open `reports/index.html`, take the top eligible name off the
-ranking, buy it, and record the buy:
+That researches a new candidate, ingests the scores, rebuilds the ranking, then
+serves the dashboard at `http://localhost:4321` and opens a browser. Two tabs:
+**Portfolio** (what you hold) and **Reports & ranking** (what to buy next).
+Ctrl-C stops it. Takes a few minutes, mostly the research.
 
 ```sh
-npm run portfolio          # http://localhost:4321
+npm start -- --no-pick            # skip the research, just rebuild and serve
+npm start -- --focus "no biotech" # any other flag is forwarded to `pick`
 ```
+
+Run it 2–3× a week. **Weekly**, take the top eligible name off the ranking, buy
+~$35 of it, and record the buy on the Portfolio tab.
+
+If a research step fails (rate limit, credit), the rest still runs — you keep the
+dashboard on the reports you already have.
 
 **Whenever prices move** — update the Current price cells in the portfolio to keep
 the value chart current.
@@ -82,6 +90,8 @@ the value chart current.
 
 | Command | What it does |
 |---|---|
+| `npm start` | The whole cycle: research → scores → ranking → serve both dashboards |
+| `npm start -- --no-pick` | Same, minus the research step |
 | `npm run pick` | Run one screen. Add `-- --save` to write `reports/<date>.md` |
 | `npm run scoreboard` | Ingest scorecards into `scoreboard.json`, print the ranking |
 | `npm run dashboard` | Rebuild `reports/index.html` (reports + ranking table) |
@@ -119,12 +129,14 @@ Scores total 100:
 Every dimension is something the analyst already assessed in prose — the
 scorecard only records it in comparable form.
 
-**Ranking order:** eligible before ineligible, fresh before stale (>30 days), then
-by total. `scoreboard.json` is **append-only**, so re-running never overwrites or
+**Ranking order:** eligible → fresh → fully sourced → by total. Concretely:
+eligible-verified, then partial, then unverified, then stale (>30 days), then
+ineligible. `scoreboard.json` is **append-only**, so re-running never overwrites or
 duplicates and you keep the history of how a view of a company changed.
 
-A typical run yields ~3 eligible names out of 8, so filling 20 positions takes
-several weeks of screens.
+A run typically scores 6–9 names, most of them eligible, so the ranking fills
+faster than the portfolio does. Every run also receives a summary of what earlier
+runs settled, so it stops re-researching names already decided.
 
 ---
 
@@ -154,7 +166,7 @@ cell as prices move. Data lives in `portfolio.json` — no database, gitignored.
 |---|---|---|
 | Auth | your Claude Code login | `ANTHROPIC_API_KEY` |
 | Cost | your Claude Code plan | billed API usage |
-| Tools | WebSearch + WebFetch | web_search |
+| Tools | WebSearch + WebFetch | web_search + web_fetch |
 | Caching | automatic | `cache_control` on the request |
 
 `claude-cli` is the default because in a head-to-head it was faster, cheaper, and
@@ -178,6 +190,7 @@ npm run pick -- --backend api
 ## Layout
 
 ```
+bin/daily.js                one command: research → scores → ranking → serve
 bin/pick.js                 CLI: flags in, report out
 bin/scoreboard.js           ingests scorecards, ranks candidates
 bin/dashboard.js            builds reports/index.html
@@ -191,6 +204,7 @@ src/backends/api.js         Messages API, streaming + pause_turn resume
 src/render.js               progress → stderr, report → stdout
 src/report-model.js         parses a saved report and its scorecard
 src/rank.js                 collapses score history into the current ranking
+src/coverage.js             what earlier runs settled, as a prompt block
 src/dashboard-html.js       page + styles for the reports dashboard
 ```
 

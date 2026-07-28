@@ -20,6 +20,13 @@ body { margin:0; background:var(--bg); color:var(--ink);
 .wrap { max-width:78rem; margin:0 auto; padding:2rem 1.25rem 4rem; }
 h1 { font:600 1.15rem/1.2 ui-sans-serif,sans-serif; margin:0; }
 .sub { color:var(--muted); font-size:.9rem; margin:.3rem 0 1.5rem; }
+/* Links are absolute, so they resolve when served by bin/portfolio.js. Opened
+   straight off disk the pages still read fine, but the tabs won't navigate. */
+.tabs { display:flex; gap:.35rem; margin-bottom:1.5rem; border-bottom:1px solid var(--line); }
+.tab { display:block; padding:.5rem .9rem; color:var(--muted); text-decoration:none;
+  font-size:.9rem; border-bottom:2px solid transparent; margin-bottom:-1px; }
+.tab:hover { color:var(--ink); }
+.tab.active { color:var(--ink); font-weight:600; border-bottom-color:var(--accent); }
 
 .tiles { display:flex; flex-wrap:wrap; gap:.75rem; margin-bottom:2rem; }
 .tile { background:var(--panel); border:1px solid var(--line); border-radius:12px;
@@ -87,6 +94,7 @@ table.rank { min-width:44rem; }
   border-radius:4px; white-space:nowrap; }
 .tag.bad { background:color-mix(in srgb,var(--risk) 18%,transparent); color:var(--risk); }
 .tag.warn { background:color-mix(in srgb,var(--change) 16%,transparent); color:var(--change); }
+.tag.info { background:color-mix(in srgb,var(--muted) 18%,transparent); color:var(--muted); }
 .nowrap { white-space:nowrap; }
 .note { margin-top:1rem; }
 a { color:var(--change); }
@@ -99,28 +107,136 @@ code { background:color-mix(in srgb,var(--line) 55%,transparent); padding:.1em .
 </head>
 <body>
 <div class="wrap">
+  <nav class="tabs">
+    <a class="tab" href="/">Portfolio</a>
+    <a class="tab active" href="/reports">Reports &amp; ranking</a>
+  </nav>
   <h1>Quality Screen</h1>
   <p class="sub">Every saved report, newest first. Not financial advice.</p>
-  <div class="tiles"><div class="tile"><div class="tile-v">2</div><div class="tile-l">screens run</div></div><div class="tile"><div class="tile-v">SHBI</div><div class="tile-l">latest pick</div></div><div class="tile"><div class="tile-v">3/20</div><div class="tile-l">eligible &amp; fresh</div></div><div class="tile"><div class="tile-v">8</div><div class="tile-l">scored tickers</div></div></div>
+  <div class="tiles"><div class="tile"><div class="tile-v">5</div><div class="tile-l">screens run</div></div><div class="tile"><div class="tile-v">YEXT</div><div class="tile-l">latest pick</div></div><div class="tile"><div class="tile-v">17/20</div><div class="tile-l">eligible &amp; fresh</div></div><div class="tile"><div class="tile-v">9</div><div class="tile-l">sectors covered</div></div></div>
   <section class="card"><h2>Ranking — all scored candidates</h2>
     <div class="rank-wrap"><table class="rank"><thead><tr>
       <th></th><th>Ticker</th><th>Total</th><th>Scores</th><th>Read</th><th>Scored</th>
     </tr></thead><tbody><tr class="">
         <td class="rk">1</td>
-        <td class="tkcell"><span class="tkr">SHBI</span> 
-            <div class="sub">Shore Bancshares, Inc.</div></td>
-        <td class="tot">67</td>
-        <td class="bars"><span class="bar" title="survival: 21/25">
-          <span style="width:84%"></span></span><span class="bar" title="growth quality: 16/25">
-          <span style="width:64%"></span></span><span class="bar" title="profitability: 16/20">
-          <span style="width:80%"></span></span><span class="bar" title="insider conviction: 8/15">
-          <span style="width:53%"></span></span><span class="bar" title="valuation gap: 6/15">
-          <span style="width:40%"></span></span></td>
-        <td class="sub read">Organic three-quarter earnings compounding at 1.24% ROA and 15.66% ROATCE, priced at 1.08x book versus a 1.26x peer average.</td>
-        <td class="sub scored">2026-07-25<div>high</div></td>
+        <td class="tkcell"><span class="tkr">YEXT</span> 
+            <div class="sub">Yext, Inc.</div><div class="why">Software — Application</div></td>
+        <td class="tot">56</td>
+        <td class="bars"><span class="bar" title="survival: 18/25">
+          <span style="width:72%"></span></span><span class="bar" title="growth quality: 4/25">
+          <span style="width:16%"></span></span><span class="bar" title="profitability: 15/20">
+          <span style="width:75%"></span></span><span class="bar" title="insider conviction: 7/15">
+          <span style="width:47%"></span></span><span class="bar" title="valuation gap: 12/15">
+          <span style="width:80%"></span></span></td>
+        <td class="sub read">GAAP profitable with a 34% free cash flow margin and an aggressive buyback shrinking the share count roughly 20%, turning flat revenue into rising cash flow per share.</td>
+        <td class="sub scored">2026-07-27<div>high</div></td>
       </tr><tr class="">
         <td class="rk">2</td>
-        <td class="tkcell"><span class="tkr">AVAH</span> 
+        <td class="tkcell"><span class="tkr">ISTR</span> 
+            <div class="sub">Investar Holding Corporation</div><div class="why">Regional Banks</div></td>
+        <td class="tot">54</td>
+        <td class="bars"><span class="bar" title="survival: 19/25">
+          <span style="width:76%"></span></span><span class="bar" title="growth quality: 8/25">
+          <span style="width:32%"></span></span><span class="bar" title="profitability: 14/20">
+          <span style="width:70%"></span></span><span class="bar" title="insider conviction: 4/15">
+          <span style="width:27%"></span></span><span class="bar" title="valuation gap: 9/15">
+          <span style="width:60%"></span></span></td>
+        <td class="sub read">NIM expanding to 3.67% with core ROAA of 1.21% and clean credit (0.63% NPLs, 14.99% total capital) at 12.2x earnings and 1.31x tangible book.</td>
+        <td class="sub scored">2026-07-27<div>high</div></td>
+      </tr><tr class="">
+        <td class="rk">3</td>
+        <td class="tkcell"><span class="tkr">SHBI</span> <span class="tag info">partial</span>
+            <div class="sub">Shore Bancshares, Inc.</div><div class="why">Regional Banks</div></td>
+        <td class="tot">61</td>
+        <td class="bars"><span class="bar" title="survival: 17/25">
+          <span style="width:68%"></span></span><span class="bar" title="growth quality: 15/25">
+          <span style="width:60%"></span></span><span class="bar" title="profitability: 17/20">
+          <span style="width:85%"></span></span><span class="bar" title="insider conviction: 4/15">
+          <span style="width:27%"></span></span><span class="bar" title="valuation gap: 8/15">
+          <span style="width:53%"></span></span></td>
+        <td class="sub read">Q2 26 net income $18.9M and EPS $0.56, +21.7% YoY, with NIM expanding to 3.70%, ROATCE 15.66%, efficiency improving to 57.76% and the dividend raised 16.7%.</td>
+        <td class="sub scored">2026-07-27<div>medium</div></td>
+      </tr><tr class="">
+        <td class="rk">4</td>
+        <td class="tkcell"><span class="tkr">CSR</span> <span class="tag info">partial</span>
+            <div class="sub">Centerspace</div><div class="why">REIT — Residential</div></td>
+        <td class="tot">50</td>
+        <td class="bars"><span class="bar" title="survival: 14/25">
+          <span style="width:56%"></span></span><span class="bar" title="growth quality: 12/25">
+          <span style="width:48%"></span></span><span class="bar" title="profitability: 10/20">
+          <span style="width:50%"></span></span><span class="bar" title="insider conviction: 3/15">
+          <span style="width:20%"></span></span><span class="bar" title="valuation gap: 11/15">
+          <span style="width:73%"></span></span></td>
+        <td class="sub read">Q2 Core FFO of $1.27 beat the $1.20 consensus on same-store revenue +3.4% and NOI +2.4%, and at roughly 11x Core FFO it is cheap against apartment-REIT peers with well-termed debt at a 3.6% average rate over 6.7 years.</td>
+        <td class="sub scored">2026-07-27<div>medium</div></td>
+      </tr><tr class="">
+        <td class="rk">5</td>
+        <td class="tkcell"><span class="tkr">ERII</span> <span class="tag info">partial</span>
+            <div class="sub">Energy Recovery, Inc.</div><div class="why">Industrial Machinery</div></td>
+        <td class="tot">36</td>
+        <td class="bars"><span class="bar" title="survival: 20/25">
+          <span style="width:80%"></span></span><span class="bar" title="growth quality: 5/25">
+          <span style="width:20%"></span></span><span class="bar" title="profitability: 5/20">
+          <span style="width:25%"></span></span><span class="bar" title="insider conviction: 0/15">
+          <span style="width:0%"></span></span><span class="bar" title="valuation gap: 6/15">
+          <span style="width:40%"></span></span></td>
+        <td class="sub read">Fortress balance sheet with $92.1M cash and investments, $21.0M operating cash flow and only $24.7M total liabilities.</td>
+        <td class="sub scored">2026-07-27<div>medium</div></td>
+      </tr><tr class="">
+        <td class="rk">6</td>
+        <td class="tkcell"><span class="tkr">ENR</span> <span class="tag info">partial</span>
+            <div class="sub">Energizer Holdings, Inc.</div><div class="why">Household Products</div></td>
+        <td class="tot">32</td>
+        <td class="bars"><span class="bar" title="survival: 9/25">
+          <span style="width:36%"></span></span><span class="bar" title="growth quality: 5/25">
+          <span style="width:20%"></span></span><span class="bar" title="profitability: 9/20">
+          <span style="width:45%"></span></span><span class="bar" title="insider conviction: 2/15">
+          <span style="width:13%"></span></span><span class="bar" title="valuation gap: 7/15">
+          <span style="width:47%"></span></span></td>
+        <td class="sub read">Stable consumer-staples cash flow in batteries and auto care at roughly 7.7x EV/EBITDA.</td>
+        <td class="sub scored">2026-07-27<div>low</div></td>
+      </tr><tr class="">
+        <td class="rk">7</td>
+        <td class="tkcell"><span class="tkr">IPX</span> <span class="tag info">partial</span>
+            <div class="sub">IperionX Limited</div><div class="why">Metals &amp; Mining — Titanium</div></td>
+        <td class="tot">26</td>
+        <td class="bars"><span class="bar" title="survival: 9/25">
+          <span style="width:36%"></span></span><span class="bar" title="growth quality: 2/25">
+          <span style="width:8%"></span></span><span class="bar" title="profitability: 1/20">
+          <span style="width:5%"></span></span><span class="bar" title="insider conviction: 11/15">
+          <span style="width:73%"></span></span><span class="bar" title="valuation gap: 3/15">
+          <span style="width:20%"></span></span></td>
+        <td class="sub read">Executive Chairman Todd Hannigan bought 300,000 shares at $3.59 (~$1.1M) on the open market right after a $50M raise, and $42.1M of obligated US government reimbursement materially subsidizes the burn.</td>
+        <td class="sub scored">2026-07-27<div>low</div></td>
+      </tr><tr class="">
+        <td class="rk">8</td>
+        <td class="tkcell"><span class="tkr">CGNT</span> 
+            <div class="sub">Cognyte Software Ltd.</div></td>
+        <td class="tot">69</td>
+        <td class="bars"><span class="bar" title="survival: 22/25">
+          <span style="width:88%"></span></span><span class="bar" title="growth quality: 17/25">
+          <span style="width:68%"></span></span><span class="bar" title="profitability: 15/20">
+          <span style="width:75%"></span></span><span class="bar" title="insider conviction: 3/15">
+          <span style="width:20%"></span></span><span class="bar" title="valuation gap: 12/15">
+          <span style="width:80%"></span></span></td>
+        <td class="sub read">Debt-free national-security analytics vendor growing organically ~12% with adjusted EBITDA compounding ~40%, trading at ~8x guided EBITDA after a guidance-intact EPS-miss selloff.</td>
+        <td class="sub scored">2026-07-27<div>high</div></td>
+      </tr><tr class="">
+        <td class="rk">9</td>
+        <td class="tkcell"><span class="tkr">ZVRA</span> <span class="tag info">unverified</span>
+            <div class="sub">Zevra Therapeutics, Inc.</div></td>
+        <td class="tot">51</td>
+        <td class="bars"><span class="bar" title="survival: 16/25">
+          <span style="width:64%"></span></span><span class="bar" title="growth quality: 20/25">
+          <span style="width:80%"></span></span><span class="bar" title="profitability: 5/20">
+          <span style="width:25%"></span></span><span class="bar" title="insider conviction: 2/15">
+          <span style="width:13%"></span></span><span class="bar" title="valuation gap: 8/15">
+          <span style="width:53%"></span></span></td>
+        <td class="sub read">Genuine organic rare-disease product ramp — Q1 2026 revenue $36.22M, +77.5% YoY, debt-free with $236.8M cash at Q1 — but the headline $37.9M Q1 net income is a $43.3M one-time gain on the SDX portfolio sale, not operations.</td>
+        <td class="sub scored">2026-07-27<div>medium</div></td>
+      </tr><tr class="">
+        <td class="rk">10</td>
+        <td class="tkcell"><span class="tkr">AVAH</span> <span class="tag info">unverified</span>
             <div class="sub">Aveanna Healthcare Holdings</div></td>
         <td class="tot">48</td>
         <td class="bars"><span class="bar" title="survival: 11/25">
@@ -132,8 +248,8 @@ code { background:color-mix(in srgb,var(--line) 55%,transparent); padding:.1em .
         <td class="sub read">Real 15.9% Q1 revenue growth with guidance raised twice to $2.63-2.65B, but the story is leveraged and partly acquired via Family First.</td>
         <td class="sub scored">2026-07-25<div>medium</div></td>
       </tr><tr class="">
-        <td class="rk">3</td>
-        <td class="tkcell"><span class="tkr">VIA</span> 
+        <td class="rk">11</td>
+        <td class="tkcell"><span class="tkr">VIA</span> <span class="tag info">unverified</span>
             <div class="sub">Via Transportation, Inc.</div></td>
         <td class="tot">44</td>
         <td class="bars"><span class="bar" title="survival: 17/25">
@@ -144,8 +260,112 @@ code { background:color-mix(in srgb,var(--line) 55%,transparent); padding:.1em .
           <span style="width:47%"></span></span></td>
         <td class="sub read">29% revenue growth to $127.4M with $348M net cash, no debt and a 5.1 current ratio — but profitability is adjusted-EBITDA theatre.</td>
         <td class="sub scored">2026-07-25<div>medium</div></td>
+      </tr><tr class="">
+        <td class="rk">12</td>
+        <td class="tkcell"><span class="tkr">MBC</span> 
+            <div class="sub">MasterBrand, Inc.</div></td>
+        <td class="tot">40</td>
+        <td class="bars"><span class="bar" title="survival: 11/25">
+          <span style="width:44%"></span></span><span class="bar" title="growth quality: 5/25">
+          <span style="width:20%"></span></span><span class="bar" title="profitability: 8/20">
+          <span style="width:40%"></span></span><span class="bar" title="insider conviction: 8/15">
+          <span style="width:53%"></span></span><span class="bar" title="valuation gap: 8/15">
+          <span style="width:53%"></span></span></td>
+        <td class="sub read">A director bought 11,587 shares into a 19% drawdown, but Q1 2026 net sales fell 6.4% to $618M and tariff exposure is guided at 5-6% of net sales.</td>
+        <td class="sub scored">2026-07-27<div>medium</div></td>
+      </tr><tr class="">
+        <td class="rk">13</td>
+        <td class="tkcell"><span class="tkr">LUNR</span> <span class="tag info">unverified</span>
+            <div class="sub">Intuitive Machines, Inc.</div><div class="why">Aerospace &amp; Defense</div></td>
+        <td class="tot">28</td>
+        <td class="bars"><span class="bar" title="survival: 8/25">
+          <span style="width:32%"></span></span><span class="bar" title="growth quality: 12/25">
+          <span style="width:48%"></span></span><span class="bar" title="profitability: 3/20">
+          <span style="width:15%"></span></span><span class="bar" title="insider conviction: 0/15">
+          <span style="width:0%"></span></span><span class="bar" title="valuation gap: 5/15">
+          <span style="width:33%"></span></span></td>
+        <td class="sub read">$943M contracted backlog across NASA and defense with 2026 revenue guidance up to $1B, plus an L3Harris award for 18 SDA Tranche 3 tracking-layer spacecraft.</td>
+        <td class="sub scored">2026-07-27<div>low</div></td>
+      </tr><tr class="">
+        <td class="rk">14</td>
+        <td class="tkcell"><span class="tkr">FULC</span> <span class="tag info">unverified</span>
+            <div class="sub">Fulcrum Therapeutics, Inc.</div><div class="why">Biotechnology</div></td>
+        <td class="tot">23</td>
+        <td class="bars"><span class="bar" title="survival: 12/25">
+          <span style="width:48%"></span></span><span class="bar" title="growth quality: 1/25">
+          <span style="width:4%"></span></span><span class="bar" title="profitability: 1/20">
+          <span style="width:5%"></span></span><span class="bar" title="insider conviction: 3/15">
+          <span style="width:20%"></span></span><span class="bar" title="valuation gap: 6/15">
+          <span style="width:40%"></span></span></td>
+        <td class="sub read">Trades below a reported ~$330M net cash position with Tang Capital accumulating on 14-15 July — a liquidation/strategic-review special situation, not an operating business.</td>
+        <td class="sub scored">2026-07-27<div>low</div></td>
+      </tr><tr class="">
+        <td class="rk">15</td>
+        <td class="tkcell"><span class="tkr">SERV</span> <span class="tag info">unverified</span>
+            <div class="sub">Serve Robotics Inc.</div></td>
+        <td class="tot">16</td>
+        <td class="bars"><span class="bar" title="survival: 4/25">
+          <span style="width:16%"></span></span><span class="bar" title="growth quality: 8/25">
+          <span style="width:32%"></span></span><span class="bar" title="profitability: 1/20">
+          <span style="width:5%"></span></span><span class="bar" title="insider conviction: 2/15">
+          <span style="width:13%"></span></span><span class="bar" title="valuation gap: 1/15">
+          <span style="width:7%"></span></span></td>
+        <td class="sub read">Q1 2026 revenue of $3.0M (+578% YoY) off a near-zero base, with 2026 guidance of only ~$26M and new sidewalk-robot deployments paused in H1.</td>
+        <td class="sub scored">2026-07-26<div>medium</div></td>
+      </tr><tr class="">
+        <td class="rk">16</td>
+        <td class="tkcell"><span class="tkr">CRDF</span> <span class="tag info">unverified</span>
+            <div class="sub">Cardiff Oncology, Inc.</div><div class="why">Biotechnology</div></td>
+        <td class="tot">13</td>
+        <td class="bars"><span class="bar" title="survival: 8/25">
+          <span style="width:32%"></span></span><span class="bar" title="growth quality: 0/25">
+          <span style="width:0%"></span></span><span class="bar" title="profitability: 0/20">
+          <span style="width:0%"></span></span><span class="bar" title="insider conviction: 2/15">
+          <span style="width:13%"></span></span><span class="bar" title="valuation gap: 3/15">
+          <span style="width:20%"></span></span></td>
+        <td class="sub read">Clinical-stage oncology with onvansertib in Phase 2; director Gary Pace put in ~$1M.</td>
+        <td class="sub scored">2026-07-27<div>low</div></td>
+      </tr><tr class="">
+        <td class="rk">17</td>
+        <td class="tkcell"><span class="tkr">VANI</span> <span class="tag info">unverified</span>
+            <div class="sub">Vivani Medical, Inc.</div><div class="why">Biotechnology — Drug Delivery</div></td>
+        <td class="tot">12</td>
+        <td class="bars"><span class="bar" title="survival: 7/25">
+          <span style="width:28%"></span></span><span class="bar" title="growth quality: 0/25">
+          <span style="width:0%"></span></span><span class="bar" title="profitability: 0/20">
+          <span style="width:0%"></span></span><span class="bar" title="insider conviction: 2/15">
+          <span style="width:13%"></span></span><span class="bar" title="valuation gap: 3/15">
+          <span style="width:20%"></span></span></td>
+        <td class="sub read">GLP-1 subdermal implant candidate with data expected Q4 2026 and a ~$1M acquisition by Chairman Gregg Williams.</td>
+        <td class="sub scored">2026-07-27<div>low</div></td>
       </tr><tr class="out">
-        <td class="rk">4</td>
+        <td class="rk">18</td>
+        <td class="tkcell"><span class="tkr">HDSN</span> <span class="tag bad">✗ ineligible</span>
+            <div class="sub">Hudson Technologies, Inc.</div><div class="why">Specialty Chemicals — Refrigerants</div><div class="why">Market cap ~$183M, below the $300M universe floor (aggregator-sourced, not reconciled against a verified quote)</div></td>
+        <td class="tot">43</td>
+        <td class="bars"><span class="bar" title="survival: 15/25">
+          <span style="width:60%"></span></span><span class="bar" title="growth quality: 12/25">
+          <span style="width:48%"></span></span><span class="bar" title="profitability: 8/20">
+          <span style="width:40%"></span></span><span class="bar" title="insider conviction: 0/15">
+          <span style="width:0%"></span></span><span class="bar" title="valuation gap: 8/15">
+          <span style="width:53%"></span></span></td>
+        <td class="sub read">Q1 2026 revenue rose 9% to $60.2M on 20% volume growth with slightly higher HFC pricing.</td>
+        <td class="sub scored">2026-07-27<div>low</div></td>
+      </tr><tr class="out">
+        <td class="rk">19</td>
+        <td class="tkcell"><span class="tkr">TYGO</span> <span class="tag bad">✗ ineligible</span>
+            <div class="sub">Tigo Energy, Inc.</div><div class="why">Market cap ~$260M, below the $300M floor.</div></td>
+        <td class="tot">50</td>
+        <td class="bars"><span class="bar" title="survival: 10/25">
+          <span style="width:40%"></span></span><span class="bar" title="growth quality: 16/25">
+          <span style="width:64%"></span></span><span class="bar" title="profitability: 12/20">
+          <span style="width:60%"></span></span><span class="bar" title="insider conviction: 5/15">
+          <span style="width:33%"></span></span><span class="bar" title="valuation gap: 7/15">
+          <span style="width:47%"></span></span></td>
+        <td class="sub read">Genuinely improving: Q1 2026 revenue +33.7% to $25.2M, GAAP net loss narrowed to $1.8M from $7.0M, no debt after retiring a $50M note, FY26 guide $130-135M — worth re-checking if the cap crosses $300M.</td>
+        <td class="sub scored">2026-07-27<div>low</div></td>
+      </tr><tr class="out">
+        <td class="rk">20</td>
         <td class="tkcell"><span class="tkr">MPB</span> <span class="tag bad">✗ ineligible</span>
             <div class="sub">Mid Penn Bancorp, Inc.</div><div class="why">Revenue growth is essentially entirely acquired (William Penn and 1st Colonial) with no organic component disclosed; market cap figure is stale (8 Apr 2026).</div></td>
         <td class="tot">49</td>
@@ -158,57 +378,31 @@ code { background:color-mix(in srgb,var(--line) 55%,transparent); padding:.1em .
         <td class="sub read">Q2 EPS of $0.86 beat $0.71 and net income rose 355.5% YoY, but the company itself attributes the increase to two acquisitions.</td>
         <td class="sub scored">2026-07-25<div>medium</div></td>
       </tr><tr class="out">
-        <td class="rk">5</td>
-        <td class="tkcell"><span class="tkr">TYGO</span> <span class="tag bad">✗ ineligible</span>
-            <div class="sub">Tigo Energy, Inc.</div><div class="why">Market cap of $156.38M (10 Jul 2026) is below the $300M universe floor.</div></td>
-        <td class="tot">44</td>
-        <td class="bars"><span class="bar" title="survival: 10/25">
-          <span style="width:40%"></span></span><span class="bar" title="growth quality: 15/25">
-          <span style="width:60%"></span></span><span class="bar" title="profitability: 9/20">
-          <span style="width:45%"></span></span><span class="bar" title="insider conviction: 2/15">
-          <span style="width:13%"></span></span><span class="bar" title="valuation gap: 8/15">
-          <span style="width:53%"></span></span></td>
-        <td class="sub read">Genuinely improving — Q1 revenue +33.7% to $25.2M, gross margin up to 42.8% from 38.1%, loss narrowed to $1.8M from $7.0M, no debt.</td>
-        <td class="sub scored">2026-07-25<div>low</div></td>
+        <td class="rk">21</td>
+        <td class="tkcell"><span class="tkr">ADV</span> <span class="tag bad">✗ ineligible</span>
+            <div class="sub">Advantage Solutions Inc.</div><div class="why">Market cap below $300M floor and unreconciled across sources ($272M per Simply Wall St vs $0.35B as of 8 May 2026).</div></td>
+        <td class="tot">31</td>
+        <td class="bars"><span class="bar" title="survival: 6/25">
+          <span style="width:24%"></span></span><span class="bar" title="growth quality: 5/25">
+          <span style="width:20%"></span></span><span class="bar" title="profitability: 4/20">
+          <span style="width:20%"></span></span><span class="bar" title="insider conviction: 9/15">
+          <span style="width:60%"></span></span><span class="bar" title="valuation gap: 7/15">
+          <span style="width:47%"></span></span></td>
+        <td class="sub read">Insider purchases April-June 2026 plus a $30M buyback, and Experiential Services grew 22.8% to $385.5M, but Branded Services fell 11.3% and total 2025 revenue declined 0.7%.</td>
+        <td class="sub scored">2026-07-27<div>low</div></td>
       </tr><tr class="out">
-        <td class="rk">6</td>
-        <td class="tkcell"><span class="tkr">ERII</span> <span class="tag bad">✗ ineligible</span>
-            <div class="sub">Energy Recovery, Inc.</div><div class="why">Market cap not verified this session; eliminated on fundamentals before size was confirmed.</div></td>
-        <td class="tot">38</td>
-        <td class="bars"><span class="bar" title="survival: 16/25">
-          <span style="width:64%"></span></span><span class="bar" title="growth quality: 8/25">
-          <span style="width:32%"></span></span><span class="bar" title="profitability: 5/20">
-          <span style="width:25%"></span></span><span class="bar" title="insider conviction: 4/15">
-          <span style="width:27%"></span></span><span class="bar" title="valuation gap: 5/15">
-          <span style="width:33%"></span></span></td>
-        <td class="sub read">Q1 revenue rose 20.4% to $9.7M and beat estimates, with $92.1M cash and investments and $21.0M operating cash flow.</td>
-        <td class="sub scored">2026-07-25<div>low</div></td>
-      </tr><tr class="out">
-        <td class="rk">7</td>
-        <td class="tkcell"><span class="tkr">MBC</span> <span class="tag bad">✗ ineligible</span>
-            <div class="sub">MasterBrand, Inc.</div><div class="why">Market cap not verified against any source this session — could not reconcile size, so not scored as investable.</div></td>
-        <td class="tot">37</td>
-        <td class="bars"><span class="bar" title="survival: 10/25">
-          <span style="width:40%"></span></span><span class="bar" title="growth quality: 3/25">
-          <span style="width:12%"></span></span><span class="bar" title="profitability: 4/20">
-          <span style="width:20%"></span></span><span class="bar" title="insider conviction: 12/15">
-          <span style="width:80%"></span></span><span class="bar" title="valuation gap: 8/15">
-          <span style="width:53%"></span></span></td>
-        <td class="sub read">The strongest insider signal found this session — CEO bought 60,000 shares for $505,800 — but he is buying into a deteriorating cyclical.</td>
-        <td class="sub scored">2026-07-25<div>low</div></td>
-      </tr><tr class="out">
-        <td class="rk">8</td>
+        <td class="rk">22</td>
         <td class="tkcell"><span class="tkr">GLOO</span> <span class="tag bad">✗ ineligible</span>
-            <div class="sub">Gloo Holdings Inc.</div><div class="why">Stated cash runway under ~2 quarters: $33M cash as of 30 Apr 2026 against $17.1M quarterly operating cash burn plus $5.5M investing outflows.</div></td>
-        <td class="tot">24</td>
-        <td class="bars"><span class="bar" title="survival: 4/25">
-          <span style="width:16%"></span></span><span class="bar" title="growth quality: 9/25">
-          <span style="width:36%"></span></span><span class="bar" title="profitability: 3/20">
-          <span style="width:15%"></span></span><span class="bar" title="insider conviction: 5/15">
-          <span style="width:33%"></span></span><span class="bar" title="valuation gap: 3/15">
-          <span style="width:20%"></span></span></td>
-        <td class="sub read">238% Q1 revenue growth to $41.5M sounds spectacular but is a roll-up of Westfall, Masterworks, EMD and Midwestern with only ~30% disclosed as organic.</td>
-        <td class="sub scored">2026-07-25<div>medium</div></td>
+            <div class="sub">Gloo Holdings, Inc.</div><div class="why">Going-concern: management concluded substantial doubt about ability to continue absent profitability or further capital; ~$22.6M Q1 cash outflow vs $33M cash. Growth also substantially acquired (Masterworks, Igniter, XRI Global).</div></td>
+        <td class="tot">28</td>
+        <td class="bars"><span class="bar" title="survival: 3/25">
+          <span style="width:12%"></span></span><span class="bar" title="growth quality: 8/25">
+          <span style="width:32%"></span></span><span class="bar" title="profitability: 5/20">
+          <span style="width:25%"></span></span><span class="bar" title="insider conviction: 8/15">
+          <span style="width:53%"></span></span><span class="bar" title="valuation gap: 4/15">
+          <span style="width:27%"></span></span></td>
+        <td class="sub read">Q1 2026 revenue tripled to $41.5M (+238%) and FY guidance was raised to ~$190-195M, but the growth is bought and the cash is nearly gone.</td>
+        <td class="sub scored">2026-07-27<div>medium</div></td>
       </tr></tbody></table></div>
     <p class="sub note"><strong>Scores</strong> bars read left to right:
     survival · growth · profitability · insider conviction · valuation gap (hover for values).
@@ -216,8 +410,23 @@ code { background:color-mix(in srgb,var(--line) 55%,transparent); padding:.1em .
     rank below fresh ones. Scores are model judgements, not audited data.</p>
   </section>
   <div class="cols">
-    <nav class="nav" role="tablist" aria-label="Reports"><button class="nav-item" role="tab" data-target="2026-07-25"
+    <nav class="nav" role="tablist" aria-label="Reports"><button class="nav-item" role="tab" data-target="2026-07-27-2"
     aria-selected="true" tabindex="0">
+    <span class="nav-date">2026-07-27-2</span>
+    <span class="nav-ticker">no pick</span>
+    <span class="nav-company">no candidate survived</span>
+  </button><button class="nav-item" role="tab" data-target="2026-07-27"
+    aria-selected="false" tabindex="-1">
+    <span class="nav-date">2026-07-27</span>
+    <span class="nav-ticker">YEXT</span>
+    <span class="nav-company">Yext, Inc.</span>
+  </button><button class="nav-item" role="tab" data-target="2026-07-26"
+    aria-selected="false" tabindex="-1">
+    <span class="nav-date">2026-07-26</span>
+    <span class="nav-ticker">CGNT</span>
+    <span class="nav-company">Cognyte Software Ltd.</span>
+  </button><button class="nav-item" role="tab" data-target="2026-07-25"
+    aria-selected="false" tabindex="-1">
     <span class="nav-date">2026-07-25</span>
     <span class="nav-ticker">SHBI</span>
     <span class="nav-company">Shore Bancshares, Inc.</span>
@@ -227,7 +436,251 @@ code { background:color-mix(in srgb,var(--line) 55%,transparent); padding:.1em .
     <span class="nav-ticker">ISTR</span>
     <span class="nav-company">Investar Holding Corporation</span>
   </button></nav>
-    <div class="detail"><section class="panel" id="r-2026-07-25" role="tabpanel" >
+    <div class="detail"><section class="panel" id="r-2026-07-27-2" role="tabpanel" >
+  <header class="pick-head"><div class="ticker">No pick</div>
+           <div class="company">No candidate survived the fundamentals check</div>
+           <div class="stamp">2026-07-27-2</div></header>
+         <pre class="raw">{
+  &quot;as_of&quot;: &quot;2026-07-27&quot;,
+  &quot;universe&quot;: &quot;300M-10B&quot;,
+  &quot;candidates&quot;: [
+    {
+      &quot;ticker&quot;: &quot;ISTR&quot;,
+      &quot;company&quot;: &quot;Investar Holding Corporation&quot;,
+      &quot;price&quot;: 30.16,
+      &quot;market_cap_musd&quot;: 416,
+      &quot;eligible&quot;: true,
+      &quot;disqualifier&quot;: null,
+      &quot;data_completeness&quot;: &quot;verified&quot;,
+      &quot;sector&quot;: &quot;Regional Banks&quot;,
+      &quot;scores&quot;: {
+        &quot;survival&quot;: 19,
+        &quot;growth_quality&quot;: 8,
+        &quot;profitability&quot;: 14,
+        &quot;insider_conviction&quot;: 4,
+        &quot;valuation_gap&quot;: 9
+      },
+      &quot;total&quot;: 54,
+      &quot;confidence&quot;: &quot;high&quot;,
+      &quot;one_line&quot;: &quot;NIM expanding to 3.67% with core ROAA of 1.21% and clean credit (0.63% NPLs, 14.99% total capital) at 12.2x earnings and 1.31x tangible book.&quot;,
+      &quot;key_risk&quot;: &quot;All YoY growth is the Wichita Falls acquisition; loans and deposits both fell sequentially while the efficiency ratio worsened to 67.49%, and the CEO sold $733K against one director's ~$96K of buying.&quot;
+    },
+    {
+      &quot;ticker&quot;: &quot;CSR&quot;,
+      &quot;company&quot;: &quot;Centerspace&quot;,
+      &quot;price&quot;: 56.3,
+      &quot;market_cap_musd&quot;: 946,
+      &quot;eligible&quot;: true,
+      &quot;disqualifier&quot;: null,
+      &quot;data_completeness&quot;: &quot;partial&quot;,
+      &quot;sector&quot;: &quot;REIT — Residential&quot;,
+      &quot;scores&quot;: {
+        &quot;survival&quot;: 14,
+        &quot;growth_quality&quot;: 12,
+        &quot;profitability&quot;: 10,
+        &quot;insider_conviction&quot;: 3,
+        &quot;valuation_gap&quot;: 11
+      },
+      &quot;total&quot;: 50,
+      &quot;confidence&quot;: &quot;medium&quot;,
+      &quot;one_line&quot;: &quot;Q2 Core FFO of $1.27 beat the $1.20 consensus on same-store revenue +3.4% and NOI +2.4%, and at roughly 11x Core FFO it is cheap against apartment-REIT peers with well-termed debt at a 3.6% average rate over 6.7 years.&quot;,
+      &quot;key_risk&quot;: &quot;Net debt at 8.2x adjusted EBITDA with full-year same-store revenue guided to just 0.0-1.75% and Core FFO of $4.81-5.05 versus $4.93 in 2025 — flat; no current-session price was obtainable (latest quotes found were dated April and June 2026) and insider buying is aggregator-only with no Form 4 confirmed.&quot;
+    },
+    {
+      &quot;ticker&quot;: &quot;ENR&quot;,
+      &quot;company&quot;: &quot;Energizer Holdings, Inc.&quot;,
+      &quot;price&quot;: null,
+      &quot;market_cap_musd&quot;: 1200,
+      &quot;eligible&quot;: true,
+      &quot;disqualifier&quot;: null,
+      &quot;data_completeness&quot;: &quot;partial&quot;,
+      &quot;sector&quot;: &quot;Household Products&quot;,
+      &quot;scores&quot;: {
+        &quot;survival&quot;: 9,
+        &quot;growth_quality&quot;: 5,
+        &quot;profitability&quot;: 9,
+        &quot;insider_conviction&quot;: 2,
+        &quot;valuation_gap&quot;: 7
+      },
+      &quot;total&quot;: 32,
+      &quot;confidence&quot;: &quot;low&quot;,
+      &quot;one_line&quot;: &quot;Stable consumer-staples cash flow in batteries and auto care at roughly 7.7x EV/EBITDA.&quot;,
+      &quot;key_risk&quot;: &quot;Total debt of $3.42B against a market cap near $1.1-1.3B is roughly 3x the equity value, while fiscal 2026 organic net sales are guided only flat to slightly up — leverage with no growth to delever into; market cap resolved only to May 2026 sources and no current price or share count was verified this session.&quot;
+    }
+  ]
+}
+</pre>
+  <details class="fold"><summary>The screen — shortlist &amp; eliminations</summary><p>Verified: ISTR at <strong>$30.16</strong> (close, 27 Jul 2026) × 13.78M shares = <strong>$415.6M</strong>, matching the $415.53M quote exactly. Market cap fully reconciled — the ~$1.03B figure in my record was an error, now resolved.</p>
+<p><strong>Budget: 15 searches.</strong> Committing.</p>
+<p><strong>Two notes before the pick.</strong> First, honesty on the bar: ISTR scores 54, which is <em>below</em> SHBI (61) and CGNT (69) already live. I'm picking it because it's the only name I fully verified today, not because it clears the portfolio's best. Second, concentration: SHBI is already a live regional bank. This would be the second, and that's a real reason to size it small.</p>
+<p>PICK: ISTR — Investar Holding Corporation</p>
+<p>THESIS (1 paragraph):</p>
+<p>A $416M Louisiana/Texas bank trading at 12.2x earnings and 1.31x tangible book, having just digested the Wichita Falls Bancshares acquisition. What's genuinely working is the margin: NIM expanded to 3.67% from 3.59% sequentially while the loan book was rebalanced toward higher-yielding commercial credit, and core ROAA of 1.21% is respectable for a bank this size. Credit is clean — nonperforming loans at 0.63%, allowance at 1.18%, total capital ratio 14.99%. The market may be underrating the earnings power that eight newly-hired commercial bankers across Texas and Louisiana represent, since their cost is in the expense line today and their loans are not yet on the books. But this is a modest thesis, not a compelling one: the stock is at $30.16 against a 52-week high of $31.77 and a consensus target of ~$33, which is roughly 9% of upside. Most of the good news is already priced.</p>
+<p>KEY NUMBERS:</p>
+<ul>
+<li>Revenue trend: Total loans $3.06B, +45.3% YoY but <strong>down 0.3% linked-quarter</strong>; deposits $3.21B, +37.5% YoY but <strong>down 0.6% linked-quarter</strong>. The YoY growth is the acquisition. Organic growth is currently flat-to-slightly-negative. Q2 net income $9.5M, diluted EPS $0.61 vs $0.77 in Q1 and $0.46 in Q2 2025; core EPS $0.75 vs $0.87 in Q1. (Q2 2026 release, 20 Jul 2026)</li>
+<li>Cash / debt: Total assets $3.86B, total capital ratio 14.99%, TBV/share $23.09 → P/TBV 1.31x. Deposit-funded; no runway or maturity-wall concern. (Q2 2026 release)</li>
+<li>Insider activity: <strong>Form 4 confirmed</strong> — Director Robert Chris Jordan bought 1,550 shares @ $26.85 (12 Mar 2026, ~$41.6K) and 2,000 @ $27.36 (23 Apr 2026, ~$54.7K), no sales, now holds 60,798 shares. Offsetting this: CEO John D'Angelo <strong>sold $732,825</strong> of stock. At the company level this is net selling, and the buying is one director for under $100K total.</li>
+<li>Analyst targets: Consensus ~$33.00 (high $34.00, low $31.50). Zacks upgraded to Strong Buy; Weiss to buy (b); Wall Street Zen hold→buy. No price-target revisions found in the last month.</li>
+</ul>
+<p>MAIN RISK:</p>
+<p>Organic growth is not there. Loans and deposits both shrank sequentially, and the entire growth story is one acquisition that has already closed. Meanwhile the efficiency ratio worsened from 64.08% to 67.49% and core ROAA fell from 1.41% to 1.21%. If the eight new commercial bankers don't originate enough to restart organic loan growth, this is a fully-valued bank with rising expenses and a shrinking balance sheet — a value trap at 1.31x book.</p>
+<p>WHAT WOULD CHANGE MY MIND:</p>
+<p>If Q3 2026 shows a second consecutive quarter of sequential loan decline, or the efficiency ratio stays above 67%, the banker-hiring thesis is dead and this is not worth 1.31x tangible book. Conversely, sequential loan growth above 2% with efficiency back under 64% would justify raising the growth_quality score materially. I would also want to see whether CEO D'Angelo's selling continues in the next Form 4 cycle.</p>
+<p>---</p>
+<p>This is not financial advice. This is an automated research summary based on publicly available information as of 2026-07-27. Verify all figures independently before making any investment decision.</p></details>
+  <details class="fold"><summary>Sources (16)</summary><p><strong>Record-keeping from this session:</strong> ISTR's market cap contradiction is now <strong>resolved</strong> — $415.6M, reconciled two ways from the 10-Q-basis share count and today's close. It should move out of &quot;unresolved.&quot; ENR and CSR remain <code>partial</code>: both are clearly in-universe, but I could not obtain a current-session price for either, so neither should be treated as rejected. HDSN surfaced again in a screener feed touting a 416,480-share buyback as &quot;insider&quot; activity — that is a buyback, not insider buying, and HDSN stays settled on the market-cap floor regardless.</p>
+<p>Sources: <a href="https://stockanalysis.com/stocks/istr/" rel="noopener" target="_blank">ISTR quote/shares</a> · <a href="https://www.prnewswire.com/news-releases/investar-holding-corporation-announces-2026-second-quarter-results-302829060.html" rel="noopener" target="_blank">ISTR Q2 2026 results</a> · <a href="https://www.stocktitan.net/sec-filings/ISTR/form-4-investar-holding-corp-insider-trading-activity-34ee4c3237ee.html" rel="noopener" target="_blank">ISTR director Form 4 purchase</a> · <a href="https://www.investing.com/news/insider-trading-news/investar-holding-ceo-dangelo-sells-732825-in-istr-stock-93CH-4474890" rel="noopener" target="_blank">ISTR CEO sale</a> · <a href="https://www.tipranks.com/news/the-fly/centerspace-reports-q2-core-ffo-1-27-consensus-1-20" rel="noopener" target="_blank">CSR Q2 Core FFO</a> · <a href="https://www.stocktitan.net/sec-filings/CSR/8-k-centerspace-reports-material-event-29555756e4c5.html" rel="noopener" target="_blank">CSR guidance and debt profile</a> · <a href="https://companiesmarketcap.com/energizer/total-debt/" rel="noopener" target="_blank">ENR debt</a> · <a href="https://investors.energizerholdings.com/2025-11-18-Energizer-Holdings,-Inc-Announces-Fiscal-2025-Fourth-Quarter-and-Full-Year-Results-and-Financial-Outlook-for-Fiscal-2026" rel="noopener" target="_blank">ENR fiscal 2026 outlook</a></p>
+<p>SOURCES</p>
+<ol>
+<li><a href="https://stockanalysis.com/stocks/istr/" rel="noopener" target="_blank">Investar Holding (ISTR) Stock Price &amp; Overview</a></li>
+<li><a href="https://www.prnewswire.com/news-releases/investar-holding-corporation-announces-2026-second-quarter-results-302829060.html" rel="noopener" target="_blank">Investar Holding Corporation Announces 2026 Second Quarter Results</a></li>
+<li><a href="https://www.stocktitan.net/sec-filings/ISTR/form-4-investar-holding-corp-insider-trading-activity-34ee4c3237ee.html" rel="noopener" target="_blank">Investar director buys 2,000 shares in open market | ISTR Insider Trading</a></li>
+<li><a href="https://www.investing.com/news/insider-trading-news/investar-holding-ceo-dangelo-sells-732825-in-istr-stock-93CH-4474890" rel="noopener" target="_blank">Investar holding CEO D’Angelo sells $732825 in ISTR stock By Investing.com</a></li>
+<li><a href="https://www.stocktitan.net/sec-filings/CSR/8-k-centerspace-reports-material-event-29555756e4c5.html" rel="noopener" target="_blank">Centerspace (NYSE: CSR) details 2026 Core FFO guidance and debt profile</a></li>
+<li><a href="https://www.tipranks.com/news/the-fly/centerspace-reports-q2-core-ffo-1-27-consensus-1-20" rel="noopener" target="_blank">centerspace reports q2 core ffo 1 27 consensus 1 20</a></li>
+<li><a href="https://investors.energizerholdings.com/2025-11-18-Energizer-Holdings,-Inc-Announces-Fiscal-2025-Fourth-Quarter-and-Full-Year-Results-and-Financial-Outlook-for-Fiscal-2026" rel="noopener" target="_blank">Energizer Holdings, Inc. Announces Fiscal 2025 Fourth Quarter and Full Year Results and Financial Outlook for Fiscal 2026 - Nov 18, 2025</a></li>
+<li><a href="https://companiesmarketcap.com/energizer/total-debt/" rel="noopener" target="_blank">Energizer Holdings (ENR) - Total debt</a></li>
+</ol></details>
+</section><section class="panel" id="r-2026-07-27" role="tabpanel" hidden>
+  <header class="pick-head">
+           <div class="ticker">YEXT</div>
+           <div class="company">Yext, Inc.</div>
+           <div class="stamp">2026-07-27</div>
+         </header>
+         <p class="thesis">Yext has stopped pretending to be a growth company and started behaving like a
+cash machine, and the market is still pricing it as a broken SaaS name. Q1 FY27
+revenue was $107.9M, down about 1% year over year — but it threw off $37.0M of
+free cash flow (34% margin), $26.9M of adjusted EBITDA (25%), and $2.6M of
+actual GAAP net income. Management is converting that cash directly into share
+count: a completed tender took out 24.3M shares at $5.75 for $140M, and the
+board just authorized another $100M of open-market repurchase against a $551M
+market cap. Flat revenue plus a ~20% reduction in shares is double-digit growth
+in free cash flow per share, which is the only figure that matters to a holder.
+At an enterprise value of roughly $607M ($551M cap plus ~$56M net debt), you are
+paying single-digit multiples of cash flow for 91% of ARR concentrated in
+customers spending $50K+ — the sticky end of the book, which grew 1% while the
+sub-$50K long tail fell 19%. The erosion is in the segment that was never going
+to be durable anyway.</p>
+         <h2>Key numbers</h2><dl class="numbers"><div class="num"><dt>Revenue trend</dt><dd>Q1 FY27 revenue $107.9M, -1% YoY vs $109.5M. ARR $440.8M, roughly flat. ARR from customers ≥$50K ACV: $403.1M, +1% YoY (91% of total). ARR below $50K: $37.7M, -19% YoY. Net retention 97%. This is a slow decline, not growth — I am not dressing it up.</dd></div><div class="num"><dt>Cash / debt</dt><dd>$91.881M cash at 4/30/26 against $147.597M long-term debt, net — approximately $56M net debt, under 0.6x annualized adjusted EBITDA. I could not verify the term loan's maturity date this session; that is unchecked.</dd></div><div class="num"><dt>Insider activity</dt><dd>Form 4 confirmed — director Daniel J. Englander bought 76,190 shares on 7/13/26 at a $5.2226 weighted average, $397,909 total, taking direct holdings from 65,000 to 141,190. One director, one purchase, but it more than doubled his stake and it was struck within 6% of today's $5.50. Note separately that the buyback is a company action, not insider conviction.</dd></div><div class="num"><dt>Analyst targets</dt><dd>6 analysts, consensus &quot;Hold,&quot; consensus price target $9.38, range $8.25 to $10.00.</dd></div></dl>
+         <aside class="callout risk"><h3>Main risk</h3><p>AI-driven search disintermediates the business Yext is built on. Yext monetizes</p>
+<p>managing a brand's structured presence across search engines, maps and</p>
+<p>directories; if answer engines route users without ever touching those listings,</p>
+<p>the ≥$50K enterprise cohort stops being sticky and the 1% decline becomes a 10%</p>
+<p>decline. A no-growth asset at 8x cash flow is cheap; a melting one is not.</p>
+<p>Compounding this, management has suspended both forward guidance and quarterly</p>
+<p>earnings calls — so the shareholder's ability to see that inflection coming has</p>
+<p>been deliberately reduced.</p></aside>
+         <aside class="callout change"><h3>What would change my mind</h3><p>If ARR from customers with $50K+ annual contract value — the $403.1M cohort —</p>
+<p>turns negative year over year in any quarter, or net retention drops below 95%,</p>
+<p>the thesis is broken and the buyback is just financial engineering on a shrinking</p>
+<p>base. Conversely, if the company restores earnings calls and ARR holds flat for</p>
+<p>two more quarters while share count keeps falling, this rerates.</p></aside>
+         <p class="disclaimer">This is not financial advice. This is an automated research summary based on
+publicly available information as of 2026-07-27. Verify all figures independently
+before making any investment decision.</p>
+  <details class="fold"><summary>The screen — shortlist &amp; eliminations</summary><p><strong>Shortlist built (8 names):</strong> YEXT, SHBI, ERII, HDSN, IPX, FULC, CRDF, VANI, LUNR — sourced from July 2026 insider-buy compilations and small-cap screens (Tier 4, lead-gen only), then taken to primary documents.</p>
+<p><strong>Eliminated fast:</strong></p>
+<ul>
+<li><strong>HDSN</strong> — cap ~$183M (aggregator), below the $300M floor. Dropped without further work.</li>
+<li><strong>ERII</strong> — Q1 CY26 revenue only $9.7M against a $12.3M GAAP loss, and management <strong>withdrew FY2026 guidance</strong> over Middle East uncertainty. Net cash and a $25M buyback, but a buyback is not insider buying and withdrawn guidance is the opposite of contracted revenue.</li>
+<li><strong>IPX (IperionX)</strong> — still pre-revenue, H1 2026 loss widened to US$34.8M from $16.2M, US$48.2M cash. Real insider buy ($1.1M by the Exec Chairman at $3.59), but you're underwriting a ramp, not a business.</li>
+<li><strong>FULC / CRDF / VANI</strong> — the &quot;insider buys&quot; were participation in registered direct offerings or pre-existing private agreements, not open-market conviction. Clinical-stage. Not researched further.</li>
+<li><strong>LUNR</strong> — $943M backlog is real, but I never verified cap, share count or GAAP losses this session. Unverified, not eliminated.</li>
+</ul>
+<p><strong>The real contest was YEXT vs SHBI.</strong> Shore Bancshares scored higher on the rubric (Q2 net income $18.9M, EPS $0.56 +21.7% YoY, ROATCE 15.66%, NIM 3.70% expanding, ~10x earnings). Two things stopped me picking it: <strong>nonperforming assets jumped to 1.09% of assets from 0.33% a year ago</strong> against a 1.20% allowance, and I <strong>could not reconcile its market cap</strong> — a Tier-4 source shows $0.77B on July 21 while the same family of sources showed ~$19.50/share in May, and I could not verify today's price. I won't make it the pick on an unreconciled cap. It goes on the list for a later run.</p>
+<p><strong>Market cap reconciliation for the pick:</strong> 100.134M shares outstanding at 4/30/26 (Q1 FY27 release, Tier 2) × $5.50 (verified quote, 7/27/26) = <strong>$551M</strong>, against a $553.87M quoted cap — agrees within 0.5%.</p></details>
+  <details class="fold"><summary>Sources (35)</summary><p><strong>Sources:</strong> <a href="https://investors.yext.com/news-events/press-releases/detail/387/yext-announces-first-quarter-fiscal-2027-results" rel="noopener" target="_blank">Yext Q1 FY27 results (IR)</a> · <a href="https://www.stocktitan.net/sec-filings/YEXT/8-k-yext-inc-reports-material-event-c11054fbcb6c.html" rel="noopener" target="_blank">Yext Q1 FY27 8-K / buyback</a> · <a href="https://www.stocktitan.net/sec-filings/YEXT/form-4-yext-inc-insider-trading-activity-5c6340001004.html" rel="noopener" target="_blank">Yext Form 4 — Englander</a> · <a href="https://www.investing.com/news/insider-trading-news/yext-director-daniel-englander-buys-397909-in-company-stock-93CH-4789630" rel="noopener" target="_blank">Yext director buys $397,909</a> · <a href="https://www.wallstreetzen.com/stocks/us/nyse/yext" rel="noopener" target="_blank">YEXT quote/market cap</a> · <a href="https://stockanalysis.com/stocks/yext/forecast/" rel="noopener" target="_blank">YEXT forecast</a> · <a href="https://www.prnewswire.com/news-releases/shore-bancshares-inc-reports-2026-second-quarter-results-302833642.html" rel="noopener" target="_blank">Shore Bancshares Q2 2026 results</a> · <a href="https://www.sec.gov/Archives/edgar/data/0001035092/000103509226000040/shbi-20260630xexx991.htm" rel="noopener" target="_blank">SHBI Q2 8-K</a> · <a href="https://www.macrotrends.net/stocks/charts/SHBI/shore-bancshares-inc/market-cap" rel="noopener" target="_blank">SHBI market cap</a> · <a href="https://ir.energyrecovery.com/news-events/press-releases/detail/377/energy-recovery-reports-its-first-quarter-2026-financial" rel="noopener" target="_blank">Energy Recovery Q1 2026 (IR)</a> · <a href="https://www.tickerreport.com/banking-finance/13359717/energy-recovery-nasdaqerii-updates-fy-2026-earnings-guidance.html" rel="noopener" target="_blank">ERII FY26 guidance withdrawal</a> · <a href="https://www.hudsontech.com/press-releases-and-financial-results/hudson-technologies-reports-first-quarter-2026-results/" rel="noopener" target="_blank">Hudson Technologies Q1 2026</a> · <a href="https://kalkine.com.au/news/mining/iperionx-asxipx-shares-plunged-22-after-h1-results-shows-widening-losses-and-delayed-revenue-outlook" rel="noopener" target="_blank">IperionX H1 2026</a> · <a href="https://www.merlintrader.com/insider-trading-biggest-buys-sells-july-17-2026/" rel="noopener" target="_blank">Insider buys, week of 13-17 July 2026</a> · <a href="https://simplywall.st/stocks/us/capital-goods/nasdaq-erii/energy-recovery/news/top-undervalued-small-caps-with-insider-buying-in-july-2026" rel="noopener" target="_blank">Small caps with insider buying, July 2026</a> · <a href="https://tickeron.com/trading-investing-101/15-innovative-small-caps-to-watch-in-2026-the-innovation-report/" rel="noopener" target="_blank">15 small caps 2026</a></p>
+<p>SOURCES</p>
+<ol>
+<li><a href="https://www.merlintrader.com/insider-trading-biggest-buys-sells-july-17-2026/" rel="noopener" target="_blank">Insider Trading This Week: The 20 Biggest Buys And Sells (July 13-17, 2026) - Merlintrader Trading Pub</a></li>
+<li><a href="https://www.hudsontech.com/press-releases-and-financial-results/hudson-technologies-reports-first-quarter-2026-results/" rel="noopener" target="_blank">HUDSON TECHNOLOGIES REPORTS FIRST QUARTER 2026 RESULTS - Hudson Technologies</a></li>
+<li><a href="https://ir.energyrecovery.com/news-events/press-releases/detail/377/energy-recovery-reports-its-first-quarter-2026-financial" rel="noopener" target="_blank">Energy Recovery Reports its First Quarter 2026 Financial Results and Organizational Updates :: Energy Recovery (ERII)</a></li>
+<li><a href="https://simplywall.st/stocks/us/capital-goods/nasdaq-erii/energy-recovery" rel="noopener" target="_blank">Energy Recovery (Nasdaq:ERII) - Stock Analysis - Simply Wall St</a></li>
+<li><a href="https://www.tickerreport.com/banking-finance/13359717/energy-recovery-nasdaqerii-updates-fy-2026-earnings-guidance.html" rel="noopener" target="_blank">Energy Recovery (NASDAQ:ERII) Updates FY 2026 Earnings Guidance - Ticker Report</a></li>
+<li><a href="https://investors.yext.com/news-events/press-releases/detail/387/yext-announces-first-quarter-fiscal-2027-results" rel="noopener" target="_blank">Yext Announces First Quarter Fiscal 2027 Results :: Yext, Inc. (YEXT)</a></li>
+<li><a href="https://www.stocktitan.net/sec-filings/YEXT/8-k-yext-inc-reports-material-event-c11054fbcb6c.html" rel="noopener" target="_blank">Yext (NYSE: YEXT) posts Q1 FY27 profit and expands $100M share buyback</a></li>
+<li><a href="https://investors.yext.com/" rel="noopener" target="_blank">Yext, Inc. (YEXT)</a></li>
+<li><a href="https://simplywall.st/stocks/us/capital-goods/nasdaq-erii/energy-recovery/news/top-undervalued-small-caps-with-insider-buying-in-july-2026" rel="noopener" target="_blank">Top Undervalued Small Caps With Insider Buying In July 2026 - Simply Wall St News</a></li>
+<li><a href="https://tickeron.com/trading-investing-101/15-innovative-small-caps-to-watch-in-2026-the-innovation-report/" rel="noopener" target="_blank">15 Small Cap Stocks 2026: AI, Space &amp; Defense Boom</a></li>
+<li><a href="https://stockanalysis.com/stocks/yext/" rel="noopener" target="_blank">Yext, Inc. (YEXT) Stock Price &amp; Overview</a></li>
+<li><a href="https://www.wallstreetzen.com/stocks/us/nyse/yext" rel="noopener" target="_blank">Yext Stock Price Today (NYSE: YEXT) Quote, Market Cap, Chart | WallStreetZen</a></li>
+<li><a href="https://www.stocktitan.net/sec-filings/YEXT/form-4-yext-inc-insider-trading-activity-5c6340001004.html" rel="noopener" target="_blank">Yext (NYSE: YEXT) director purchases 76,190 shares on open market</a></li>
+<li><a href="https://www.investing.com/news/insider-trading-news/yext-director-daniel-englander-buys-397909-in-company-stock-93CH-4789630" rel="noopener" target="_blank">Yext director Daniel Englander buys $397,909 in company stock By Investing.com</a></li>
+<li><a href="https://kalkine.com.au/news/mining/iperionx-asxipx-shares-plunged-22-after-h1-results-shows-widening-losses-and-delayed-revenue-outlook" rel="noopener" target="_blank">IperionX (ASX:IPX) shares Plunged ~22% after H1 results Shows widening losses and delayed revenue outlook</a></li>
+<li><a href="https://www.sec.gov/Archives/edgar/data/0001035092/000103509226000040/shbi-20260630xexx991.htm" rel="noopener" target="_blank">SHORE BANCSHARES INC - Form 8-K - FY2026</a></li>
+<li><a href="https://www.prnewswire.com/news-releases/shore-bancshares-inc-reports-2026-second-quarter-results-302833642.html" rel="noopener" target="_blank">Shore Bancshares, Inc. Reports 2026 Second Quarter Results</a></li>
+<li><a href="https://stockanalysis.com/stocks/yext/forecast/" rel="noopener" target="_blank">Yext, Inc. (YEXT) Stock Forecast &amp; Analyst Price Targets</a></li>
+<li><a href="https://www.macrotrends.net/stocks/charts/SHBI/shore-bancshares-inc/market-cap" rel="noopener" target="_blank">Shore Bancshares Inc Market Cap 2012-2026 | SHBI | MacroTrends</a></li>
+</ol></details>
+</section><section class="panel" id="r-2026-07-26" role="tabpanel" hidden>
+  <header class="pick-head">
+           <div class="ticker">CGNT</div>
+           <div class="company">Cognyte Software Ltd.</div>
+           <div class="stamp">2026-07-26</div>
+         </header>
+         <p class="thesis">Cognyte sells investigative analytics to government and law-enforcement agencies —
+lumpy, unglamorous, and very sticky. FY26 (ended Jan 31, 2026) revenue was $400.0M,
++14.1%, with GAAP operating income turning positive and $40.3M of operating cash flow
+funding $21.4M of buybacks. On June 3 the stock fell ~21% on a Q1 FYE27 non-GAAP EPS
+miss ($0.03 vs $0.08 expected) — but revenue still grew 10.4% to $105.5M, GAAP
+operating income doubled to $4.4M, non-GAAP operating income rose 41.5% to $10.7M, and
+management reaffirmed the full-year $448M / ~12% growth guide. The market repriced a
+quarterly timing miss as a thesis break. At $8.31 (7/24/26) and a $612.5M cap against
+$109.2M cash and zero debt, EV is roughly $500M — about 1.1–1.3x forward revenue and
+~12–15x forward earnings for a low-teens grower with expanding margins. That is a
+hardware-like multiple on a business whose margins are moving the right way.</p>
+         <h2>Key numbers</h2><dl class="numbers"><div class="num"><dt>Revenue trend</dt><dd>FY26 $400.0M (+14.1%); Q4 FYE26 $106.2M (+12.4%); Q1 FYE27 $105.5M (+10.4%, ~$1.8M below consensus); FYE27 guide ~$448M ±3% (~12%), reaffirmed June 3. Growth is organic — no acquisition distorting the line.</dd></div><div class="num"><dt>Cash / debt</dt><dd>$116.9M cash, no debt at Jan 31, 2026; $109.2M cash, no debt at Apr 30, 2026. FY26 operating cash flow $40.3M (Q4 alone $20.0M); Q1 FYE27 operating cash flow -$4.7M on inventory build and FX — seasonal, not a burn. $21.4M of FY26 buybacks. No runway question.</dd></div><div class="num"><dt>Insider activity</dt><dd>Weak, and I'm not dressing it up. No open-market officer or director purchases found for 2026. A Form 144 shows 69,557 shares sold for $640,492 on 4/6/26, and Rini Karlin filed intent to sell 40,000 shares. Director O'Neill's filing is RSU-driven, not a purchase. The buyback is the only real insider-side conviction signal here.</dd></div><div class="num"><dt>Analyst targets</dt><dd>Consensus Buy, average target $12.33 (range $10–$14, 4 analysts, S&amp;P Global via stockanalysis.com, 7/24/26); TradingView average $12.58. Lake Street initiated Buy, $13 target on 7/22/26 — the freshest datapoint, post-selloff. 52-week range $6.29–$12.31. Next earnings Sep 8, 2026.</dd></div></dl>
+         <aside class="callout risk"><h3>Main risk</h3><p>Government customer concentration — roughly 28% of revenue comes from two government</p>
+<p>entities, and this is an Israel-headquartered vendor selling into agency budgets amid</p>
+<p>active Middle East geopolitical disruption. A budget freeze, a procurement delay, or a</p>
+<p>political restriction at one of those two accounts hits revenue and the multiple at the</p>
+<p>same time. The Q1 miss also showed that quarterly timing in this model is genuinely</p>
+<p>unpredictable, so &quot;lumpy&quot; cuts both ways.</p></aside>
+         <aside class="callout change"><h3>What would change my mind</h3><p>If the Sep 8 Q2 FYE27 report cuts the ~$448M full-year guide, or if trailing-twelve-</p>
+<p>month operating cash flow goes negative (i.e. Q2 fails to reverse the -$4.7M Q1 outflow),</p>
+<p>the &quot;profitability inflection&quot; claim is dead and this is just a cheap, slowing government</p>
+<p>contractor. Equally: any open-market insider <em>buying</em> at these prices would meaningfully</p>
+<p>strengthen a thesis that currently rests on the buyback alone.</p></aside>
+         <p class="disclaimer">This is not financial advice. This is an automated research summary based on
+publicly available information as of 2026-07-26. Verify all figures independently
+before making any investment decision.</p>
+  <details class="fold"><summary>The screen — shortlist &amp; eliminations</summary><p><strong>Shortlist built:</strong> ERII, CGNT, GLOO, ADV, ISTR, CSR, SERV.</p>
+<p><strong>Eliminations:</strong></p>
+<ul>
+<li><strong>ERII</strong> ($8.62, 7/16/26; ~$539M cap) — withdrew FY26 guidance on Middle East uncertainty; consensus FY26 revenue cut from $164.6M to $123.8M. Two small director buys (20,000 @ $8.34, 11,180 @ $8.88) don't offset insiders net-selling $2.3M over 12 months. Deteriorating story.</li>
+<li><strong>GLOO</strong> — market cap irreconcilable across sources ($258M vs $557M), FY26 revenue +308% but ~$40M of the 2026 plan is acquired, and it just did an underwritten offering at $3.25. Hard gate on both unreconcilable cap and acquired growth.</li>
+<li><strong>ADV</strong> — $1.67B total debt at 4.4x net leverage against a ~$300–350M market cap, revenue flat-to-LSD. Real CEO buying (150,000 shares/yr), but that's an equity stub, not a survivor-first holding.</li>
+<li><strong>ISTR</strong> — Q2 revenue +64% is Wichita Falls Bancshares (closed 1/1/26, $1.5B assets, funded partly by 6.5% convertible preferred). Organic component not disclosed in anything I read. Hard gate.</li>
+<li><strong>SERV</strong> — ~$26M 2026 revenue guide against $160–170M non-GAAP opex and -$80.2M TTM operating cash flow. Structural dilution machine.</li>
+<li><strong>CSR</strong> — $1.01B apartment REIT, in universe, but low-growth and leveraged; nothing mispriced enough to compete.</li>
+</ul>
+<p>---</p></details>
+  <details class="fold"><summary>Sources (38)</summary><p><strong>Sources:</strong> <a href="https://simplywall.st/stocks/us/capital-goods/nasdaq-erii/energy-recovery/news/top-undervalued-small-caps-with-insider-buying-in-july-2026/amp" rel="noopener" target="_blank">Simply Wall St — small caps with insider buying, July 2026</a> · <a href="https://altindex.com/best-stocks/small-cap-stocks" rel="noopener" target="_blank">AltIndex small-cap screen</a> · <a href="https://stockanalysis.com/stocks/cgnt/" rel="noopener" target="_blank">stockanalysis.com — CGNT</a> · <a href="https://www.cognyte.com/news/cognyte-reports-fourth-quarter-and-fiscal-year-2026-financial-results/" rel="noopener" target="_blank">Cognyte FY2026 results</a> · <a href="https://www.businesswire.com/news/home/20260603039111/en/Cognyte-Reports-First-Quarter-Fiscal-Year-2027-Financial-Results" rel="noopener" target="_blank">Cognyte Q1 FYE27 results</a> · <a href="https://www.gurufocus.com/news/8898740/cognyte-software-reports-q1-2027-earnings-stock-plummets-on-eps-miss-cgnt" rel="noopener" target="_blank">GuruFocus — CGNT Q1 FY27 EPS miss</a> · <a href="https://seekingalpha.com/article/4912332-cognyte-software-deeply-discounted-ai-analytics-stock" rel="noopener" target="_blank">Seeking Alpha — CGNT valuation vs peers</a> · <a href="https://www.marketbeat.com/stocks/NASDAQ/CGNT/forecast/" rel="noopener" target="_blank">MarketBeat — CGNT forecast</a> · <a href="https://www.stocktitan.net/sec-filings/CGNT/144-cognyte-software-ltd-sec-filing-dd06286f331d.html" rel="noopener" target="_blank">StockTitan — CGNT Form 144</a> · <a href="https://markets.financialcontent.com/stocks/article/stockstory-2026-5-6-energy-recoverys-nasdaqerii-q1-cy2026-sales-top-estimates" rel="noopener" target="_blank">StockStory — ERII Q1 CY2026</a> · <a href="https://www.stocktitan.net/sec-filings/ERII/form-4-energy-recovery-inc-insider-trading-activity-6fee3ffbda54.html" rel="noopener" target="_blank">StockTitan — ERII director buys</a> · <a href="https://companiesmarketcap.com/advantage-solutions/total-debt/" rel="noopener" target="_blank">companiesmarketcap — ADV total debt</a> · <a href="https://finance.yahoo.com/news/insider-buying-ceo-david-peacock-061128797.html" rel="noopener" target="_blank">Yahoo Finance — ADV CEO buying</a> · <a href="https://finance.yahoo.com/news/investar-holding-corporation-announces-completion-124000974.html" rel="noopener" target="_blank">Investar completes Wichita Falls acquisition</a> · <a href="https://www.quiverquant.com/news/Investar+Holding+Corporation+(ISTR" rel="noopener" target="_blank">Quiver — ISTR Q2 2026</a>+Stock+Falls+on+Q2+2026+Earnings) · <a href="https://stockanalysis.com/stocks/csr/market-cap/" rel="noopener" target="_blank">stockanalysis.com — CSR market cap</a> · <a href="https://seekingalpha.com/article/4908878-serve-robotics-utilizes-less-than-half-of-its-active-fleet-and-is-bleeding-cash" rel="noopener" target="_blank">Seeking Alpha — SERV cash burn</a> · <a href="https://www.gurufocus.com/news/8906008/gloo-reports-strong-q2-revenue-performance" rel="noopener" target="_blank">GuruFocus — GLOO Q2 revenue</a></p>
+<p>SOURCES</p>
+<ol>
+<li><a href="https://altindex.com/best-stocks/small-cap-stocks" rel="noopener" target="_blank">Best Small Cap Stocks to Buy Now — July 2026 | AltIndex</a></li>
+<li><a href="https://simplywall.st/stocks/us/capital-goods/nasdaq-erii/energy-recovery/news/top-undervalued-small-caps-with-insider-buying-in-july-2026/amp" rel="noopener" target="_blank">Top Undervalued Small Caps With Insider Buying In July 2026 - Simply Wall St News</a></li>
+<li><a href="https://www.cognyte.com/news/cognyte-reports-fourth-quarter-and-fiscal-year-2026-financial-results/" rel="noopener" target="_blank">Cognyte Reports Fourth Quarter and Fiscal Year 2026 Financial Results | Cognyte</a></li>
+<li><a href="https://stockanalysis.com/stocks/cgnt/" rel="noopener" target="_blank">Cognyte Software (CGNT) Stock Price &amp; Overview</a></li>
+<li><a href="https://markets.financialcontent.com/stocks/article/stockstory-2026-5-6-energy-recoverys-nasdaqerii-q1-cy2026-sales-top-estimates" rel="noopener" target="_blank">FinancialContent - Energy Recovery’s (NASDAQ:ERII) Q1 CY2026 Sales Top Estimates</a></li>
+<li><a href="https://www.stocktitan.net/sec-filings/ERII/form-4-energy-recovery-inc-insider-trading-activity-6fee3ffbda54.html" rel="noopener" target="_blank">Energy Recovery director buys 20,000 ERII shares | ERII Insider Trading</a></li>
+<li><a href="https://simplywall.st/stocks/us/capital-goods/nasdaq-erii/energy-recovery" rel="noopener" target="_blank">Energy Recovery (Nasdaq:ERII) - Stock Analysis - Simply Wall St</a></li>
+<li><a href="https://www.gurufocus.com/news/8906008/gloo-reports-strong-q2-revenue-performance" rel="noopener" target="_blank">GLOO Reports Strong Q2 Revenue Performance</a></li>
+<li><a href="https://www.gurufocus.com/news/8898740/cognyte-software-reports-q1-2027-earnings-stock-plummets-on-eps-miss-cgnt" rel="noopener" target="_blank">Cognyte Software Reports Q1 2027 Earnings, Stock Plummets on EPS Miss (CGNT)</a></li>
+<li><a href="https://seekingalpha.com/article/4912332-cognyte-software-deeply-discounted-ai-analytics-stock" rel="noopener" target="_blank">Cognyte Software: Deeply Discounted AI Analytics Stock (NASDAQ:CGNT) | Seeking Alpha</a></li>
+<li><a href="https://companiesmarketcap.com/advantage-solutions/total-debt/" rel="noopener" target="_blank">Advantage Solutions (ADV) - Total debt</a></li>
+<li><a href="https://finance.yahoo.com/news/insider-buying-ceo-david-peacock-061128797.html" rel="noopener" target="_blank">Insider Buying: CEO David Peacock Acquires 40,000 Shares of Advantage Solutions Inc (ADV)</a></li>
+<li><a href="https://seekingalpha.com/article/4908878-serve-robotics-utilizes-less-than-half-of-its-active-fleet-and-is-bleeding-cash" rel="noopener" target="_blank">Serve Robotics Utilizes Less Than Half Of Its Active Fleet And Is Bleeding Cash (SERV) | Seeking Alpha</a></li>
+<li><a href="https://www.stocktitan.net/sec-filings/CGNT/144-cognyte-software-ltd-sec-filing-dd06286f331d.html" rel="noopener" target="_blank">CGNT insider sale: 69,557 shares reported | CGNT SEC Filing - Form 144</a></li>
+<li><a href="https://www.quiverquant.com/news/Investar+Holding+Corporation+(ISTR" rel="noopener" target="_blank">Investar Holding Corporation (ISTR) Stock Falls on Q2 2026 Earnings | Quiver Quantitative</a>+Stock+Falls+on+Q2+2026+Earnings)</li>
+<li><a href="https://stockanalysis.com/stocks/csr/market-cap/" rel="noopener" target="_blank">Centerspace (CSR) Market Cap &amp; Net Worth</a></li>
+<li><a href="https://stockanalysis.com/stocks/csr/" rel="noopener" target="_blank">Centerspace (CSR) Stock Price &amp; Overview</a></li>
+<li><a href="https://finance.yahoo.com/news/investar-holding-corporation-announces-completion-124000974.html" rel="noopener" target="_blank">Investar Holding Corporation Announces Completion of Wichita Falls Bancshares, Inc. Acquisition</a></li>
+<li><a href="https://www.marketbeat.com/stocks/NASDAQ/CGNT/forecast/" rel="noopener" target="_blank">Cognyte Software (CGNT) Stock Forecast and Price Target 2026 $CGNT</a></li>
+<li><a href="https://www.businesswire.com/news/home/20260603039111/en/Cognyte-Reports-First-Quarter-Fiscal-Year-2027-Financial-Results" rel="noopener" target="_blank">Cognyte Reports First Quarter Fiscal Year 2027 Financial Results</a></li>
+</ol></details>
+</section><section class="panel" id="r-2026-07-25" role="tabpanel" hidden>
   <header class="pick-head">
            <div class="ticker">SHBI</div>
            <div class="company">Shore Bancshares, Inc.</div>

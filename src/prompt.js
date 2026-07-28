@@ -13,13 +13,16 @@ export function loadSystemPrompt() {
 }
 
 /** The per-run task. Everything volatile (date, operator hint) lives here. */
-export function buildTask({ date, focus }) {
+export function buildTask({ date, focus, coverage = "" }) {
   return [
     `Run today's screen. Today's date is ${date}.`,
-    "Every price, market cap, and financial figure must come from a search you ran in this session — treat anything you did not just verify as unknown.",
+    // Prices move daily; share counts and filing figures do not. Carrying the
+    // stable half forward is what stops every run re-deriving the same numbers.
+    "Prices must come from a search you ran in this session — never carry a price forward. Figures from filings (share count, revenue, cash, debt) may be reused from the record below if you state the date they came from; anything else you did not verify is unknown.",
     // The CLI backend has no hard search cap, so the budget has to be stated.
-    `Search budget: aim for about ${MAX_SEARCHES} searches, then commit. Do not exceed ${MAX_SEARCHES + 5}.`,
+    `Search budget: aim for about ${MAX_SEARCHES} searches, then commit. Do not exceed ${MAX_SEARCHES + 5}. Reusing an established figure instead of re-deriving it is how you afford depth on the names that matter.`,
     focus && `Additional constraint from the operator: ${focus}`,
+    coverage,
     `End with exactly the PICK block from your instructions, using ${date} as [DATE]. If no candidate survives the fundamentals check, say so instead of forcing a pick.`,
     // Without the rejects, picks from different days cannot be ranked against
     // each other — which is the whole point of scoring.

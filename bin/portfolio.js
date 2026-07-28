@@ -8,6 +8,7 @@ import { readFile, writeFile } from "node:fs/promises";
 const ROOT = new URL("../", import.meta.url);
 const DATA = new URL("portfolio.json", ROOT);
 const PAGE = new URL("dashboard.html", ROOT);
+const REPORTS_PAGE = new URL("reports/index.html", ROOT);
 const PORT = Number(process.env.PORT ?? 4321);
 // `holdings` are individual buy lots; `prices` is the current price per ticker.
 const EMPTY = { holdings: [], snapshots: [], prices: {} };
@@ -21,6 +22,25 @@ const server = createServer(async (req, res) => {
   try {
     if (req.method === "GET" && (req.url === "/" || req.url === "/dashboard.html")) {
       return send(res, 200, await readFile(PAGE), "text/html; charset=utf-8");
+    }
+
+    // Serving the reports page here is what lets the two pages link to each
+    // other; over file:// they can't, since they live in different directories.
+    if (req.method === "GET" && (req.url === "/reports" || req.url === "/reports/")) {
+      const page = await readFile(REPORTS_PAGE).catch(() => null);
+      return page
+        ? send(res, 200, page, "text/html; charset=utf-8")
+        : send(
+            res,
+            404,
+            `<!doctype html><meta charset="utf-8"><title>No reports yet</title>
+             <body style="font:16px/1.6 ui-sans-serif,sans-serif;max-width:34rem;margin:4rem auto;padding:0 1rem">
+             <h1 style="font-size:1.1rem">No reports page yet</h1>
+             <p>Build one with <code>npm run pick -- --save</code> then <code>npm run dashboard</code>,
+             or just run <code>npm start</code>.</p>
+             <p><a href="/">← Portfolio</a></p>`,
+            "text/html; charset=utf-8",
+          );
     }
 
     if (req.url === "/api/portfolio") {

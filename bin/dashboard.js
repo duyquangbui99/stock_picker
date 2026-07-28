@@ -5,20 +5,23 @@ import { readdir, readFile, writeFile } from "node:fs/promises";
 import { dashboard } from "../src/dashboard-html.js";
 import { parseReport } from "../src/report-model.js";
 import { rank } from "../src/rank.js";
+import { REPORT_FILE, byRun, stem } from "../src/coverage.js";
 
 const REPORTS = new URL("../reports/", import.meta.url);
 const SCOREBOARD = new URL("../scoreboard.json", import.meta.url);
 
 let files = [];
 try {
-  files = (await readdir(REPORTS)).filter((f) => f.endsWith(".md")).sort();
+  files = (await readdir(REPORTS))
+    .filter((f) => REPORT_FILE.test(f))
+    .sort(byRun);
 } catch {
   // no reports/ directory yet — render the empty state
 }
 
 const reports = await Promise.all(
   files.map(async (file) =>
-    parseReport(await readFile(new URL(file, REPORTS), "utf8"), file.replace(/\.md$/, "")),
+    parseReport(await readFile(new URL(file, REPORTS), "utf8"), stem(file)),
   ),
 );
 

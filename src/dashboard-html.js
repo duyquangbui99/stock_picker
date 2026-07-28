@@ -55,28 +55,42 @@ function ranking(ranked) {
         ([key, max]) => `${label(key)} ${Number(r.scores?.[key] ?? 0)}/${max}`,
       ).join("|");
 
+      // Two things the ranking otherwise hides: how much this score moves between
+      // runs, and how far the completeness/staleness tiers pushed it from its
+      // score-only position. Both matter when 2 points decide the top of the list.
+      const drift =
+        r.delta == null
+          ? `<i>first score</i>`
+          : `<i>was ${r.priorTotal} → ${r.delta >= 0 ? "+" : ""}${r.delta} across ${r.runCount} runs</i>`;
+      const moved = r.scoreRank != null && r.scoreRank !== r.rank;
+      const tierNote = moved ? `<i>ranks #${r.rank}; #${r.scoreRank} on score alone</i>` : "";
+      const demoted = moved && r.scoreRank < r.rank;
+
       // The badge stays short and fixed-width; the full reason wraps below it.
       // Putting a 170-character disqualifier inside a nowrap badge was setting
       // the width of the whole table.
       // A data gap is "needs another look", not a rejection — it must not wear
       // the same red badge as a going-concern finding.
-      const gap = r.data_completeness && r.data_completeness !== "verified";
+      // Missing means unverified — rank.js already treats it that way, and a
+      // blank badge made an unlabelled name look fully sourced.
+      const completeness = r.data_completeness ?? "unverified";
+      const gap = completeness !== "verified";
       const flag = !r.eligible
         ? `<span class="tag bad">✗ ineligible</span>`
         : r.stale
           ? `<span class="tag warn">stale ${r.ageDays}d</span>`
           : gap
-            ? `<span class="tag info">${esc(r.data_completeness)}</span>`
+            ? `<span class="tag info">${esc(completeness)}</span>`
             : "";
       const why =
         !r.eligible && r.disqualifier ? `<div class="why">${esc(r.disqualifier)}</div>` : "";
       const sector = r.sector ? `<div class="why">${esc(r.sector)}</div>` : "";
 
       return `<tr class="${r.eligible ? "" : "out"}">
-        <td class="rk">${i + 1}</td>
+        <td class="rk">${i + 1}${demoted ? `<div class="moved" data-tip="Held back by the completeness / staleness tiers.|On score alone it would rank #${r.scoreRank}.">▾${r.scoreRank}</div>` : ""}</td>
         <td class="tkcell"><span class="tkr">${esc(r.ticker)}</span> ${flag}
             <div class="sub">${esc(r.company)}</div>${sector}${why}</td>
-        <td class="tot" data-tip="<b>${esc(r.ticker)} — ${r.total} / 100</b>|${breakdown}|<i>${esc(r.data_completeness ?? "unverified")} · scored ${esc(r.as_of)}</i>">${r.total}</td>
+        <td class="tot" data-tip="<b>${esc(r.ticker)} — ${r.total} / 100</b>|${breakdown}|<i>${esc(completeness)} · scored ${esc(r.as_of)}</i>|${drift}${tierNote ? "|" + tierNote : ""}">${r.total}</td>
         <td class="bars">${bars}</td>
         <td class="sub read">${esc(r.one_line)}</td>
         <td class="sub scored">${esc(r.as_of)}<div>${esc(r.confidence)}</div></td>
@@ -223,6 +237,7 @@ table.rank th { text-align:left; font-size:.68rem; letter-spacing:.07em; text-tr
 table.rank td { padding:.55rem .6rem; border-bottom:1px solid var(--line); vertical-align:top; }
 table.rank tr.out { opacity:.55; }
 .rk { color:var(--muted); font-size:.8rem; }
+.moved { color:var(--risk); font-size:.7rem; font-weight:600; margin-top:.15rem; }
 .tkr { font-weight:700; }
 .tot { font:700 1.05rem/1 ui-serif,Georgia,serif; color:var(--accent); }
 /* Wide content scrolls inside its own box — the page must never scroll sideways. */

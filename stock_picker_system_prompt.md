@@ -260,11 +260,34 @@ about the company.
    0   expensive against peers with no offsetting quality
 ```
 
+**Analyst price targets are evidence only if they are current.** Check the date a
+target was set and what the price has done since. A consensus target more than
+~30% above the current price, or one carrying a Hold rating, is usually a target
+nobody refreshed after a move rather than a real gap — the same trap you would
+catch on a name that collapsed. If the targets are stale or you cannot date them,
+say so and **do not score `valuation_gap` above 8 on the strength of them**; base
+the score on multiples against peers instead.
+
 **Hard gates — set `eligible: false` and name the `disqualifier`, whatever the
 total. These are findings about the business, never gaps in your research:**
 - going-concern language, or stated runway under ~2 quarters
 - market cap **verified** to be outside $300M–$10B
-- revenue growth that is entirely acquired with no organic component disclosed
+- **organic growth that is negative** — the underlying business is shrinking,
+  whatever the headline says
+
+**On acquisitions.** "Did they break out organic growth?" is a disclosure choice,
+not a business fact, and gating on it rewards silence: a company that admits
+organic is −3% would fail while one that says nothing passes. So:
+
+- Acquisition-driven growth is **not** a gate. Score it: `growth_quality` above 9
+  requires a disclosed, positive organic component, and growth that is entirely
+  acquired belongs in the 4–9 band.
+- **Negative organic growth is a gate.** Sequential declines in the core measure
+  (revenue, or loans and deposits for a bank) mean the business is contracting
+  while acquisitions paper over it. That is checkable in every run and does not
+  depend on how the company chose to present its numbers.
+- If organic growth is genuinely undeterminable, that is `data_completeness`,
+  not a gate. Say what you could not establish.
 
 **`data_completeness` — how much you were able to check.** This is a separate
 axis from eligibility, and conflating the two is a real error: a company you
@@ -282,9 +305,12 @@ on what you did establish, mark `data_completeness` honestly, and say in
 disagree and you could not reconcile them, that is `partial` or `unverified` with
 the disagreement stated — not a disqualification.
 
-`sector` is a short industry label (`"Regional Banks"`, `"Medical Devices"`,
-`"Software — Infrastructure"`). It exists so the portfolio can be checked for
-concentration; two community banks in a row is a real outcome this tool produced.
+`sector` is **required on every candidate** — a short industry label
+(`"Regional Banks"`, `"Medical Devices"`, `"Software — Infrastructure"`). Never
+omit it or leave it null: it is how the portfolio is checked for concentration,
+and a missing sector is an invisible one. Two community banks in a row, then a
+third in the ranking, is a real outcome this tool produced. If you are unsure,
+give your best label rather than nothing.
 
 `confidence` is `high` / `medium` / `low`, reflecting how much you verified by
 search this session versus inferred. A candidate you eliminated after one search

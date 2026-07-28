@@ -1275,6 +1275,126 @@
       "confidence": "low",
       "one_line": "Stable consumer-staples cash flow in batteries and auto care at roughly 7.7x EV/EBITDA.",
       "key_risk": "Total debt of $3.42B against a market cap near $1.1-1.3B is roughly 3x the equity value, while fiscal 2026 organic net sales are guided only flat to slightly up — leverage with no growth to delever into; market cap resolved only to May 2026 sources and no current price or share count was verified this session."
+    },
+    {
+      "report": "2026-07-27-3",
+      "as_of": "2026-07-27",
+      "universe": "300M-10B",
+      "ticker": "CGNT",
+      "company": "Cognyte Software Ltd.",
+      "price": 8.95,
+      "market_cap_musd": 660,
+      "eligible": true,
+      "disqualifier": null,
+      "data_completeness": "verified",
+      "sector": "Software — Infrastructure (Security Analytics)",
+      "scores": {
+        "survival": 22,
+        "growth_quality": 22,
+        "profitability": 11,
+        "insider_conviction": 1,
+        "valuation_gap": 11
+      },
+      "total": 67,
+      "confidence": "high",
+      "one_line": "Debt-free national-security analytics vendor growing organically 10-14% with GAAP operating income doubling and adjusted EBITDA guided +40%, at ~8x EV/EBITDA net of $109.2M cash.",
+      "key_risk": "Operating leverage has not reached the bottom line — GAAP net loss of $3.0M and negative $4.7M operating cash flow in Q1 FY27; insider conviction is unobservable because a foreign private issuer files no Form 4s."
+    },
+    {
+      "report": "2026-07-27-3",
+      "as_of": "2026-07-27",
+      "universe": "300M-10B",
+      "ticker": "THRM",
+      "company": "Gentherm Incorporated",
+      "price": 44.07,
+      "market_cap_musd": 1353,
+      "eligible": true,
+      "disqualifier": null,
+      "data_completeness": "partial",
+      "sector": "Auto Components — Thermal Management",
+      "scores": {
+        "survival": 21,
+        "growth_quality": 19,
+        "profitability": 12,
+        "insider_conviction": 0,
+        "valuation_gap": 6
+      },
+      "total": 58,
+      "confidence": "medium",
+      "one_line": "Record Q2 revenue of $416.2M, +9.8% organic ex-FX, with FY26 guidance raised to $1.55-1.65B and a $400M buyback authorized.",
+      "key_risk": "Pending Reverse Morris Trust with Modine's Performance Technologies issues ~20.7M shares against a 30.7M base — ~40% dilution to absorb a cyclical vehicular business — while GAAP net margin is 1.1% and adjusted EPS of $0.75 is 5x the $0.14 GAAP figure; price is inferred from a JPMorgan 24 Jul note rather than a direct quote."
+    },
+    {
+      "report": "2026-07-27-3",
+      "as_of": "2026-07-27",
+      "universe": "300M-10B",
+      "ticker": "ERII",
+      "company": "Energy Recovery, Inc.",
+      "price": 8.62,
+      "market_cap_musd": 443,
+      "eligible": true,
+      "disqualifier": null,
+      "data_completeness": "partial",
+      "sector": "Industrial Machinery",
+      "scores": {
+        "survival": 23,
+        "growth_quality": 8,
+        "profitability": 8,
+        "insider_conviction": 2,
+        "valuation_gap": 5
+      },
+      "total": 46,
+      "confidence": "medium",
+      "one_line": "Fortress balance sheet — $92.1M cash and investments against $24.7M total liabilities — but the stock sits near a 52-week low of $7.83 against an $18.32 high on weak desalination order timing.",
+      "key_risk": "Growth is lumpy and project-driven with no verified 2026 revenue trend this session; the market cap contradiction in my record ($539M vs $439M) is now resolved to ~$443M, but the operating figures remain aggregator-adjacent."
+    },
+    {
+      "report": "2026-07-27-3",
+      "as_of": "2026-07-27",
+      "universe": "300M-10B",
+      "ticker": "MBC",
+      "company": "MasterBrand, Inc.",
+      "price": 8.43,
+      "market_cap_musd": 1070,
+      "eligible": false,
+      "disqualifier": "Negative organic growth — Q1 2026 net sales fell 6.4% to $618M; the core business is contracting",
+      "data_completeness": "partial",
+      "sector": "Building Products — Cabinetry",
+      "scores": {
+        "survival": 14,
+        "growth_quality": 3,
+        "profitability": 8,
+        "insider_conviction": 9,
+        "valuation_gap": 7
+      },
+      "total": 41,
+      "confidence": "low",
+      "one_line": "Genuine insider conviction — the CEO bought 60,000 shares for $505,800 on top of a director's earlier 11,587-share purchase into a 19% drawdown.",
+      "key_risk": "Revenue is declining, not growing, with tariff exposure guided at 5-plus percent and leverage on a housing-cycle-exposed business; insider buying does not offset a shrinking top line."
+    },
+    {
+      "report": "2026-07-27-3",
+      "as_of": "2026-07-27",
+      "universe": "300M-10B",
+      "ticker": "ADV",
+      "company": "Advantage Solutions Inc.",
+      "price": null,
+      "market_cap_musd": null,
+      "eligible": true,
+      "disqualifier": null,
+      "data_completeness": "unverified",
+      "sector": "Advertising & Marketing Services",
+      "scores": {
+        "survival": 8,
+        "growth_quality": 4,
+        "profitability": 4,
+        "insider_conviction": 3,
+        "valuation_gap": 4
+      },
+      "total": 23,
+      "confidence": "low",
+      "one_line": "Reaffirmed guidance and a completed $56.28M buyback, with reported insider purchases.",
+      "key_risk": "Market cap is now contradicted three ways by the same publisher — $272M, $350M and $1.26B — so no valuation figure is usable; this is a levered marketing-services roll-up and remains unverified rather than rejected."
     }
   ]
 }

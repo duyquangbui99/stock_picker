@@ -18,15 +18,29 @@ const completeness = (entry) => COMPLETENESS_ORDER[entry.data_completeness] ?? 2
  */
 export function rank(entries, today = new Date()) {
   const latest = new Map();
+  const history = new Map();
   for (const entry of entries) {
+    if (!history.has(entry.ticker)) history.set(entry.ticker, []);
+    history.get(entry.ticker).push(entry);
     const seen = latest.get(entry.ticker);
     if (!seen || entry.as_of >= seen.as_of) latest.set(entry.ticker, entry);
   }
 
-  return [...latest.values()]
+  const ranked = [...latest.values()]
     .map((entry) => {
       const ageDays = Math.max(0, Math.round((today - new Date(entry.as_of)) / 86400000));
-      return { ...entry, ageDays, stale: ageDays > STALE_AFTER_DAYS };
+      // Collapsing to the latest score hides how much it moves. A ±6 drift on
+      // unchanged fundamentals matters when 2 points decide the top of the list.
+      const runs = history.get(entry.ticker) ?? [];
+      const prior = runs.filter((e) => e !== entry).at(-1);
+      return {
+        ...entry,
+        ageDays,
+        stale: ageDays > STALE_AFTER_DAYS,
+        priorTotal: prior ? prior.total : null,
+        delta: prior ? entry.total - prior.total : null,
+        runCount: runs.length,
+      };
     })
     .sort(
       (a, b) =>
@@ -36,4 +50,10 @@ export function rank(entries, today = new Date()) {
         b.total - a.total ||
         a.ticker.localeCompare(b.ticker),
     );
+
+  // What the order would be on score alone. The tiers are deliberate, but they
+  // move names a long way and the reason should be visible, not silent.
+  const byScore = [...ranked].sort((a, b) => b.total - a.total || a.ticker.localeCompare(b.ticker));
+  const scoreRank = new Map(byScore.map((r, i) => [r.ticker, i + 1]));
+  return ranked.map((r, i) => ({ ...r, rank: i + 1, scoreRank: scoreRank.get(r.ticker) }));
 }

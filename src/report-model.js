@@ -13,16 +13,17 @@ const JSON_FENCE = /```json\s*\n([\s\S]*?)```/;
 export function parseReport(markdown, date) {
   const { before, fence, after } = splitOnFence(markdown);
   const pick = fence ? parsePick(fence) : null;
-  // The scorecard sits between the pick block and the sources, so strip it out
-  // rather than rendering raw JSON into the sources section.
-  const tail = stripHeading(after).replace(JSON_FENCE, "").replace(/^\s*SCORECARD\s*$/m, "").trim();
+  // The scorecard can sit on either side of the pick block, so strip it from
+  // both rather than rendering raw JSON into the screen or sources sections.
+  const clean = (s) =>
+    stripHeading(s).replace(JSON_FENCE, "").replace(/^\s*SCORECARD\s*$/m, "").trim();
   return {
     date,
     pick, // null when the block didn't parse — callers fall back to `raw`
     raw: fence,
-    screen: stripHeading(before),
-    sources: tail,
-    sourceCount: (tail.match(/\]\(https?:\/\//g) ?? []).length,
+    screen: clean(before),
+    sources: clean(after),
+    sourceCount: (clean(after).match(/\]\(https?:\/\//g) ?? []).length,
     scorecard: parseScorecard(markdown),
   };
 }
@@ -49,14 +50,40 @@ export function parseScorecard(markdown) {
   }
 }
 
+/**
+ * Locates the PICK block. Real runs have produced three shapes, and assuming any
+ * one of them silently turned a real pick into "no pick" on the dashboard:
+ *   1. fenced, and the only fence
+ *   2. fenced, but *after* the ```json scorecard  (so it isn't fence #1)
+ *   3. not fenced at all, as plain prose
+ */
 function splitOnFence(text) {
-  const match = /```[a-z]*\n([\s\S]*?)```/.exec(text);
-  if (!match) return { before: text, fence: null, after: "" };
-  return {
-    before: text.slice(0, match.index),
-    fence: match[1],
-    after: text.slice(match.index + match[0].length),
-  };
+  const fences = [...text.matchAll(/```[a-z]*\n([\s\S]*?)```/g)];
+
+  const fenced = fences.find((f) => /^PICK:/m.test(f[1]));
+  if (fenced) {
+    return {
+      before: text.slice(0, fenced.index),
+      fence: fenced[1],
+      after: text.slice(fenced.index + fenced[0].length),
+    };
+  }
+
+  // Unfenced: run from the PICK line to whatever ends it — a fence, a SOURCES
+  // heading, or the end of the report.
+  const start = /^PICK:/m.exec(text);
+  if (start) {
+    const rest = text.slice(start.index);
+    const end = /\n```|\n\s*SOURCES\s*$/m.exec(rest);
+    const stop = end ? end.index : rest.length;
+    return {
+      before: text.slice(0, start.index),
+      fence: rest.slice(0, stop),
+      after: rest.slice(stop),
+    };
+  }
+
+  return { before: text, fence: fences[0]?.[1] ?? null, after: "" };
 }
 
 function parsePick(text) {

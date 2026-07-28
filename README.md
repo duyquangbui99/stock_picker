@@ -5,8 +5,9 @@ A research tool for building a **20-position portfolio of small-to-mid-cap stock
 
 It is not a stock screener. A screener tells you what moved today. This runs a
 skeptical fundamentals analyst over a handful of candidates, scores every one of
-them, and ranks them against picks from previous days — so the money goes to the
-best name you have found *so far*, not the most interesting name of the moment.
+them against a fixed rubric, and ranks them against picks from previous days — so
+the money goes to the best name you have found *so far*, not the most interesting
+name of the moment.
 
 > **Not financial advice.** Every report is an automated summary of public
 > information, and the scores are model judgements rather than audited data.
@@ -17,25 +18,24 @@ best name you have found *so far*, not the most interesting name of the moment.
 ## The idea
 
 A single day's pick is not a portfolio. Run a "best stock today" tool for a year
-and you get 365 unrelated names, which is the opposite of a considered portfolio.
-Three things bridge that gap:
+and you get 365 unrelated names. Four things bridge that gap:
 
-1. **Score every candidate, not just the winner.** Each run evaluates 5–8 names
-   and rejects most of them. Those rejects are scored too, which is what makes a
-   pick from March comparable to one from July.
-2. **Hard eligibility gates.** Going-concern language, cash runway under ~2
-   quarters, or a *verified* market cap outside the range make a name ineligible
-   **whatever it scored** — a 90 with a going-concern note ranks below an
-   eligible 60. A figure you simply could not verify is different: that is
-   tracked as `data_completeness`, ranked below verified names but above
-   rejected ones. A research gap is not a finding.
-3. **Accumulate, then deploy.** Save ~$5/day and deploy ~$35 weekly into the
-   top-ranked eligible name. 52 decisions a year instead of 365, larger
-   increments, and the screen only needs to run 2–3×/week.
+1. **Score every candidate, not just the winner.** Each run evaluates several
+   names and rejects most. The rejects are scored too, which is what makes a pick
+   from March comparable to one from July.
+2. **Gate on business facts, never on research gaps.** Going-concern language,
+   runway under ~2 quarters, negative organic growth, or a *verified* market cap
+   outside the range make a name ineligible whatever it scored. A figure you
+   simply could not confirm is different — that is `data_completeness`, ranked
+   below verified names but above rejected ones.
+3. **Carry knowledge between runs.** Each run is told what earlier runs settled,
+   which names remain unresolved, where its own record contradicts itself, and
+   what it recently picked. Without this it re-researched the same names daily.
+4. **Accumulate, then deploy.** Save ~$5/day and deploy ~$35 weekly into the
+   top-ranked eligible name. 52 decisions a year instead of 365.
 
 Target is **20 positions** — roughly $90/position/year at that savings rate, most
-of the diversification benefit, and few enough names that every holding can
-realistically be re-checked.
+of the diversification benefit, and few enough to re-check.
 
 ---
 
@@ -46,115 +46,103 @@ npm install
 ```
 
 That is all. The default backend runs through your existing **Claude Code login**,
-so no API key is required.
-
-Requires Node 20.12+ and the `claude` CLI on your PATH.
+so no API key is required. Needs Node 20.12+ and the `claude` CLI on your PATH.
 
 ---
 
-## The workflow
-
-**One command does everything:**
+## Daily use
 
 ```sh
 npm start
 ```
 
-That researches a new candidate, ingests the scores, rebuilds the ranking, then
-serves the dashboard at `http://localhost:4321` and opens a browser. Two tabs:
-**Portfolio** (what you hold) and **Reports & ranking** (what to buy next).
-Ctrl-C stops it. Takes a few minutes, mostly the research.
+Researches a candidate, ingests the scores, rebuilds the ranking, serves both
+dashboards at `http://localhost:4321`, and opens a browser. Ctrl-C stops it.
+Takes a few minutes, almost all of it research.
+
+Two tabs: **Portfolio** (what you hold) and **Reports & ranking** (what to buy
+next).
 
 ```sh
-npm start -- --no-pick            # skip the research, just rebuild and serve
-npm start -- --focus "no biotech" # any other flag is forwarded to `pick`
+npm start -- --no-pick             # skip research, just rebuild and serve
+npm start -- --focus "no biotech"  # any other flag forwards to `pick`
 ```
 
 Run it 2–3× a week. **Weekly**, take the top eligible name off the ranking, buy
-~$35 of it, and record the buy on the Portfolio tab.
-
-If a research step fails (rate limit, credit), the rest still runs — you keep the
-dashboard on the reports you already have.
-
-**Whenever prices move** — update the Current price cells in the portfolio to keep
-the value chart current.
-
-> Allocation is still a manual read of the ranking. A `bin/allocate.js` that
-> applies the rule automatically (new position only if it beats your median
-> holding, else top up the best existing one) is designed but deliberately not
-> built until the scores have been sanity-checked against real reports.
-
----
-
-## Commands
+~$35, and record it on the Portfolio tab. If the research step fails (rate limit,
+credit), the rest still runs on the reports you already have.
 
 | Command | What it does |
 |---|---|
-| `npm start` | The whole cycle: research → scores → ranking → serve both dashboards |
-| `npm start -- --no-pick` | Same, minus the research step |
-| `npm run pick` | Run one screen. Add `-- --save` to write `reports/<date>.md` |
-| `npm run scoreboard` | Ingest scorecards into `scoreboard.json`, print the ranking |
-| `npm run dashboard` | Rebuild `reports/index.html` (reports + ranking table) |
-| `npm run portfolio` | Start the portfolio tracker on `http://localhost:4321` |
+| `npm start` | The whole cycle: research → scores → ranking → serve |
+| `npm start -- --no-pick` | Same, minus the research |
+| `npm run pick` | One screen. `-- --save` writes `reports/<date>.md` |
+| `npm run scoreboard` | Ingest scorecards, print the ranking |
+| `npm run dashboard` | Rebuild `reports/index.html` |
+| `npm run portfolio` | Serve the portfolio tracker only |
 
 Flags for `pick` go **after `--`** — `npm run pick --save` silently drops the flag.
 
 | Flag | |
 |---|---|
-| `-f, --focus <text>` | extra constraint for this run, e.g. `"no biotech"` |
+| `-f, --focus <text>` | extra constraint, e.g. `"re-verify ISTR"` |
 | `-e, --effort <level>` | `low · medium · high · xhigh · max` (default `medium`) |
 | `-b, --backend <name>` | `claude-cli` (default) or `api` |
 | `-s, --save` | also write `reports/<date>.md` |
 | `-v, --verbose` | show the analyst's running commentary |
-| `-h, --help` | list the flags |
-
-Progress goes to stderr and the report to stdout, so `npm run -s pick > today.md`
-gives a clean file. The `-s` matters — without it npm prepends two banner lines.
 
 ---
 
-## How scoring works
+## How a name is judged
 
-Each run emits a `SCORECARD` json block covering every candidate it researched.
-Scores total 100:
+**Sources are tiered.** SEC filings and IR releases are unrestricted; screeners
+and aggregators (simplywall.st, stocktitan, stockanalysis…) are **lead generation
+only and may never be the sole source for a scorecard figure**. Market cap must be
+*reconciled* — share count from the latest 10-Q cover page × a verified price —
+not copied. Insider claims need a Form 4; a buyback is not insider buying. Every
+aggregator earnings figure gets a GAAP-vs-adjusted check, and analyst price
+targets only count if they are dated and current.
+
+Each rule exists because the tool got it wrong once: an aggregator reported
++$1.7M net income for a company whose GAAP result was a **-$20.1M loss**, and a
+"high insider confidence" name turned out to be doing buybacks.
+
+**Scores total 100**, with explicit bands per dimension so a 67 in July means what
+a 67 meant in March:
 
 | Dimension | Max | Measures |
 |---|---|---|
-| `survival` | 25 | Cash vs burn, debt due within 12 months, runway, dilution risk |
-| `growth_quality` | 25 | Revenue trend and its durability — organic vs acquired, recurring vs one-time |
+| `survival` | 25 | Cash vs burn, debt due within 12 months, runway, dilution |
+| `growth_quality` | 25 | Revenue trend and durability — organic vs acquired |
 | `profitability` | 20 | Margin trend and cash generation |
 | `insider_conviction` | 15 | Pattern and size of insider buying, price paid vs today |
-| `valuation_gap` | 15 | Valuation vs peers, and whether the news is already priced in |
+| `valuation_gap` | 15 | Valuation vs peers, and whether the news is already priced |
 
-Every dimension is something the analyst already assessed in prose — the
-scorecard only records it in comparable form.
+On acquisitions: acquisition-driven growth is a **score penalty**, not a gate —
+"did they break out organic growth" is a disclosure choice, and gating on it would
+reward silence. **Negative organic growth is the gate**, because a shrinking
+underlying business is a fact you can check every run.
 
 **Ranking order:** eligible → fresh → fully sourced → by total. Concretely:
 eligible-verified, then partial, then unverified, then stale (>30 days), then
-ineligible. `scoreboard.json` is **append-only**, so re-running never overwrites or
-duplicates and you keep the history of how a view of a company changed.
+ineligible. `scoreboard.json` is **append-only** — nothing is overwritten, so you
+keep the history of how a view of a company changed.
 
-A run typically scores 6–9 names, most of them eligible, so the ranking fills
-faster than the portfolio does. Every run also receives a summary of what earlier
-runs settled, so it stops re-researching names already decided.
+Hover a score for its breakdown, how much it has drifted between runs, and where
+it would rank on score alone. A `▾N` marker means the tiers held a name back.
 
 ---
 
 ## Portfolio tracker
 
-```sh
-npm run portfolio
-```
-
 Add a position (ticker, shares, buy price, buy date) and edit the **Current** price
 cell as prices move. Data lives in `portfolio.json` — no database, gitignored.
 
-- **Multiple buys of one ticker roll up into a single position** with a
-  share-weighted average cost. Expand the row to see each individual buy.
-- The chart plots market value against cost basis over time, built from one
-  snapshot per day whenever you update prices — so **the line appears on your
-  second day** of updates. There is no back-fill; the app has no source of
-  historical prices.
+- **Multiple buys of one ticker roll up into one position** with a share-weighted
+  average cost. Expand the row to see each buy.
+- The chart plots market value against cost basis, built from one snapshot per day
+  when you update prices — so **the line appears on your second day**. There is no
+  back-fill; the app has no source of historical prices.
 - Prices are entered by hand. Nothing here fetches live quotes.
 - Gain/loss always carries a ▲/▼ and a signed number, never colour alone.
 
@@ -169,12 +157,8 @@ cell as prices move. Data lives in `portfolio.json` — no database, gitignored.
 | Tools | WebSearch + WebFetch | web_search + web_fetch |
 | Caching | automatic | `cache_control` on the request |
 
-`claude-cli` is the default because in a head-to-head it was faster, cheaper, and
-produced a complete report where the API path was still grinding: 14 searches and
-145s versus 36 and climbing.
-
 The CLI backend **strips `ANTHROPIC_API_KEY` from the subprocess environment**.
-Without that, `npm run pick` loads `.env`, the child `claude` process inherits the
+Without that, `npm start` loads `.env`, the child `claude` process inherits the
 key, and Claude Code bills API credits instead of using your login — silently
 defeating the point of the backend.
 
@@ -194,21 +178,21 @@ bin/daily.js                one command: research → scores → ranking → ser
 bin/pick.js                 CLI: flags in, report out
 bin/scoreboard.js           ingests scorecards, ranks candidates
 bin/dashboard.js            builds reports/index.html
-bin/portfolio.js            local server + portfolio.json persistence
-dashboard.html              portfolio UI (served by bin/portfolio.js)
+bin/portfolio.js            local server, portfolio.json, serves both pages
+dashboard.html              portfolio UI
 
-src/config.js               backends, effort, search budget, position target
+src/config.js               backends, effort, budgets, position target
 src/prompt.js               loads the system prompt, builds the per-run task
+src/coverage.js             what earlier runs settled, as a prompt block
 src/backends/claude-cli.js  headless `claude -p`, parses its event stream
 src/backends/api.js         Messages API, streaming + pause_turn resume
 src/render.js               progress → stderr, report → stdout
 src/report-model.js         parses a saved report and its scorecard
 src/rank.js                 collapses score history into the current ranking
-src/coverage.js             what earlier runs settled, as a prompt block
 src/dashboard-html.js       page + styles for the reports dashboard
 ```
 
-The analyst persona, process, and scoring rubric live in
+The analyst persona, sourcing rules, and scoring rubric live in
 [`stock_picker_system_prompt.md`](stock_picker_system_prompt.md) — edit that file
 to change how the analyst thinks; no code changes needed.
 
@@ -217,37 +201,40 @@ downstream knows which one ran.
 
 ---
 
-## Design decisions worth knowing
+## Things that will bite you otherwise
 
-- **stdout is the report, stderr is progress**, so redirection gives a clean file.
-- **Every number must come from a search in that session.** The prompt forbids
-  recalling prices or financials from memory.
-- **Search budget is 15** (`MAX_SEARCHES`), stated in the prompt rather than
-  enforced. It was 40 once; that run cost real money and finished no better than
-  a 14-search one.
-- **Sources are filtered to URLs the report actually cites** — a run sees ~190
-  links and leans on ~15.
-- **The dashboard embeds everything** in one file, because a page opened over
-  `file://` cannot `fetch()` sibling files.
-- **The markdown converter handles only what these reports contain** — headings,
-  bullets, bold, italic, links, code spans. Tables and images pass through as
-  plain text.
-- `reports/`, `portfolio.json`, `scoreboard.json`, and `.env` are all gitignored.
+- **Reports are never overwritten.** A second run on the same day saves as
+  `2026-07-27-2.md`. Each run keeps its own prose and its own scoreboard id.
+- **Anything matching `YYYY-MM-DD[-N].md` in `reports/` is ingested as a run.**
+  Keep backups elsewhere — a copy named `-phaseA.md` was once read as a real screen.
+- **Deleting a report never cleans the scoreboard.** Scores are already extracted
+  and stay; you would only lose the reasoning behind them.
+- **New rules only bind on re-score.** Gates live in the prompt, so a name scored
+  before a rule existed keeps its old verdict until a run re-examines it. Force it
+  with `npm start -- --focus "re-verify TICKER"`.
+- **`npm run -s pick`** when redirecting to a file — without `-s`, npm prepends
+  two banner lines to stdout.
+- The search budget (`MAX_SEARCHES`, default 15) is stated in the prompt, not
+  enforced. It was 40 once; that run cost real money and finished no better.
+- `reports/`, `portfolio.json`, `scoreboard.json` and `.env` are gitignored.
 
 ---
 
 ## Limitations
 
-- **This cannot be backtested.** There is no historical price source, so the
-  scoring rubric starts as an unvalidated hypothesis. The only honest validation
-  is forward tracking: every score is kept, so after some months the picks can be
-  compared against real outcomes in the portfolio tracker.
-- **$300M–$10B reduces failure risk but does not remove it.** The eligibility
-  gates do more work here than either the cap range or the position count.
-- **Candidates are sometimes marked ineligible for missing data** rather than for
-  failing a test — a name eliminated early on fundamentals may never have had its
-  market cap verified. That is conservative, and self-corrects when a later run
-  scores it properly.
-- **Nothing here re-checks a holding after you buy it yet.** Periodic re-review
-  with exit flags is designed but not built.
+- **This cannot be backtested.** No historical price source, so the rubric starts
+  as an unvalidated hypothesis. The only honest validation is forward tracking:
+  every score is kept, so picks can eventually be compared against outcomes.
+- **Scores drift.** The same company has scored 67 and then 36 across runs on
+  unchanged fundamentals. The tooltip shows the delta — treat gaps of a few points
+  as noise, not a ranking.
+- **The tiers can outrank the score.** A well-sourced 56 sits above an unverified
+  69 by design. That buys the best-*researched* name, not necessarily the best one;
+  the `▾N` marker shows when it is happening.
+- **Sector concentration is visible, not enforced.** Two regional banks have sat in
+  the top four. Check it at deploy time.
+- **Nothing re-checks a holding after you buy it.** Periodic re-review against the
+  stated exit conditions is designed but not built.
+- **Allocation is manual.** You read the ranking and decide. `bin/allocate.js` is
+  specified but deliberately unbuilt until the scores prove themselves.
 - Whether any of this beats an index fund is unknown and untested.

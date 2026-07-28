@@ -87,9 +87,18 @@ table.rank { min-width:44rem; }
 .tkcell { max-width:15rem; min-width:9rem; }
 .why { color:var(--muted); font-size:.72rem; line-height:1.45; margin-top:.3rem; }
 .scored { white-space:nowrap; width:6rem; }
-.bar { display:inline-block; width:1.5rem; height:.4rem; margin-right:2px; border-radius:2px;
-  background:color-mix(in srgb,var(--line) 70%,transparent); overflow:hidden; vertical-align:middle; }
+/* Taller than a pure spark-bar so it is a comfortable hover target. */
+.bar { display:inline-block; width:1.5rem; height:.55rem; margin-right:2px; border-radius:2px;
+  background:color-mix(in srgb,var(--line) 70%,transparent); overflow:hidden; vertical-align:middle;
+  }
 .bar > span { display:block; height:100%; background:var(--accent); border-radius:2px; }
+.bar:hover { outline:2px solid var(--accent); outline-offset:1px; }
+
+#tip { position:fixed; z-index:30; pointer-events:none; opacity:0; transition:opacity .08s;
+  background:var(--panel); color:var(--ink); border:1px solid var(--line); border-radius:8px;
+  padding:.5rem .65rem; font-size:.78rem; line-height:1.5; white-space:nowrap;
+  box-shadow:0 6px 20px rgb(0 0 0 / .18); }
+#tip b { font-weight:600; } #tip i { color:var(--muted); font-style:normal; }
 .tag { font-size:.66rem; letter-spacing:.05em; text-transform:uppercase; padding:.1rem .4rem;
   border-radius:4px; white-space:nowrap; }
 .tag.bad { background:color-mix(in srgb,var(--risk) 18%,transparent); color:var(--risk); }
@@ -121,12 +130,12 @@ code { background:color-mix(in srgb,var(--line) 55%,transparent); padding:.1em .
         <td class="rk">1</td>
         <td class="tkcell"><span class="tkr">YEXT</span> 
             <div class="sub">Yext, Inc.</div><div class="why">Software — Application</div></td>
-        <td class="tot">56</td>
-        <td class="bars"><span class="bar" title="survival: 18/25">
-          <span style="width:72%"></span></span><span class="bar" title="growth quality: 4/25">
-          <span style="width:16%"></span></span><span class="bar" title="profitability: 15/20">
-          <span style="width:75%"></span></span><span class="bar" title="insider conviction: 7/15">
-          <span style="width:47%"></span></span><span class="bar" title="valuation gap: 12/15">
+        <td class="tot" data-tip="<b>YEXT — 56 / 100</b>|Survival 18/25|Growth quality 4/25|Profitability 15/20|Insider conviction 7/15|Valuation gap 12/15|<i>verified · scored 2026-07-27</i>">56</td>
+        <td class="bars"><span class="bar" data-tip="<b>Survival</b> 18 / 25">
+          <span style="width:72%"></span></span><span class="bar" data-tip="<b>Growth quality</b> 4 / 25">
+          <span style="width:16%"></span></span><span class="bar" data-tip="<b>Profitability</b> 15 / 20">
+          <span style="width:75%"></span></span><span class="bar" data-tip="<b>Insider conviction</b> 7 / 15">
+          <span style="width:47%"></span></span><span class="bar" data-tip="<b>Valuation gap</b> 12 / 15">
           <span style="width:80%"></span></span></td>
         <td class="sub read">GAAP profitable with a 34% free cash flow margin and an aggressive buyback shrinking the share count roughly 20%, turning flat revenue into rising cash flow per share.</td>
         <td class="sub scored">2026-07-27<div>high</div></td>
@@ -134,12 +143,12 @@ code { background:color-mix(in srgb,var(--line) 55%,transparent); padding:.1em .
         <td class="rk">2</td>
         <td class="tkcell"><span class="tkr">ISTR</span> 
             <div class="sub">Investar Holding Corporation</div><div class="why">Regional Banks</div></td>
-        <td class="tot">54</td>
-        <td class="bars"><span class="bar" title="survival: 19/25">
-          <span style="width:76%"></span></span><span class="bar" title="growth quality: 8/25">
-          <span style="width:32%"></span></span><span class="bar" title="profitability: 14/20">
-          <span style="width:70%"></span></span><span class="bar" title="insider conviction: 4/15">
-          <span style="width:27%"></span></span><span class="bar" title="valuation gap: 9/15">
+        <td class="tot" data-tip="<b>ISTR — 54 / 100</b>|Survival 19/25|Growth quality 8/25|Profitability 14/20|Insider conviction 4/15|Valuation gap 9/15|<i>verified · scored 2026-07-27</i>">54</td>
+        <td class="bars"><span class="bar" data-tip="<b>Survival</b> 19 / 25">
+          <span style="width:76%"></span></span><span class="bar" data-tip="<b>Growth quality</b> 8 / 25">
+          <span style="width:32%"></span></span><span class="bar" data-tip="<b>Profitability</b> 14 / 20">
+          <span style="width:70%"></span></span><span class="bar" data-tip="<b>Insider conviction</b> 4 / 15">
+          <span style="width:27%"></span></span><span class="bar" data-tip="<b>Valuation gap</b> 9 / 15">
           <span style="width:60%"></span></span></td>
         <td class="sub read">NIM expanding to 3.67% with core ROAA of 1.21% and clean credit (0.63% NPLs, 14.99% total capital) at 12.2x earnings and 1.31x tangible book.</td>
         <td class="sub scored">2026-07-27<div>high</div></td>
@@ -147,12 +156,12 @@ code { background:color-mix(in srgb,var(--line) 55%,transparent); padding:.1em .
         <td class="rk">3</td>
         <td class="tkcell"><span class="tkr">SHBI</span> <span class="tag info">partial</span>
             <div class="sub">Shore Bancshares, Inc.</div><div class="why">Regional Banks</div></td>
-        <td class="tot">61</td>
-        <td class="bars"><span class="bar" title="survival: 17/25">
-          <span style="width:68%"></span></span><span class="bar" title="growth quality: 15/25">
-          <span style="width:60%"></span></span><span class="bar" title="profitability: 17/20">
-          <span style="width:85%"></span></span><span class="bar" title="insider conviction: 4/15">
-          <span style="width:27%"></span></span><span class="bar" title="valuation gap: 8/15">
+        <td class="tot" data-tip="<b>SHBI — 61 / 100</b>|Survival 17/25|Growth quality 15/25|Profitability 17/20|Insider conviction 4/15|Valuation gap 8/15|<i>partial · scored 2026-07-27</i>">61</td>
+        <td class="bars"><span class="bar" data-tip="<b>Survival</b> 17 / 25">
+          <span style="width:68%"></span></span><span class="bar" data-tip="<b>Growth quality</b> 15 / 25">
+          <span style="width:60%"></span></span><span class="bar" data-tip="<b>Profitability</b> 17 / 20">
+          <span style="width:85%"></span></span><span class="bar" data-tip="<b>Insider conviction</b> 4 / 15">
+          <span style="width:27%"></span></span><span class="bar" data-tip="<b>Valuation gap</b> 8 / 15">
           <span style="width:53%"></span></span></td>
         <td class="sub read">Q2 26 net income $18.9M and EPS $0.56, +21.7% YoY, with NIM expanding to 3.70%, ROATCE 15.66%, efficiency improving to 57.76% and the dividend raised 16.7%.</td>
         <td class="sub scored">2026-07-27<div>medium</div></td>
@@ -160,12 +169,12 @@ code { background:color-mix(in srgb,var(--line) 55%,transparent); padding:.1em .
         <td class="rk">4</td>
         <td class="tkcell"><span class="tkr">CSR</span> <span class="tag info">partial</span>
             <div class="sub">Centerspace</div><div class="why">REIT — Residential</div></td>
-        <td class="tot">50</td>
-        <td class="bars"><span class="bar" title="survival: 14/25">
-          <span style="width:56%"></span></span><span class="bar" title="growth quality: 12/25">
-          <span style="width:48%"></span></span><span class="bar" title="profitability: 10/20">
-          <span style="width:50%"></span></span><span class="bar" title="insider conviction: 3/15">
-          <span style="width:20%"></span></span><span class="bar" title="valuation gap: 11/15">
+        <td class="tot" data-tip="<b>CSR — 50 / 100</b>|Survival 14/25|Growth quality 12/25|Profitability 10/20|Insider conviction 3/15|Valuation gap 11/15|<i>partial · scored 2026-07-27</i>">50</td>
+        <td class="bars"><span class="bar" data-tip="<b>Survival</b> 14 / 25">
+          <span style="width:56%"></span></span><span class="bar" data-tip="<b>Growth quality</b> 12 / 25">
+          <span style="width:48%"></span></span><span class="bar" data-tip="<b>Profitability</b> 10 / 20">
+          <span style="width:50%"></span></span><span class="bar" data-tip="<b>Insider conviction</b> 3 / 15">
+          <span style="width:20%"></span></span><span class="bar" data-tip="<b>Valuation gap</b> 11 / 15">
           <span style="width:73%"></span></span></td>
         <td class="sub read">Q2 Core FFO of $1.27 beat the $1.20 consensus on same-store revenue +3.4% and NOI +2.4%, and at roughly 11x Core FFO it is cheap against apartment-REIT peers with well-termed debt at a 3.6% average rate over 6.7 years.</td>
         <td class="sub scored">2026-07-27<div>medium</div></td>
@@ -173,12 +182,12 @@ code { background:color-mix(in srgb,var(--line) 55%,transparent); padding:.1em .
         <td class="rk">5</td>
         <td class="tkcell"><span class="tkr">ERII</span> <span class="tag info">partial</span>
             <div class="sub">Energy Recovery, Inc.</div><div class="why">Industrial Machinery</div></td>
-        <td class="tot">36</td>
-        <td class="bars"><span class="bar" title="survival: 20/25">
-          <span style="width:80%"></span></span><span class="bar" title="growth quality: 5/25">
-          <span style="width:20%"></span></span><span class="bar" title="profitability: 5/20">
-          <span style="width:25%"></span></span><span class="bar" title="insider conviction: 0/15">
-          <span style="width:0%"></span></span><span class="bar" title="valuation gap: 6/15">
+        <td class="tot" data-tip="<b>ERII — 36 / 100</b>|Survival 20/25|Growth quality 5/25|Profitability 5/20|Insider conviction 0/15|Valuation gap 6/15|<i>partial · scored 2026-07-27</i>">36</td>
+        <td class="bars"><span class="bar" data-tip="<b>Survival</b> 20 / 25">
+          <span style="width:80%"></span></span><span class="bar" data-tip="<b>Growth quality</b> 5 / 25">
+          <span style="width:20%"></span></span><span class="bar" data-tip="<b>Profitability</b> 5 / 20">
+          <span style="width:25%"></span></span><span class="bar" data-tip="<b>Insider conviction</b> 0 / 15">
+          <span style="width:0%"></span></span><span class="bar" data-tip="<b>Valuation gap</b> 6 / 15">
           <span style="width:40%"></span></span></td>
         <td class="sub read">Fortress balance sheet with $92.1M cash and investments, $21.0M operating cash flow and only $24.7M total liabilities.</td>
         <td class="sub scored">2026-07-27<div>medium</div></td>
@@ -186,12 +195,12 @@ code { background:color-mix(in srgb,var(--line) 55%,transparent); padding:.1em .
         <td class="rk">6</td>
         <td class="tkcell"><span class="tkr">ENR</span> <span class="tag info">partial</span>
             <div class="sub">Energizer Holdings, Inc.</div><div class="why">Household Products</div></td>
-        <td class="tot">32</td>
-        <td class="bars"><span class="bar" title="survival: 9/25">
-          <span style="width:36%"></span></span><span class="bar" title="growth quality: 5/25">
-          <span style="width:20%"></span></span><span class="bar" title="profitability: 9/20">
-          <span style="width:45%"></span></span><span class="bar" title="insider conviction: 2/15">
-          <span style="width:13%"></span></span><span class="bar" title="valuation gap: 7/15">
+        <td class="tot" data-tip="<b>ENR — 32 / 100</b>|Survival 9/25|Growth quality 5/25|Profitability 9/20|Insider conviction 2/15|Valuation gap 7/15|<i>partial · scored 2026-07-27</i>">32</td>
+        <td class="bars"><span class="bar" data-tip="<b>Survival</b> 9 / 25">
+          <span style="width:36%"></span></span><span class="bar" data-tip="<b>Growth quality</b> 5 / 25">
+          <span style="width:20%"></span></span><span class="bar" data-tip="<b>Profitability</b> 9 / 20">
+          <span style="width:45%"></span></span><span class="bar" data-tip="<b>Insider conviction</b> 2 / 15">
+          <span style="width:13%"></span></span><span class="bar" data-tip="<b>Valuation gap</b> 7 / 15">
           <span style="width:47%"></span></span></td>
         <td class="sub read">Stable consumer-staples cash flow in batteries and auto care at roughly 7.7x EV/EBITDA.</td>
         <td class="sub scored">2026-07-27<div>low</div></td>
@@ -199,12 +208,12 @@ code { background:color-mix(in srgb,var(--line) 55%,transparent); padding:.1em .
         <td class="rk">7</td>
         <td class="tkcell"><span class="tkr">IPX</span> <span class="tag info">partial</span>
             <div class="sub">IperionX Limited</div><div class="why">Metals &amp; Mining — Titanium</div></td>
-        <td class="tot">26</td>
-        <td class="bars"><span class="bar" title="survival: 9/25">
-          <span style="width:36%"></span></span><span class="bar" title="growth quality: 2/25">
-          <span style="width:8%"></span></span><span class="bar" title="profitability: 1/20">
-          <span style="width:5%"></span></span><span class="bar" title="insider conviction: 11/15">
-          <span style="width:73%"></span></span><span class="bar" title="valuation gap: 3/15">
+        <td class="tot" data-tip="<b>IPX — 26 / 100</b>|Survival 9/25|Growth quality 2/25|Profitability 1/20|Insider conviction 11/15|Valuation gap 3/15|<i>partial · scored 2026-07-27</i>">26</td>
+        <td class="bars"><span class="bar" data-tip="<b>Survival</b> 9 / 25">
+          <span style="width:36%"></span></span><span class="bar" data-tip="<b>Growth quality</b> 2 / 25">
+          <span style="width:8%"></span></span><span class="bar" data-tip="<b>Profitability</b> 1 / 20">
+          <span style="width:5%"></span></span><span class="bar" data-tip="<b>Insider conviction</b> 11 / 15">
+          <span style="width:73%"></span></span><span class="bar" data-tip="<b>Valuation gap</b> 3 / 15">
           <span style="width:20%"></span></span></td>
         <td class="sub read">Executive Chairman Todd Hannigan bought 300,000 shares at $3.59 (~$1.1M) on the open market right after a $50M raise, and $42.1M of obligated US government reimbursement materially subsidizes the burn.</td>
         <td class="sub scored">2026-07-27<div>low</div></td>
@@ -212,12 +221,12 @@ code { background:color-mix(in srgb,var(--line) 55%,transparent); padding:.1em .
         <td class="rk">8</td>
         <td class="tkcell"><span class="tkr">CGNT</span> 
             <div class="sub">Cognyte Software Ltd.</div></td>
-        <td class="tot">69</td>
-        <td class="bars"><span class="bar" title="survival: 22/25">
-          <span style="width:88%"></span></span><span class="bar" title="growth quality: 17/25">
-          <span style="width:68%"></span></span><span class="bar" title="profitability: 15/20">
-          <span style="width:75%"></span></span><span class="bar" title="insider conviction: 3/15">
-          <span style="width:20%"></span></span><span class="bar" title="valuation gap: 12/15">
+        <td class="tot" data-tip="<b>CGNT — 69 / 100</b>|Survival 22/25|Growth quality 17/25|Profitability 15/20|Insider conviction 3/15|Valuation gap 12/15|<i>unverified · scored 2026-07-27</i>">69</td>
+        <td class="bars"><span class="bar" data-tip="<b>Survival</b> 22 / 25">
+          <span style="width:88%"></span></span><span class="bar" data-tip="<b>Growth quality</b> 17 / 25">
+          <span style="width:68%"></span></span><span class="bar" data-tip="<b>Profitability</b> 15 / 20">
+          <span style="width:75%"></span></span><span class="bar" data-tip="<b>Insider conviction</b> 3 / 15">
+          <span style="width:20%"></span></span><span class="bar" data-tip="<b>Valuation gap</b> 12 / 15">
           <span style="width:80%"></span></span></td>
         <td class="sub read">Debt-free national-security analytics vendor growing organically ~12% with adjusted EBITDA compounding ~40%, trading at ~8x guided EBITDA after a guidance-intact EPS-miss selloff.</td>
         <td class="sub scored">2026-07-27<div>high</div></td>
@@ -225,12 +234,12 @@ code { background:color-mix(in srgb,var(--line) 55%,transparent); padding:.1em .
         <td class="rk">9</td>
         <td class="tkcell"><span class="tkr">ZVRA</span> <span class="tag info">unverified</span>
             <div class="sub">Zevra Therapeutics, Inc.</div></td>
-        <td class="tot">51</td>
-        <td class="bars"><span class="bar" title="survival: 16/25">
-          <span style="width:64%"></span></span><span class="bar" title="growth quality: 20/25">
-          <span style="width:80%"></span></span><span class="bar" title="profitability: 5/20">
-          <span style="width:25%"></span></span><span class="bar" title="insider conviction: 2/15">
-          <span style="width:13%"></span></span><span class="bar" title="valuation gap: 8/15">
+        <td class="tot" data-tip="<b>ZVRA — 51 / 100</b>|Survival 16/25|Growth quality 20/25|Profitability 5/20|Insider conviction 2/15|Valuation gap 8/15|<i>unverified · scored 2026-07-27</i>">51</td>
+        <td class="bars"><span class="bar" data-tip="<b>Survival</b> 16 / 25">
+          <span style="width:64%"></span></span><span class="bar" data-tip="<b>Growth quality</b> 20 / 25">
+          <span style="width:80%"></span></span><span class="bar" data-tip="<b>Profitability</b> 5 / 20">
+          <span style="width:25%"></span></span><span class="bar" data-tip="<b>Insider conviction</b> 2 / 15">
+          <span style="width:13%"></span></span><span class="bar" data-tip="<b>Valuation gap</b> 8 / 15">
           <span style="width:53%"></span></span></td>
         <td class="sub read">Genuine organic rare-disease product ramp — Q1 2026 revenue $36.22M, +77.5% YoY, debt-free with $236.8M cash at Q1 — but the headline $37.9M Q1 net income is a $43.3M one-time gain on the SDX portfolio sale, not operations.</td>
         <td class="sub scored">2026-07-27<div>medium</div></td>
@@ -238,12 +247,12 @@ code { background:color-mix(in srgb,var(--line) 55%,transparent); padding:.1em .
         <td class="rk">10</td>
         <td class="tkcell"><span class="tkr">AVAH</span> <span class="tag info">unverified</span>
             <div class="sub">Aveanna Healthcare Holdings</div></td>
-        <td class="tot">48</td>
-        <td class="bars"><span class="bar" title="survival: 11/25">
-          <span style="width:44%"></span></span><span class="bar" title="growth quality: 17/25">
-          <span style="width:68%"></span></span><span class="bar" title="profitability: 13/20">
-          <span style="width:65%"></span></span><span class="bar" title="insider conviction: 2/15">
-          <span style="width:13%"></span></span><span class="bar" title="valuation gap: 5/15">
+        <td class="tot" data-tip="<b>AVAH — 48 / 100</b>|Survival 11/25|Growth quality 17/25|Profitability 13/20|Insider conviction 2/15|Valuation gap 5/15|<i>unverified · scored 2026-07-25</i>">48</td>
+        <td class="bars"><span class="bar" data-tip="<b>Survival</b> 11 / 25">
+          <span style="width:44%"></span></span><span class="bar" data-tip="<b>Growth quality</b> 17 / 25">
+          <span style="width:68%"></span></span><span class="bar" data-tip="<b>Profitability</b> 13 / 20">
+          <span style="width:65%"></span></span><span class="bar" data-tip="<b>Insider conviction</b> 2 / 15">
+          <span style="width:13%"></span></span><span class="bar" data-tip="<b>Valuation gap</b> 5 / 15">
           <span style="width:33%"></span></span></td>
         <td class="sub read">Real 15.9% Q1 revenue growth with guidance raised twice to $2.63-2.65B, but the story is leveraged and partly acquired via Family First.</td>
         <td class="sub scored">2026-07-25<div>medium</div></td>
@@ -251,12 +260,12 @@ code { background:color-mix(in srgb,var(--line) 55%,transparent); padding:.1em .
         <td class="rk">11</td>
         <td class="tkcell"><span class="tkr">VIA</span> <span class="tag info">unverified</span>
             <div class="sub">Via Transportation, Inc.</div></td>
-        <td class="tot">44</td>
-        <td class="bars"><span class="bar" title="survival: 17/25">
-          <span style="width:68%"></span></span><span class="bar" title="growth quality: 15/25">
-          <span style="width:60%"></span></span><span class="bar" title="profitability: 4/20">
-          <span style="width:20%"></span></span><span class="bar" title="insider conviction: 1/15">
-          <span style="width:7%"></span></span><span class="bar" title="valuation gap: 7/15">
+        <td class="tot" data-tip="<b>VIA — 44 / 100</b>|Survival 17/25|Growth quality 15/25|Profitability 4/20|Insider conviction 1/15|Valuation gap 7/15|<i>unverified · scored 2026-07-25</i>">44</td>
+        <td class="bars"><span class="bar" data-tip="<b>Survival</b> 17 / 25">
+          <span style="width:68%"></span></span><span class="bar" data-tip="<b>Growth quality</b> 15 / 25">
+          <span style="width:60%"></span></span><span class="bar" data-tip="<b>Profitability</b> 4 / 20">
+          <span style="width:20%"></span></span><span class="bar" data-tip="<b>Insider conviction</b> 1 / 15">
+          <span style="width:7%"></span></span><span class="bar" data-tip="<b>Valuation gap</b> 7 / 15">
           <span style="width:47%"></span></span></td>
         <td class="sub read">29% revenue growth to $127.4M with $348M net cash, no debt and a 5.1 current ratio — but profitability is adjusted-EBITDA theatre.</td>
         <td class="sub scored">2026-07-25<div>medium</div></td>
@@ -264,12 +273,12 @@ code { background:color-mix(in srgb,var(--line) 55%,transparent); padding:.1em .
         <td class="rk">12</td>
         <td class="tkcell"><span class="tkr">MBC</span> 
             <div class="sub">MasterBrand, Inc.</div></td>
-        <td class="tot">40</td>
-        <td class="bars"><span class="bar" title="survival: 11/25">
-          <span style="width:44%"></span></span><span class="bar" title="growth quality: 5/25">
-          <span style="width:20%"></span></span><span class="bar" title="profitability: 8/20">
-          <span style="width:40%"></span></span><span class="bar" title="insider conviction: 8/15">
-          <span style="width:53%"></span></span><span class="bar" title="valuation gap: 8/15">
+        <td class="tot" data-tip="<b>MBC — 40 / 100</b>|Survival 11/25|Growth quality 5/25|Profitability 8/20|Insider conviction 8/15|Valuation gap 8/15|<i>unverified · scored 2026-07-27</i>">40</td>
+        <td class="bars"><span class="bar" data-tip="<b>Survival</b> 11 / 25">
+          <span style="width:44%"></span></span><span class="bar" data-tip="<b>Growth quality</b> 5 / 25">
+          <span style="width:20%"></span></span><span class="bar" data-tip="<b>Profitability</b> 8 / 20">
+          <span style="width:40%"></span></span><span class="bar" data-tip="<b>Insider conviction</b> 8 / 15">
+          <span style="width:53%"></span></span><span class="bar" data-tip="<b>Valuation gap</b> 8 / 15">
           <span style="width:53%"></span></span></td>
         <td class="sub read">A director bought 11,587 shares into a 19% drawdown, but Q1 2026 net sales fell 6.4% to $618M and tariff exposure is guided at 5-6% of net sales.</td>
         <td class="sub scored">2026-07-27<div>medium</div></td>
@@ -277,12 +286,12 @@ code { background:color-mix(in srgb,var(--line) 55%,transparent); padding:.1em .
         <td class="rk">13</td>
         <td class="tkcell"><span class="tkr">LUNR</span> <span class="tag info">unverified</span>
             <div class="sub">Intuitive Machines, Inc.</div><div class="why">Aerospace &amp; Defense</div></td>
-        <td class="tot">28</td>
-        <td class="bars"><span class="bar" title="survival: 8/25">
-          <span style="width:32%"></span></span><span class="bar" title="growth quality: 12/25">
-          <span style="width:48%"></span></span><span class="bar" title="profitability: 3/20">
-          <span style="width:15%"></span></span><span class="bar" title="insider conviction: 0/15">
-          <span style="width:0%"></span></span><span class="bar" title="valuation gap: 5/15">
+        <td class="tot" data-tip="<b>LUNR — 28 / 100</b>|Survival 8/25|Growth quality 12/25|Profitability 3/20|Insider conviction 0/15|Valuation gap 5/15|<i>unverified · scored 2026-07-27</i>">28</td>
+        <td class="bars"><span class="bar" data-tip="<b>Survival</b> 8 / 25">
+          <span style="width:32%"></span></span><span class="bar" data-tip="<b>Growth quality</b> 12 / 25">
+          <span style="width:48%"></span></span><span class="bar" data-tip="<b>Profitability</b> 3 / 20">
+          <span style="width:15%"></span></span><span class="bar" data-tip="<b>Insider conviction</b> 0 / 15">
+          <span style="width:0%"></span></span><span class="bar" data-tip="<b>Valuation gap</b> 5 / 15">
           <span style="width:33%"></span></span></td>
         <td class="sub read">$943M contracted backlog across NASA and defense with 2026 revenue guidance up to $1B, plus an L3Harris award for 18 SDA Tranche 3 tracking-layer spacecraft.</td>
         <td class="sub scored">2026-07-27<div>low</div></td>
@@ -290,12 +299,12 @@ code { background:color-mix(in srgb,var(--line) 55%,transparent); padding:.1em .
         <td class="rk">14</td>
         <td class="tkcell"><span class="tkr">FULC</span> <span class="tag info">unverified</span>
             <div class="sub">Fulcrum Therapeutics, Inc.</div><div class="why">Biotechnology</div></td>
-        <td class="tot">23</td>
-        <td class="bars"><span class="bar" title="survival: 12/25">
-          <span style="width:48%"></span></span><span class="bar" title="growth quality: 1/25">
-          <span style="width:4%"></span></span><span class="bar" title="profitability: 1/20">
-          <span style="width:5%"></span></span><span class="bar" title="insider conviction: 3/15">
-          <span style="width:20%"></span></span><span class="bar" title="valuation gap: 6/15">
+        <td class="tot" data-tip="<b>FULC — 23 / 100</b>|Survival 12/25|Growth quality 1/25|Profitability 1/20|Insider conviction 3/15|Valuation gap 6/15|<i>unverified · scored 2026-07-27</i>">23</td>
+        <td class="bars"><span class="bar" data-tip="<b>Survival</b> 12 / 25">
+          <span style="width:48%"></span></span><span class="bar" data-tip="<b>Growth quality</b> 1 / 25">
+          <span style="width:4%"></span></span><span class="bar" data-tip="<b>Profitability</b> 1 / 20">
+          <span style="width:5%"></span></span><span class="bar" data-tip="<b>Insider conviction</b> 3 / 15">
+          <span style="width:20%"></span></span><span class="bar" data-tip="<b>Valuation gap</b> 6 / 15">
           <span style="width:40%"></span></span></td>
         <td class="sub read">Trades below a reported ~$330M net cash position with Tang Capital accumulating on 14-15 July — a liquidation/strategic-review special situation, not an operating business.</td>
         <td class="sub scored">2026-07-27<div>low</div></td>
@@ -303,12 +312,12 @@ code { background:color-mix(in srgb,var(--line) 55%,transparent); padding:.1em .
         <td class="rk">15</td>
         <td class="tkcell"><span class="tkr">SERV</span> <span class="tag info">unverified</span>
             <div class="sub">Serve Robotics Inc.</div></td>
-        <td class="tot">16</td>
-        <td class="bars"><span class="bar" title="survival: 4/25">
-          <span style="width:16%"></span></span><span class="bar" title="growth quality: 8/25">
-          <span style="width:32%"></span></span><span class="bar" title="profitability: 1/20">
-          <span style="width:5%"></span></span><span class="bar" title="insider conviction: 2/15">
-          <span style="width:13%"></span></span><span class="bar" title="valuation gap: 1/15">
+        <td class="tot" data-tip="<b>SERV — 16 / 100</b>|Survival 4/25|Growth quality 8/25|Profitability 1/20|Insider conviction 2/15|Valuation gap 1/15|<i>unverified · scored 2026-07-26</i>">16</td>
+        <td class="bars"><span class="bar" data-tip="<b>Survival</b> 4 / 25">
+          <span style="width:16%"></span></span><span class="bar" data-tip="<b>Growth quality</b> 8 / 25">
+          <span style="width:32%"></span></span><span class="bar" data-tip="<b>Profitability</b> 1 / 20">
+          <span style="width:5%"></span></span><span class="bar" data-tip="<b>Insider conviction</b> 2 / 15">
+          <span style="width:13%"></span></span><span class="bar" data-tip="<b>Valuation gap</b> 1 / 15">
           <span style="width:7%"></span></span></td>
         <td class="sub read">Q1 2026 revenue of $3.0M (+578% YoY) off a near-zero base, with 2026 guidance of only ~$26M and new sidewalk-robot deployments paused in H1.</td>
         <td class="sub scored">2026-07-26<div>medium</div></td>
@@ -316,12 +325,12 @@ code { background:color-mix(in srgb,var(--line) 55%,transparent); padding:.1em .
         <td class="rk">16</td>
         <td class="tkcell"><span class="tkr">CRDF</span> <span class="tag info">unverified</span>
             <div class="sub">Cardiff Oncology, Inc.</div><div class="why">Biotechnology</div></td>
-        <td class="tot">13</td>
-        <td class="bars"><span class="bar" title="survival: 8/25">
-          <span style="width:32%"></span></span><span class="bar" title="growth quality: 0/25">
-          <span style="width:0%"></span></span><span class="bar" title="profitability: 0/20">
-          <span style="width:0%"></span></span><span class="bar" title="insider conviction: 2/15">
-          <span style="width:13%"></span></span><span class="bar" title="valuation gap: 3/15">
+        <td class="tot" data-tip="<b>CRDF — 13 / 100</b>|Survival 8/25|Growth quality 0/25|Profitability 0/20|Insider conviction 2/15|Valuation gap 3/15|<i>unverified · scored 2026-07-27</i>">13</td>
+        <td class="bars"><span class="bar" data-tip="<b>Survival</b> 8 / 25">
+          <span style="width:32%"></span></span><span class="bar" data-tip="<b>Growth quality</b> 0 / 25">
+          <span style="width:0%"></span></span><span class="bar" data-tip="<b>Profitability</b> 0 / 20">
+          <span style="width:0%"></span></span><span class="bar" data-tip="<b>Insider conviction</b> 2 / 15">
+          <span style="width:13%"></span></span><span class="bar" data-tip="<b>Valuation gap</b> 3 / 15">
           <span style="width:20%"></span></span></td>
         <td class="sub read">Clinical-stage oncology with onvansertib in Phase 2; director Gary Pace put in ~$1M.</td>
         <td class="sub scored">2026-07-27<div>low</div></td>
@@ -329,12 +338,12 @@ code { background:color-mix(in srgb,var(--line) 55%,transparent); padding:.1em .
         <td class="rk">17</td>
         <td class="tkcell"><span class="tkr">VANI</span> <span class="tag info">unverified</span>
             <div class="sub">Vivani Medical, Inc.</div><div class="why">Biotechnology — Drug Delivery</div></td>
-        <td class="tot">12</td>
-        <td class="bars"><span class="bar" title="survival: 7/25">
-          <span style="width:28%"></span></span><span class="bar" title="growth quality: 0/25">
-          <span style="width:0%"></span></span><span class="bar" title="profitability: 0/20">
-          <span style="width:0%"></span></span><span class="bar" title="insider conviction: 2/15">
-          <span style="width:13%"></span></span><span class="bar" title="valuation gap: 3/15">
+        <td class="tot" data-tip="<b>VANI — 12 / 100</b>|Survival 7/25|Growth quality 0/25|Profitability 0/20|Insider conviction 2/15|Valuation gap 3/15|<i>unverified · scored 2026-07-27</i>">12</td>
+        <td class="bars"><span class="bar" data-tip="<b>Survival</b> 7 / 25">
+          <span style="width:28%"></span></span><span class="bar" data-tip="<b>Growth quality</b> 0 / 25">
+          <span style="width:0%"></span></span><span class="bar" data-tip="<b>Profitability</b> 0 / 20">
+          <span style="width:0%"></span></span><span class="bar" data-tip="<b>Insider conviction</b> 2 / 15">
+          <span style="width:13%"></span></span><span class="bar" data-tip="<b>Valuation gap</b> 3 / 15">
           <span style="width:20%"></span></span></td>
         <td class="sub read">GLP-1 subdermal implant candidate with data expected Q4 2026 and a ~$1M acquisition by Chairman Gregg Williams.</td>
         <td class="sub scored">2026-07-27<div>low</div></td>
@@ -342,12 +351,12 @@ code { background:color-mix(in srgb,var(--line) 55%,transparent); padding:.1em .
         <td class="rk">18</td>
         <td class="tkcell"><span class="tkr">HDSN</span> <span class="tag bad">✗ ineligible</span>
             <div class="sub">Hudson Technologies, Inc.</div><div class="why">Specialty Chemicals — Refrigerants</div><div class="why">Market cap ~$183M, below the $300M universe floor (aggregator-sourced, not reconciled against a verified quote)</div></td>
-        <td class="tot">43</td>
-        <td class="bars"><span class="bar" title="survival: 15/25">
-          <span style="width:60%"></span></span><span class="bar" title="growth quality: 12/25">
-          <span style="width:48%"></span></span><span class="bar" title="profitability: 8/20">
-          <span style="width:40%"></span></span><span class="bar" title="insider conviction: 0/15">
-          <span style="width:0%"></span></span><span class="bar" title="valuation gap: 8/15">
+        <td class="tot" data-tip="<b>HDSN — 43 / 100</b>|Survival 15/25|Growth quality 12/25|Profitability 8/20|Insider conviction 0/15|Valuation gap 8/15|<i>partial · scored 2026-07-27</i>">43</td>
+        <td class="bars"><span class="bar" data-tip="<b>Survival</b> 15 / 25">
+          <span style="width:60%"></span></span><span class="bar" data-tip="<b>Growth quality</b> 12 / 25">
+          <span style="width:48%"></span></span><span class="bar" data-tip="<b>Profitability</b> 8 / 20">
+          <span style="width:40%"></span></span><span class="bar" data-tip="<b>Insider conviction</b> 0 / 15">
+          <span style="width:0%"></span></span><span class="bar" data-tip="<b>Valuation gap</b> 8 / 15">
           <span style="width:53%"></span></span></td>
         <td class="sub read">Q1 2026 revenue rose 9% to $60.2M on 20% volume growth with slightly higher HFC pricing.</td>
         <td class="sub scored">2026-07-27<div>low</div></td>
@@ -355,12 +364,12 @@ code { background:color-mix(in srgb,var(--line) 55%,transparent); padding:.1em .
         <td class="rk">19</td>
         <td class="tkcell"><span class="tkr">TYGO</span> <span class="tag bad">✗ ineligible</span>
             <div class="sub">Tigo Energy, Inc.</div><div class="why">Market cap ~$260M, below the $300M floor.</div></td>
-        <td class="tot">50</td>
-        <td class="bars"><span class="bar" title="survival: 10/25">
-          <span style="width:40%"></span></span><span class="bar" title="growth quality: 16/25">
-          <span style="width:64%"></span></span><span class="bar" title="profitability: 12/20">
-          <span style="width:60%"></span></span><span class="bar" title="insider conviction: 5/15">
-          <span style="width:33%"></span></span><span class="bar" title="valuation gap: 7/15">
+        <td class="tot" data-tip="<b>TYGO — 50 / 100</b>|Survival 10/25|Growth quality 16/25|Profitability 12/20|Insider conviction 5/15|Valuation gap 7/15|<i>unverified · scored 2026-07-27</i>">50</td>
+        <td class="bars"><span class="bar" data-tip="<b>Survival</b> 10 / 25">
+          <span style="width:40%"></span></span><span class="bar" data-tip="<b>Growth quality</b> 16 / 25">
+          <span style="width:64%"></span></span><span class="bar" data-tip="<b>Profitability</b> 12 / 20">
+          <span style="width:60%"></span></span><span class="bar" data-tip="<b>Insider conviction</b> 5 / 15">
+          <span style="width:33%"></span></span><span class="bar" data-tip="<b>Valuation gap</b> 7 / 15">
           <span style="width:47%"></span></span></td>
         <td class="sub read">Genuinely improving: Q1 2026 revenue +33.7% to $25.2M, GAAP net loss narrowed to $1.8M from $7.0M, no debt after retiring a $50M note, FY26 guide $130-135M — worth re-checking if the cap crosses $300M.</td>
         <td class="sub scored">2026-07-27<div>low</div></td>
@@ -368,12 +377,12 @@ code { background:color-mix(in srgb,var(--line) 55%,transparent); padding:.1em .
         <td class="rk">20</td>
         <td class="tkcell"><span class="tkr">MPB</span> <span class="tag bad">✗ ineligible</span>
             <div class="sub">Mid Penn Bancorp, Inc.</div><div class="why">Revenue growth is essentially entirely acquired (William Penn and 1st Colonial) with no organic component disclosed; market cap figure is stale (8 Apr 2026).</div></td>
-        <td class="tot">49</td>
-        <td class="bars"><span class="bar" title="survival: 19/25">
-          <span style="width:76%"></span></span><span class="bar" title="growth quality: 6/25">
-          <span style="width:24%"></span></span><span class="bar" title="profitability: 14/20">
-          <span style="width:70%"></span></span><span class="bar" title="insider conviction: 3/15">
-          <span style="width:20%"></span></span><span class="bar" title="valuation gap: 7/15">
+        <td class="tot" data-tip="<b>MPB — 49 / 100</b>|Survival 19/25|Growth quality 6/25|Profitability 14/20|Insider conviction 3/15|Valuation gap 7/15|<i>unverified · scored 2026-07-25</i>">49</td>
+        <td class="bars"><span class="bar" data-tip="<b>Survival</b> 19 / 25">
+          <span style="width:76%"></span></span><span class="bar" data-tip="<b>Growth quality</b> 6 / 25">
+          <span style="width:24%"></span></span><span class="bar" data-tip="<b>Profitability</b> 14 / 20">
+          <span style="width:70%"></span></span><span class="bar" data-tip="<b>Insider conviction</b> 3 / 15">
+          <span style="width:20%"></span></span><span class="bar" data-tip="<b>Valuation gap</b> 7 / 15">
           <span style="width:47%"></span></span></td>
         <td class="sub read">Q2 EPS of $0.86 beat $0.71 and net income rose 355.5% YoY, but the company itself attributes the increase to two acquisitions.</td>
         <td class="sub scored">2026-07-25<div>medium</div></td>
@@ -381,12 +390,12 @@ code { background:color-mix(in srgb,var(--line) 55%,transparent); padding:.1em .
         <td class="rk">21</td>
         <td class="tkcell"><span class="tkr">ADV</span> <span class="tag bad">✗ ineligible</span>
             <div class="sub">Advantage Solutions Inc.</div><div class="why">Market cap below $300M floor and unreconciled across sources ($272M per Simply Wall St vs $0.35B as of 8 May 2026).</div></td>
-        <td class="tot">31</td>
-        <td class="bars"><span class="bar" title="survival: 6/25">
-          <span style="width:24%"></span></span><span class="bar" title="growth quality: 5/25">
-          <span style="width:20%"></span></span><span class="bar" title="profitability: 4/20">
-          <span style="width:20%"></span></span><span class="bar" title="insider conviction: 9/15">
-          <span style="width:60%"></span></span><span class="bar" title="valuation gap: 7/15">
+        <td class="tot" data-tip="<b>ADV — 31 / 100</b>|Survival 6/25|Growth quality 5/25|Profitability 4/20|Insider conviction 9/15|Valuation gap 7/15|<i>unverified · scored 2026-07-27</i>">31</td>
+        <td class="bars"><span class="bar" data-tip="<b>Survival</b> 6 / 25">
+          <span style="width:24%"></span></span><span class="bar" data-tip="<b>Growth quality</b> 5 / 25">
+          <span style="width:20%"></span></span><span class="bar" data-tip="<b>Profitability</b> 4 / 20">
+          <span style="width:20%"></span></span><span class="bar" data-tip="<b>Insider conviction</b> 9 / 15">
+          <span style="width:60%"></span></span><span class="bar" data-tip="<b>Valuation gap</b> 7 / 15">
           <span style="width:47%"></span></span></td>
         <td class="sub read">Insider purchases April-June 2026 plus a $30M buyback, and Experiential Services grew 22.8% to $385.5M, but Branded Services fell 11.3% and total 2025 revenue declined 0.7%.</td>
         <td class="sub scored">2026-07-27<div>low</div></td>
@@ -394,12 +403,12 @@ code { background:color-mix(in srgb,var(--line) 55%,transparent); padding:.1em .
         <td class="rk">22</td>
         <td class="tkcell"><span class="tkr">GLOO</span> <span class="tag bad">✗ ineligible</span>
             <div class="sub">Gloo Holdings, Inc.</div><div class="why">Going-concern: management concluded substantial doubt about ability to continue absent profitability or further capital; ~$22.6M Q1 cash outflow vs $33M cash. Growth also substantially acquired (Masterworks, Igniter, XRI Global).</div></td>
-        <td class="tot">28</td>
-        <td class="bars"><span class="bar" title="survival: 3/25">
-          <span style="width:12%"></span></span><span class="bar" title="growth quality: 8/25">
-          <span style="width:32%"></span></span><span class="bar" title="profitability: 5/20">
-          <span style="width:25%"></span></span><span class="bar" title="insider conviction: 8/15">
-          <span style="width:53%"></span></span><span class="bar" title="valuation gap: 4/15">
+        <td class="tot" data-tip="<b>GLOO — 28 / 100</b>|Survival 3/25|Growth quality 8/25|Profitability 5/20|Insider conviction 8/15|Valuation gap 4/15|<i>unverified · scored 2026-07-27</i>">28</td>
+        <td class="bars"><span class="bar" data-tip="<b>Survival</b> 3 / 25">
+          <span style="width:12%"></span></span><span class="bar" data-tip="<b>Growth quality</b> 8 / 25">
+          <span style="width:32%"></span></span><span class="bar" data-tip="<b>Profitability</b> 5 / 20">
+          <span style="width:25%"></span></span><span class="bar" data-tip="<b>Insider conviction</b> 8 / 15">
+          <span style="width:53%"></span></span><span class="bar" data-tip="<b>Valuation gap</b> 4 / 15">
           <span style="width:27%"></span></span></td>
         <td class="sub read">Q1 2026 revenue tripled to $41.5M (+238%) and FY guidance was raised to ~$190-195M, but the growth is bought and the cash is nearly gone.</td>
         <td class="sub scored">2026-07-27<div>medium</div></td>
@@ -832,7 +841,43 @@ independently before making any investment decision.</p>
 </section></div>
   </div>
 </div>
+<div id="tip" role="tooltip"></div>
 <script>
+// Hover layer for the score bars and totals. Native title= is too slow and
+// cannot show a breakdown; "|" in data-tip is a line break.
+(() => {
+  const tip = document.getElementById('tip');
+  let active = null;
+
+  const place = (event) => {
+    const pad = 14;
+    const box = tip.getBoundingClientRect();
+    let x = event.clientX + pad;
+    let y = event.clientY + pad;
+    if (x + box.width > innerWidth - 8) x = event.clientX - box.width - pad;
+    if (y + box.height > innerHeight - 8) y = event.clientY - box.height - pad;
+    tip.style.left = x + 'px';
+    tip.style.top = Math.max(8, y) + 'px';
+  };
+
+  document.addEventListener('pointerover', (event) => {
+    const el = event.target.closest('[data-tip]');
+    if (!el || el === active) return;
+    active = el;
+    tip.innerHTML = el.dataset.tip.split('|').join('<br>');
+    tip.style.opacity = '1';
+    place(event);
+  });
+  document.addEventListener('pointermove', (event) => { if (active) place(event); });
+  document.addEventListener('pointerout', (event) => {
+    if (!active || event.target.closest('[data-tip]') !== active) return;
+    active = null;
+    tip.style.opacity = '0';
+  });
+  // Touch and keyboard users get no hover — scrolling shouldn't strand a tooltip.
+  addEventListener('scroll', () => { active = null; tip.style.opacity = '0'; }, { passive: true });
+})();
+
 (() => {
   const tabs = [...document.querySelectorAll('.nav-item')];
   const show = (date) => {

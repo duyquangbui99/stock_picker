@@ -43,11 +43,17 @@ function ranking(ranked) {
 
   const rows = ranked
     .map((r, i) => {
+      const label = (key) => key.replace(/_/g, " ").replace(/^./, (c) => c.toUpperCase());
       const bars = DIMENSIONS.map(([key, max]) => {
         const got = Number(r.scores?.[key] ?? 0);
-        return `<span class="bar" title="${key.replace(/_/g, " ")}: ${got}/${max}">
+        return `<span class="bar" data-tip="<b>${label(key)}</b> ${got} / ${max}">
           <span style="width:${Math.round((got / max) * 100)}%"></span></span>`;
       }).join("");
+      // Hovering the total explains where it came from — otherwise a 67 is just
+      // a number with five unlabelled bars beside it.
+      const breakdown = DIMENSIONS.map(
+        ([key, max]) => `${label(key)} ${Number(r.scores?.[key] ?? 0)}/${max}`,
+      ).join("|");
 
       // The badge stays short and fixed-width; the full reason wraps below it.
       // Putting a 170-character disqualifier inside a nowrap badge was setting
@@ -70,7 +76,7 @@ function ranking(ranked) {
         <td class="rk">${i + 1}</td>
         <td class="tkcell"><span class="tkr">${esc(r.ticker)}</span> ${flag}
             <div class="sub">${esc(r.company)}</div>${sector}${why}</td>
-        <td class="tot">${r.total}</td>
+        <td class="tot" data-tip="<b>${esc(r.ticker)} — ${r.total} / 100</b>|${breakdown}|<i>${esc(r.data_completeness ?? "unverified")} · scored ${esc(r.as_of)}</i>">${r.total}</td>
         <td class="bars">${bars}</td>
         <td class="sub read">${esc(r.one_line)}</td>
         <td class="sub scored">${esc(r.as_of)}<div>${esc(r.confidence)}</div></td>
@@ -228,9 +234,18 @@ table.rank { min-width:44rem; }
 .tkcell { max-width:15rem; min-width:9rem; }
 .why { color:var(--muted); font-size:.72rem; line-height:1.45; margin-top:.3rem; }
 .scored { white-space:nowrap; width:6rem; }
-.bar { display:inline-block; width:1.5rem; height:.4rem; margin-right:2px; border-radius:2px;
-  background:color-mix(in srgb,var(--line) 70%,transparent); overflow:hidden; vertical-align:middle; }
+/* Taller than a pure spark-bar so it is a comfortable hover target. */
+.bar { display:inline-block; width:1.5rem; height:.55rem; margin-right:2px; border-radius:2px;
+  background:color-mix(in srgb,var(--line) 70%,transparent); overflow:hidden; vertical-align:middle;
+  }
 .bar > span { display:block; height:100%; background:var(--accent); border-radius:2px; }
+.bar:hover { outline:2px solid var(--accent); outline-offset:1px; }
+
+#tip { position:fixed; z-index:30; pointer-events:none; opacity:0; transition:opacity .08s;
+  background:var(--panel); color:var(--ink); border:1px solid var(--line); border-radius:8px;
+  padding:.5rem .65rem; font-size:.78rem; line-height:1.5; white-space:nowrap;
+  box-shadow:0 6px 20px rgb(0 0 0 / .18); }
+#tip b { font-weight:600; } #tip i { color:var(--muted); font-style:normal; }
 .tag { font-size:.66rem; letter-spacing:.05em; text-transform:uppercase; padding:.1rem .4rem;
   border-radius:4px; white-space:nowrap; }
 .tag.bad { background:color-mix(in srgb,var(--risk) 18%,transparent); color:var(--risk); }
@@ -261,7 +276,43 @@ code { background:color-mix(in srgb,var(--line) 55%,transparent); padding:.1em .
     <div class="detail">${panels}</div>
   </div>
 </div>
+<div id="tip" role="tooltip"></div>
 <script>
+// Hover layer for the score bars and totals. Native title= is too slow and
+// cannot show a breakdown; "|" in data-tip is a line break.
+(() => {
+  const tip = document.getElementById('tip');
+  let active = null;
+
+  const place = (event) => {
+    const pad = 14;
+    const box = tip.getBoundingClientRect();
+    let x = event.clientX + pad;
+    let y = event.clientY + pad;
+    if (x + box.width > innerWidth - 8) x = event.clientX - box.width - pad;
+    if (y + box.height > innerHeight - 8) y = event.clientY - box.height - pad;
+    tip.style.left = x + 'px';
+    tip.style.top = Math.max(8, y) + 'px';
+  };
+
+  document.addEventListener('pointerover', (event) => {
+    const el = event.target.closest('[data-tip]');
+    if (!el || el === active) return;
+    active = el;
+    tip.innerHTML = el.dataset.tip.split('|').join('<br>');
+    tip.style.opacity = '1';
+    place(event);
+  });
+  document.addEventListener('pointermove', (event) => { if (active) place(event); });
+  document.addEventListener('pointerout', (event) => {
+    if (!active || event.target.closest('[data-tip]') !== active) return;
+    active = null;
+    tip.style.opacity = '0';
+  });
+  // Touch and keyboard users get no hover — scrolling shouldn't strand a tooltip.
+  addEventListener('scroll', () => { active = null; tip.style.opacity = '0'; }, { passive: true });
+})();
+
 (() => {
   const tabs = [...document.querySelectorAll('.nav-item')];
   const show = (date) => {
